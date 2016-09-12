@@ -7,20 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D8E62B061D8341E9002018CD /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E62B051D8341E9002018CD /* ImageCollectionViewCell.swift */; };
 		D8FDE3B81D7DF5A600B98B48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3B71D7DF5A600B98B48 /* AppDelegate.swift */; };
 		D8FDE3BA1D7DF5A600B98B48 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */; };
 		D8FDE3BD1D7DF5A600B98B48 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8FDE3BB1D7DF5A600B98B48 /* Main.storyboard */; };
 		D8FDE3BF1D7DF5A700B98B48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8FDE3BE1D7DF5A700B98B48 /* Assets.xcassets */; };
 		D8FDE3C21D7DF5A700B98B48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8FDE3C01D7DF5A700B98B48 /* LaunchScreen.storyboard */; };
 		D8FDE3CB1D7DFFB100B98B48 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3CA1D7DFFB100B98B48 /* CreateAccountViewController.swift */; };
-		D8FDE3CD1D7DFFDA00B98B48 /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3CC1D7DFFDA00B98B48 /* BrowseViewController.swift */; };
+		D8FDE3CD1D7DFFDA00B98B48 /* BrowseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3CC1D7DFFDA00B98B48 /* BrowseTableViewController.swift */; };
 		D8FDE3CF1D7E002F00B98B48 /* DonateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3CE1D7E002F00B98B48 /* DonateViewController.swift */; };
-		D8FDE3D11D7E003E00B98B48 /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3D01D7E003E00B98B48 /* BookmarksViewController.swift */; };
+		D8FDE3D11D7E003E00B98B48 /* BookmarksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3D01D7E003E00B98B48 /* BookmarksTableViewController.swift */; };
 		D8FDE3D31D7E01BC00B98B48 /* DontateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3D21D7E01BC00B98B48 /* DontateItemViewController.swift */; };
 		D8FDE3D51D7E01DE00B98B48 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3D41D7E01DE00B98B48 /* ItemDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D8E62B051D8341E9002018CD /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		D8FDE3B41D7DF5A500B98B48 /* Show And Sell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Show And Sell.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8FDE3B71D7DF5A600B98B48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -29,9 +31,9 @@
 		D8FDE3C11D7DF5A700B98B48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8FDE3C31D7DF5A700B98B48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8FDE3CA1D7DFFB100B98B48 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
-		D8FDE3CC1D7DFFDA00B98B48 /* BrowseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
+		D8FDE3CC1D7DFFDA00B98B48 /* BrowseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseTableViewController.swift; sourceTree = "<group>"; };
 		D8FDE3CE1D7E002F00B98B48 /* DonateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DonateViewController.swift; sourceTree = "<group>"; };
-		D8FDE3D01D7E003E00B98B48 /* BookmarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksViewController.swift; sourceTree = "<group>"; };
+		D8FDE3D01D7E003E00B98B48 /* BookmarksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTableViewController.swift; sourceTree = "<group>"; };
 		D8FDE3D21D7E01BC00B98B48 /* DontateItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DontateItemViewController.swift; sourceTree = "<group>"; };
 		D8FDE3D41D7E01DE00B98B48 /* ItemDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -47,6 +49,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D8E62B041D834121002018CD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D8E62B051D8341E9002018CD /* ImageCollectionViewCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		D8FDE3AB1D7DF5A500B98B48 = {
 			isa = PBXGroup;
 			children = (
@@ -68,6 +78,7 @@
 			children = (
 				D8FDE3B71D7DF5A600B98B48 /* AppDelegate.swift */,
 				D8FDE3C91D7DFF4200B98B48 /* ViewControllers */,
+				D8E62B041D834121002018CD /* Views */,
 				D8FDE3BB1D7DF5A600B98B48 /* Main.storyboard */,
 				D8FDE3BE1D7DF5A700B98B48 /* Assets.xcassets */,
 				D8FDE3C01D7DF5A700B98B48 /* LaunchScreen.storyboard */,
@@ -81,8 +92,8 @@
 			children = (
 				D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */,
 				D8FDE3CA1D7DFFB100B98B48 /* CreateAccountViewController.swift */,
-				D8FDE3CC1D7DFFDA00B98B48 /* BrowseViewController.swift */,
-				D8FDE3D01D7E003E00B98B48 /* BookmarksViewController.swift */,
+				D8FDE3CC1D7DFFDA00B98B48 /* BrowseTableViewController.swift */,
+				D8FDE3D01D7E003E00B98B48 /* BookmarksTableViewController.swift */,
 				D8FDE3CE1D7E002F00B98B48 /* DonateViewController.swift */,
 				D8FDE3D21D7E01BC00B98B48 /* DontateItemViewController.swift */,
 				D8FDE3D41D7E01DE00B98B48 /* ItemDetailViewController.swift */,
@@ -163,11 +174,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8FDE3D31D7E01BC00B98B48 /* DontateItemViewController.swift in Sources */,
-				D8FDE3D11D7E003E00B98B48 /* BookmarksViewController.swift in Sources */,
+				D8FDE3D11D7E003E00B98B48 /* BookmarksTableViewController.swift in Sources */,
 				D8FDE3D51D7E01DE00B98B48 /* ItemDetailViewController.swift in Sources */,
 				D8FDE3CB1D7DFFB100B98B48 /* CreateAccountViewController.swift in Sources */,
 				D8FDE3BA1D7DF5A600B98B48 /* LoginViewController.swift in Sources */,
-				D8FDE3CD1D7DFFDA00B98B48 /* BrowseViewController.swift in Sources */,
+				D8FDE3CD1D7DFFDA00B98B48 /* BrowseTableViewController.swift in Sources */,
+				D8E62B061D8341E9002018CD /* ImageCollectionViewCell.swift in Sources */,
 				D8FDE3B81D7DF5A600B98B48 /* AppDelegate.swift in Sources */,
 				D8FDE3CF1D7E002F00B98B48 /* DonateViewController.swift in Sources */,
 			);

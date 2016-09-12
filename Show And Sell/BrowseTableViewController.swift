@@ -1,5 +1,5 @@
 //
-//  BookmarksViewController.swift
+//  BrowseViewController.swift
 //  Show And Sell
 //
 //  Created by Brayden Cloud on 9/5/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BookmarksViewController: UIViewController {
+class BrowseTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,5 +31,12 @@ class BookmarksViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: TableView delegate
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // RETURN the number of rows, based on how many items there are to browse.
+        
+        return 1    // TODO: temporary return statement.
+    }
 
 }
