@@ -1,19 +1,22 @@
 //
-//  BookmarksViewController.swift
+//  IntroPageViewController.swift
 //  Show And Sell
 //
-//  Created by Brayden Cloud on 9/5/16.
+//  Created by Brayden Cloud on 9/15/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
 
 import UIKit
 
-class BookmarksTableViewController: UITableViewController {
+class IntroPageViewController: UIPageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        // Create intro pages programatically
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,15 +34,5 @@ class BookmarksTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
-    // MARK: Table View Delegate
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // RETURN the number of rows, based on how many items there are to browse.
-        
-        return 1    // TODO: temporary return statement.
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return ItemTableViewCell()
-    }
+
 }
