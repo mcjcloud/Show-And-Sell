@@ -5,6 +5,7 @@
 //  Created by Brayden Cloud on 9/5/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
+//  Show And Sell Yardale app.
 
 import UIKit
 
