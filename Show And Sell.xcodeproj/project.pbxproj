@@ -143,6 +143,7 @@
 					D8FDE3B31D7DF5A500B98B48 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 43G9VP4VY7;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -311,6 +312,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.insertcoolnamehere.Show-And-Sell";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -323,6 +325,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.insertcoolnamehere.Show-And-Sell";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

@@ -33,7 +33,7 @@ class BrowseTableViewController: UITableViewController {
     */
     
     // MARK: TableView delegate
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // RETURN the number of rows, based on how many items there are to browse.
         
         return 1    // TODO: temporary return statement.
