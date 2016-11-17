@@ -11,4 +11,12 @@ import UIKit
 class IntroViewController: UIViewController {
 
     // Properties to be accessed from other classes.
+    @IBOutlet var messageLabel: UILabel!
+    
+    override func viewDidLoad() {
+        if messageLabel == nil {
+            messageLabel = UILabel()
+        }
+    }
+    
 }

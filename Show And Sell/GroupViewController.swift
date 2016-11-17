@@ -1,14 +1,14 @@
 //
-//  DontateItemViewController.swift
+//  GroupViewController.swift
 //  Show And Sell
 //
-//  Created by Brayden Cloud on 9/5/16.
+//  Created by Brayden Cloud on 9/20/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
 
 import UIKit
 
-class DontateItemViewController: UIViewController {
+class GroupViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +26,7 @@ class DontateItemViewController: UIViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
