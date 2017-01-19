@@ -78,9 +78,18 @@ class MessagesTableViewController: UITableViewController {
         }
         else if message.posterId == item.ownerId {
             cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+            cell.nameLabel.textAlignment = .left
+            cell.messageLabel.textAlignment = .left
         }
         else if message.posterId == (AppDelegate.group?.groupId ?? "") {
             cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+            cell.nameLabel.textAlignment = .left
+            cell.messageLabel.textAlignment = .left
+        }
+        else {
+            cell.backgroundColor = UIColor.white
+            cell.nameLabel.textAlignment = .left
+            cell.messageLabel.textAlignment = .left
         }
 
         return cell
@@ -163,6 +172,8 @@ class MessagesTableViewController: UITableViewController {
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                //self.tableView.setContentOffset(CGPoint(x: 0, y: CGFloat.greatestFiniteMagnitude), animated: false)
+                self.tableView.scrollToRow(at: IndexPath(row: messages.count - 1, section: 0), at: .bottom, animated: false)
             }
         }
     }
