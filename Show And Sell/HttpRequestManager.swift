@@ -12,8 +12,8 @@
 import Foundation
 
 class HttpRequestManager {
-    //public static let SERVER_URL = "http://68.248.214.70:8080/showandsell"
-    public static let SERVER_URL = "http://192.168.1.107:8080/showandsell"
+    public static let SERVER_URL = "http://68.248.214.70:8080/showandsell"
+    //public static let SERVER_URL = "http://192.168.1.107:8080/showandsell"
     
     /*
      *      USER METHODS

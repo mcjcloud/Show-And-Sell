@@ -70,19 +70,35 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                         */
                         let inputController = UIAlertController(title: "Create Group", message: "Enter the name for the group", preferredStyle: .alert)
                         let doneAction = UIAlertAction(title: "Create", style: .default) { inputAction in
-                            // TODO: create the group with the specified name.
-                            if let name = inputController.textFields?[0].text, name.characters.count > 0 {
-                                HttpRequestManager.postGroup(name: name, adminId: AppDelegate.user!.userId, password: AppDelegate.user!.password, location: "remove this", locationDetail: "remove this") { group, response, error in
-                                    
-                                }
+                            
+                            // disable manage cell 
+                            DispatchQueue.main.async {
+                                self.manageCell.isUserInteractionEnabled = false
                             }
-                            else {
-                                inputController.title = "Name cannot be empty"
-                                self.present(inputController, animated: true, completion: nil)
+                            
+                            // TODO: create the group with the specified name.
+                            if let fields = inputController.textFields {
+                                if let name = fields[0].text, let loc = fields[1].text, let locDetail = fields[2].text, name.characters.count > 0, loc.characters.count > 0, locDetail.characters.count > 0 {
+                                    HttpRequestManager.postGroup(name: name, adminId: AppDelegate.user!.userId, password: AppDelegate.user!.password, location: loc, locationDetail: locDetail) { group, response, error in
+                                        print("Group request returned: \((response as? HTTPURLResponse)?.statusCode)")
+                                        
+                                        // enable manage cell
+                                        DispatchQueue.main.async {
+                                            self.manageCell.isUserInteractionEnabled = true
+                                            self.tableView.reloadData()
+                                        }
+                                    }
+                                }
+                                else {
+                                    inputController.title = "Name cannot be empty"
+                                    self.present(inputController, animated: true, completion: nil)
+                                }
                             }
                         }
                         
-                        inputController.addTextField(configurationHandler: nil)
+                        inputController.addTextField(configurationHandler: { $0.placeholder = "Group Name" })
+                        inputController.addTextField(configurationHandler: { $0.placeholder = "Group Address" })
+                        inputController.addTextField(configurationHandler: { $0.placeholder = "Location Details" })
                         inputController.addAction(doneAction)
                         
                         self.present(inputController, animated: true, completion: nil)
