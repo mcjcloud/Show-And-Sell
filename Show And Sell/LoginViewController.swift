@@ -54,8 +54,26 @@ class LoginViewController: UIViewController {
         passwordField.text = ""
         messageLabel.text = ""
         
+
+        // clear non-persistant data.
+        AppDelegate.myGroup = nil
+        AppDelegate.group = nil
+        AppDelegate.user = nil
+        AppDelegate.bookmarks = nil
+        
         loginButton.isEnabled = true
         createAccountButton.isEnabled = true
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dest = segue.destination as? FindGroupTableViewController {
+            dest.loginVC = self
+        }
+        else if let dest = segue.destination as? CreateAccountViewController {
+            dest.loginVC = self
+        }
+        else if let dest = segue.destination as? SSTabBarViewController {
+            dest.loginVC = self
+        }
     }
     
     // IBOutlet functions
@@ -88,10 +106,12 @@ class LoginViewController: UIViewController {
                     
                     // go to tabs segue from main thread
                     DispatchQueue.main.async(execute: {
-                        if let _ = AppDelegate.save.group {
+                        if let groupId = AppDelegate.user?.groupId, groupId.characters.count > 0 {
                             self.performSegue(withIdentifier: "loginToTabs", sender: self)
                         }
                         else {  // if there is no group, segue to choose a group
+                            print("loginToFinder segue")
+                            print("saved groupId: \(AppDelegate.user?.groupId)")
                             self.performSegue(withIdentifier: "loginToFinder", sender: self)
                         }
                     })

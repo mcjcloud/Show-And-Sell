@@ -19,32 +19,32 @@ class SaveData: NSObject, NSCoding {
     struct Keys {
         static let usernameKey = "usernameKey"
         static let passwordKey = "passwordKey"
-        static let groupKey = "groupKey"
+        //static let groupKey = "groupKey"
     }
     
     // user data
     var username: String?
     var password: String?
-    var group: String?
+    //var groupId: String?
         
     // MARK: Coder
     func encode(with aCoder: NSCoder) {
         aCoder.encode(self.username, forKey: Keys.usernameKey)
         aCoder.encode(self.password, forKey: Keys.passwordKey)
-        aCoder.encode(self.group, forKey: Keys.groupKey)
+        //aCoder.encode(self.groupId, forKey: Keys.groupKey)
     }
     
-    init(username: String?, password: String?, group: String?) {
+    init(username: String?, password: String?/*, group: String?*/) {
         self.username = username
         self.password = password
-        self.group = group
+        //self.groupId = group
     }
     required convenience init?(coder aDecoder: NSCoder) {
         let username = aDecoder.decodeObject(forKey: Keys.usernameKey) as? String
         let password = aDecoder.decodeObject(forKey: Keys.passwordKey) as? String
-        let group = aDecoder.decodeObject(forKey: Keys.groupKey) as? String
+        //let group = aDecoder.decodeObject(forKey: Keys.groupKey) as? String
         
         // init the save data, user new array if no bookmarks.
-        self.init(username: username, password: password, group: group)
+        self.init(username: username, password: password/*, group: group*/)
     }
 }

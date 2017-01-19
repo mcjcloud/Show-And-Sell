@@ -31,7 +31,6 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         tableView.tableHeaderView = searchController.searchBar
 
         // Do any additional setup after loading the view.
-        items = [Item]()
         print("View did load")
         
         // refresh control
@@ -41,8 +40,6 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         // load all items.
         refreshControl?.beginRefreshing()
         handleRefresh(self.refreshControl!)
-        
-        self.navigationItem.title = "Browse"
     }
     override func viewWillAppear(_ animated: Bool) {
         // reload the table data
@@ -62,14 +59,18 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         // prepare to go to detail view
         let cell = sender as! ItemTableViewCell
         let destination: ItemDetailViewController = segue.destination as! ItemDetailViewController
-        let item = items[(tableView.indexPath(for: cell)?.row)!]
+        
+        // select item based on weather or not search is active
+        let item = (searchController.isActive && searchController.searchBar.text! != "") ? filteredItems[(tableView.indexPath(for: cell)?.row)!] : items[(tableView.indexPath(for: cell)?.row)!]
+        // get the item obj from AppDelegate to fix bug in ItemDetailVC where Unbookmark doesn't work.
+        let appDelItem = AppDelegate.bookmarks?.first(where: { (k, v) in k.itemId == item.itemId })?.key
         
         // assign the data from the item to the fields in the destination view controller
         destination.name = item.name
         destination.price = item.price
         destination.condition = item.condition
         destination.desc = item.itemDescription
-        destination.item = item
+        destination.item = appDelItem ?? item
         
         let imageData = Data(base64Encoded: item.thumbnail)
         if let data = imageData {
@@ -117,8 +118,13 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // segue to the view displaying the item.
-        let cell = tableView.visibleCells[indexPath.row]
+        let cell = tableView.cellForRow(at: indexPath)
         performSegue(withIdentifier: "itemDetails", sender: cell)
+    }
+    
+    // handle unwind here.
+    @IBAction func unwindToBrowse(segue: UIStoryboardSegue) {
+        print("unwind to browse")
     }
 
     // Handles a drag to refresh
@@ -126,8 +132,7 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         print()
         print("refreshing")
         // get a list of all items (for now)
-        // TODO: get items based on group.
-        HttpRequestManager.getItems(with: AppDelegate.save.group!) { itemsArray, response, error in
+        HttpRequestManager.getApproved(with: AppDelegate.group?.groupId ?? "") { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items

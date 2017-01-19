@@ -15,12 +15,16 @@ class Group: NSObject{
     var name: String
     var adminId: String
     var dateCreated: String
+    var location: String
+    var locationDetail: String
     //var itemsSold: Int         // TODO: include this is needed
  
-    init(groupId: String, name: String, adminId: String, dateCreated: String) {
+    init(groupId: String, name: String, adminId: String, dateCreated: String, location: String, locationDetail: String) {
         self.groupId = groupId
         self.name = name
         self.adminId = adminId
         self.dateCreated = dateCreated
+        self.location = location
+        self.locationDetail = locationDetail
     }
 }

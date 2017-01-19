@@ -8,12 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		D80D79161DDA39980055A307 /* noimage.png in Resources */ = {isa = PBXBuildFile; fileRef = D80D79151DDA39980055A307 /* noimage.png */; };
+		D835EA3A1E2C48E9009C0650 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D835EA391E2C48E8009C0650 /* MessageTableViewCell.swift */; };
 		D84393C01DBF1CFF008E7721 /* right-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = D84393BF1DBF1CFF008E7721 /* right-arrow.png */; };
 		D84393C31DBF1F0B008E7721 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = D84393C21DBF1F0B008E7721 /* checkmark.png */; };
+		D84C070D1E043BAB0015DBEB /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */; };
+		D86D51051DEC93710096B58C /* ManageGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */; };
 		D8A2CA2E1D91928200E5ADC4 /* SSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */; };
-		D8A2CA301D9193F100E5ADC4 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2F1D9193F100E5ADC4 /* GroupViewController.swift */; };
+		D8A2CA301D9193F100E5ADC4 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */; };
 		D8A2CA331D942F1C00E5ADC4 /* ZoomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA321D942F1C00E5ADC4 /* ZoomSegue.swift */; };
 		D8A2CA351D942FAE00E5ADC4 /* ZoomUnwindSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA341D942FAE00E5ADC4 /* ZoomUnwindSegue.swift */; };
+		D8B232C21E1D7EB7000234E8 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B232C11E1D7EB7000234E8 /* MessagesTableViewController.swift */; };
 		D8C129861DB6696A005B86E5 /* SaveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C129851DB6696A005B86E5 /* SaveData.swift */; };
 		D8C5FD031DBFAE410062FDF5 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C5FD021DBFAE410062FDF5 /* Group.swift */; };
 		D8C5FD051DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C5FD041DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift */; };
@@ -40,12 +44,16 @@
 
 /* Begin PBXFileReference section */
 		D80D79151DDA39980055A307 /* noimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noimage.png; sourceTree = "<group>"; };
+		D835EA391E2C48E8009C0650 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		D84393BF1DBF1CFF008E7721 /* right-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow.png"; sourceTree = "<group>"; };
 		D84393C21DBF1F0B008E7721 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
+		D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
+		D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupTableViewController.swift; sourceTree = "<group>"; };
 		D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSTabBarViewController.swift; sourceTree = "<group>"; };
-		D8A2CA2F1D9193F100E5ADC4 /* GroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
+		D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
 		D8A2CA321D942F1C00E5ADC4 /* ZoomSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomSegue.swift; sourceTree = "<group>"; };
 		D8A2CA341D942FAE00E5ADC4 /* ZoomUnwindSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomUnwindSegue.swift; sourceTree = "<group>"; };
+		D8B232C11E1D7EB7000234E8 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
 		D8C129851DB6696A005B86E5 /* SaveData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveData.swift; sourceTree = "<group>"; };
 		D8C5FD021DBFAE410062FDF5 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		D8C5FD041DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindGroupTableViewCell.swift; sourceTree = "<group>"; };
@@ -113,10 +121,31 @@
 			name = Segues;
 			sourceTree = "<group>";
 		};
+		D8B232C31E1D7F0F000234E8 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				D8FDE3D41D7E01DE00B98B48 /* ItemDetailViewController.swift */,
+				D8FDE3D21D7E01BC00B98B48 /* DonateItemViewController.swift */,
+				D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */,
+				D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */,
+			);
+			name = Detail;
+			sourceTree = "<group>";
+		};
+		D8B232C41E1D7F92000234E8 /* Intro */ = {
+			isa = PBXGroup;
+			children = (
+				D8CA36641D8AFA7E00A30D39 /* IntroViewController.swift */,
+				D8CA36621D8AFA2800A30D39 /* IntroPageViewController.swift */,
+				D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */,
+				D8FDE3CA1D7DFFB100B98B48 /* CreateAccountViewController.swift */,
+			);
+			name = Intro;
+			sourceTree = "<group>";
+		};
 		D8DC45931D95797800E53B34 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D8DC45941D9579CA00E53B34 /* HttpRequestManager.swift */,
 				D8C129851DB6696A005B86E5 /* SaveData.swift */,
 				D8DC45961D957ACE00E53B34 /* User.swift */,
 				D8FE95DC1DA6A89B002276AF /* Item.swift */,
@@ -130,6 +159,7 @@
 			children = (
 				D8CA36601D8AF2CA00A30D39 /* ItemTableViewCell.swift */,
 				D8C5FD041DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift */,
+				D835EA391E2C48E8009C0650 /* MessageTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -158,6 +188,7 @@
 				D8FDE3C91D7DFF4200B98B48 /* ViewControllers */,
 				D8E62B041D834121002018CD /* Views */,
 				D8A2CA311D942EAD00E5ADC4 /* Segues */,
+				D8DC45941D9579CA00E53B34 /* HttpRequestManager.swift */,
 				D8DC45931D95797800E53B34 /* Models */,
 				D8FDE3BB1D7DF5A600B98B48 /* Main.storyboard */,
 				D8FDE3BE1D7DF5A700B98B48 /* Assets.xcassets */,
@@ -170,16 +201,13 @@
 		D8FDE3C91D7DFF4200B98B48 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				D8CA36641D8AFA7E00A30D39 /* IntroViewController.swift */,
-				D8CA36621D8AFA2800A30D39 /* IntroPageViewController.swift */,
-				D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */,
-				D8FDE3CA1D7DFFB100B98B48 /* CreateAccountViewController.swift */,
+				D8B232C41E1D7F92000234E8 /* Intro */,
+				D8B232C31E1D7F0F000234E8 /* Detail */,
 				D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */,
 				D84393C11DBF1E0A008E7721 /* Tabs */,
 				D8FDFB1B1DBAA1EB008E09B1 /* FindGroupTableViewController.swift */,
-				D8A2CA2F1D9193F100E5ADC4 /* GroupViewController.swift */,
-				D8FDE3D21D7E01BC00B98B48 /* DonateItemViewController.swift */,
-				D8FDE3D41D7E01DE00B98B48 /* ItemDetailViewController.swift */,
+				D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */,
+				D8B232C11E1D7EB7000234E8 /* MessagesTableViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -267,11 +295,15 @@
 				D8FE95DF1DADA08D002276AF /* SettingsTableViewController.swift in Sources */,
 				D8A2CA351D942FAE00E5ADC4 /* ZoomUnwindSegue.swift in Sources */,
 				D8FDE3D11D7E003E00B98B48 /* BookmarksTableViewController.swift in Sources */,
+				D8B232C21E1D7EB7000234E8 /* MessagesTableViewController.swift in Sources */,
 				D8FDFB1C1DBAA1EB008E09B1 /* FindGroupTableViewController.swift in Sources */,
 				D8DC45951D9579CA00E53B34 /* HttpRequestManager.swift in Sources */,
 				D8CA36611D8AF2CA00A30D39 /* ItemTableViewCell.swift in Sources */,
+				D835EA3A1E2C48E9009C0650 /* MessageTableViewCell.swift in Sources */,
+				D84C070D1E043BAB0015DBEB /* CreateGroupViewController.swift in Sources */,
 				D8FDE3D51D7E01DE00B98B48 /* ItemDetailViewController.swift in Sources */,
-				D8A2CA301D9193F100E5ADC4 /* GroupViewController.swift in Sources */,
+				D8A2CA301D9193F100E5ADC4 /* GroupDetailViewController.swift in Sources */,
+				D86D51051DEC93710096B58C /* ManageGroupTableViewController.swift in Sources */,
 				D8C5FD031DBFAE410062FDF5 /* Group.swift in Sources */,
 				D8FDE3CB1D7DFFB100B98B48 /* CreateAccountViewController.swift in Sources */,
 				D8A2CA2E1D91928200E5ADC4 /* SSTabBarViewController.swift in Sources */,

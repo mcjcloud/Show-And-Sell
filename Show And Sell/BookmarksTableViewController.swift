@@ -10,7 +10,12 @@ import UIKit
 
 class BookmarksTableViewController: UITableViewController {
     
-    var bookmarks = AppDelegate.bookmarks ?? [Item]()                           // the AppDel bookmarks or an empty array.
+    var bookmarks = [Item: String]() {                          // the AppDel bookmarks or an empty array.
+        didSet {
+            bookmarkItems = bookmarks.keys.sorted(by: { return $0.name < $1.name })
+        }
+    }
+    var bookmarkItems = [Item]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,11 +24,20 @@ class BookmarksTableViewController: UITableViewController {
         // set navigation bar
         navigationItem.title = "Bookmarks"
         
-        // load bookmarks
+        // refresh control
+        self.refreshControl = UIRefreshControl()
+        refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        
+        // load all bookmarks.
+        refreshControl?.beginRefreshing()
+        handleRefresh(self.refreshControl!)
         
     }
     override func viewWillAppear(_ animated: Bool) {
         // if the tab is reclicked or showed after being left, reload the data.
+        // update the data dictionary
+        self.bookmarks = AppDelegate.bookmarks ?? [Item: String]()
+        
         tableView.reloadData()
     }
 
@@ -41,10 +55,11 @@ class BookmarksTableViewController: UITableViewController {
         let cell = sender as! ItemTableViewCell
         let destination: ItemDetailViewController = segue.destination as! ItemDetailViewController
         
-        let item = bookmarks[(self.tableView.indexPath(for: cell)?.row)!]
+        let item = bookmarkItems[(self.tableView.indexPath(for: cell)?.row)!]
          
         // assign the data from the item to the fields in the destination view controller
         destination.name = item.name
+        destination.price = item.price
         destination.condition = item.condition
         destination.desc = item.itemDescription
         
@@ -56,7 +71,7 @@ class BookmarksTableViewController: UITableViewController {
             destination.thumbnail = UIImage(named: "noimage")
         }
         
-        print("bookmarked: \(item.isBookmarked)")
+        //print("bookmarked: \(item.isBookmarked)")
         destination.item = item
     }
  
@@ -71,7 +86,7 @@ class BookmarksTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> ItemTableViewCell {
         // build the cell
-        let item = bookmarks[indexPath.row]
+        let item = bookmarkItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "bookmarkCell") as! ItemTableViewCell
      
         cell.itemTitle.text = item.name
@@ -92,5 +107,30 @@ class BookmarksTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.visibleCells[indexPath.row]
         performSegue(withIdentifier: "bookmarkDetails", sender: cell)
+    }
+    
+    // MARK: Refresh
+    
+    // Handles a drag to refresh
+    func handleRefresh(_ refreshControl: UIRefreshControl) {
+        print()
+        print("refreshing")
+        // get a list of all items (for now)
+        HttpRequestManager.getBookmarks(userId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+            print("DATA RETURNED")
+            
+            // set current items to requested items
+            if let b = bookmarks {
+                self.bookmarks = b
+                AppDelegate.bookmarks = b
+            }
+            
+            // reload data on the main thread.
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
+            }
+            print("refresh ending")
+        }
     }
 }

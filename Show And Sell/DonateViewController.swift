@@ -23,7 +23,7 @@ class DonateViewController: UIViewController {
         donateButton.setTitle("Donate Item", for: .normal)
         
         // if there is no group set, false, else true
-        donateButton.isEnabled = AppDelegate.save.group != "" && AppDelegate.save.group != nil
+        donateButton.isEnabled = AppDelegate.group?.groupId != "" && AppDelegate.group?.groupId != nil
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,8 +50,8 @@ class DonateViewController: UIViewController {
         let thumbnail = imageData!.base64EncodedString()
         
         // make a post request to add the item to the appropriate group TODO:
-        let item = Item(itemId: "", groupId: AppDelegate.save.group!, ownerId: AppDelegate.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, isBookmarked: false)
-        HttpRequestManager.postItem(with: item) { item, response, error in
+        let item = Item(itemId: "", groupId: AppDelegate.group!.groupId, ownerId: AppDelegate.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, approved: false)
+        HttpRequestManager.post(item: item) { item, response, error in
             print("ITEM POST COMPLETION")
             if error != nil {
                 print("ERROR: \(error)")
@@ -63,7 +63,6 @@ class DonateViewController: UIViewController {
             }
         }
     }
-
     
     // resize image
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {

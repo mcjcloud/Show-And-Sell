@@ -17,20 +17,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Global variables.
     static var save: SaveData!
     
-    static var bookmarks: [Item]?
-    static var user: User? 
+    static var bookmarks: [Item: String]?
+    static var user: User?
     static var group: Group? {
         didSet {
-            save.group = group?.groupId
+            //save.groupId = group?.groupId
+            user?.groupId = group?.groupId ?? ""
             AppDelegate.saveData()
         }
     }
+    static var myGroup: Group?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         // load saved data.
-        AppDelegate.save = AppDelegate.loadData() ?? SaveData(username: nil, password: nil, group: nil)
+        AppDelegate.save = AppDelegate.loadData() ?? SaveData(username: nil, password: nil/*, group: nil*/)
         
         return true
     }

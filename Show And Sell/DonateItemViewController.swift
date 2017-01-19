@@ -20,6 +20,9 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
     
     let picker = UIImagePickerController()
     
+    // data
+    var item: Item?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,6 +33,21 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
         itemPriceField.delegate = self
         itemConditionField.delegate = self
         itemDescription.delegate = self
+        
+        // fill in default values (if existant)
+        itemNameField.text = item?.name
+        itemPriceField.text = item?.price
+        itemConditionField.text = item?.condition
+        itemDescription.text = item?.itemDescription
+        
+        // get image
+        if let pic = item?.thumbnail {
+            let imageData = Data(base64Encoded: pic)
+            let image = UIImage(data: imageData!)
+            
+            imageButton.contentMode = .scaleAspectFit
+            imageButton.setBackgroundImage(image, for: .normal)
+        }
         
         // start the button as false.
         doneButton.isEnabled = false

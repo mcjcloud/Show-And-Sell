@@ -9,6 +9,8 @@
 import UIKit
 
 class SSTabBarViewController: UITabBarController {
+    
+    var loginVC: LoginViewController!                       // reference to login to prevent garbage collection.
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,22 +19,29 @@ class SSTabBarViewController: UITabBarController {
          */
  
         // load the current group.
-        if AppDelegate.save.group != nil && AppDelegate.save.group != "" {
+        if let groupId = AppDelegate.user?.groupId {
             // make an http request for the group.
-            HttpRequestManager.getGroup(withId: AppDelegate.save.group!) { group, response, error in
-                AppDelegate.group = group
+            HttpRequestManager.getGroup(withId: groupId) { group, response, error in
+                if let g = group {
+                    AppDelegate.group = g
+                }
+                else {
+                    self.present(FindGroupTableViewController(), animated: true) { () -> Void in
+                        print("Chose initial group")
+                    }
+                }
+                AppDelegate.saveData()
             }
         }
-        // load the bookmarks
-        HttpRequestManager.getBookmarks(with: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+        
+        // load the owned group
+        HttpRequestManager.getGroup(with: AppDelegate.user?.userId ?? "") { group, response, error in
+            AppDelegate.myGroup = group
+            AppDelegate.saveData()
             
-            if let e = error {
-                print("error: \(e)")
-            }
-            else {
-                AppDelegate.bookmarks = bookmarks
-            }
+            if let e = error { print("error with owner group: \(e)") }
         }
+        
     }
 
     override func didReceiveMemoryWarning() {
