@@ -88,6 +88,13 @@ class ItemDetailViewController: UIViewController {
     }
     
     @IBAction func showMessages(_ sender: UIButton) {
-        
+        performSegue(withIdentifier: "detailToMessages", sender: sender)
+    }
+    
+    // MARK: Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dest = segue.destination as? MessagesTableViewController {
+            dest.item = item
+        }
     }
 }

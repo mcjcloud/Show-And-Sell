@@ -833,6 +833,62 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // get messages for an Item
+    static func getMessages(itemId: String, completion: @escaping ([Message], URLResponse?, Error?) -> Void) {
+        
+        let requestURL = URL(string: "\(SERVER_URL)/api/chat/messages?itemId=\(itemId)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            let statusCode = (response as! HTTPURLResponse).statusCode
+            if statusCode != 200 {
+                print("Get Messages status: \(statusCode)")
+                completion([Message](), response, error)
+                return
+            }
+            
+            let json = try! JSONSerialization.jsonObject(with: data!) as! [[String: Any]]
+            
+            var messages = [Message]()
+            for message in json {
+                if let msg = Message(data: try! JSONSerialization.data(withJSONObject: message)) {
+                    messages.append(msg)
+                }
+            }
+            
+            // complete
+            completion(messages, response, error)
+        }
+        task.resume()
+    }
+    
+    static func postMessage(posterId: String, posterPassword: String, itemId: String, text: String, completion: @escaping (Message?, URLResponse?, Error?) -> Void) {
+        
+        let requestURL = URL(string: "\(SERVER_URL)/api/chat/create?posterId=\(posterId)&password=\(posterPassword)")
+        var request = URLRequest(url: requestURL!)
+        
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let body = ["itemId":"\(itemId)", "body":"\(text)"]
+        request.httpBody = try! JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            let statusCode = (response as! HTTPURLResponse).statusCode
+            if statusCode != 200 {
+                print("POST message status: \(statusCode)")
+                completion(nil, response, error)
+                return
+            }
+            
+            completion(Message(data: data), response, error)
+        }
+        task.resume()
+    }
     /*
      * Helper methods
      */

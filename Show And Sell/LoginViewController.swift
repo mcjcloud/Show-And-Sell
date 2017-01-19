@@ -54,12 +54,13 @@ class LoginViewController: UIViewController {
         passwordField.text = ""
         messageLabel.text = ""
         
-
+        /*
         // clear non-persistant data.
         AppDelegate.myGroup = nil
         AppDelegate.group = nil
         AppDelegate.user = nil
         AppDelegate.bookmarks = nil
+        */
         
         loginButton.isEnabled = true
         createAccountButton.isEnabled = true
@@ -106,6 +107,7 @@ class LoginViewController: UIViewController {
                     
                     // go to tabs segue from main thread
                     DispatchQueue.main.async(execute: {
+                        print("Logging in, groupId: \(u.groupId)")
                         if let groupId = AppDelegate.user?.groupId, groupId.characters.count > 0 {
                             self.performSegue(withIdentifier: "loginToTabs", sender: self)
                         }

@@ -13,6 +13,7 @@
 		D84393C31DBF1F0B008E7721 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = D84393C21DBF1F0B008E7721 /* checkmark.png */; };
 		D84C070D1E043BAB0015DBEB /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */; };
 		D86D51051DEC93710096B58C /* ManageGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */; };
+		D88C05FD1E30696500A30FFB /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C05FC1E30696500A30FFB /* Message.swift */; };
 		D8A2CA2E1D91928200E5ADC4 /* SSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */; };
 		D8A2CA301D9193F100E5ADC4 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */; };
 		D8A2CA331D942F1C00E5ADC4 /* ZoomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA321D942F1C00E5ADC4 /* ZoomSegue.swift */; };
@@ -49,6 +50,7 @@
 		D84393C21DBF1F0B008E7721 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
 		D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
 		D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupTableViewController.swift; sourceTree = "<group>"; };
+		D88C05FC1E30696500A30FFB /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSTabBarViewController.swift; sourceTree = "<group>"; };
 		D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
 		D8A2CA321D942F1C00E5ADC4 /* ZoomSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomSegue.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				D8DC45961D957ACE00E53B34 /* User.swift */,
 				D8FE95DC1DA6A89B002276AF /* Item.swift */,
 				D8C5FD021DBFAE410062FDF5 /* Group.swift */,
+				D88C05FC1E30696500A30FFB /* Message.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				D8CA36611D8AF2CA00A30D39 /* ItemTableViewCell.swift in Sources */,
 				D835EA3A1E2C48E9009C0650 /* MessageTableViewCell.swift in Sources */,
 				D84C070D1E043BAB0015DBEB /* CreateGroupViewController.swift in Sources */,
+				D88C05FD1E30696500A30FFB /* Message.swift in Sources */,
 				D8FDE3D51D7E01DE00B98B48 /* ItemDetailViewController.swift in Sources */,
 				D8A2CA301D9193F100E5ADC4 /* GroupDetailViewController.swift in Sources */,
 				D86D51051DEC93710096B58C /* ManageGroupTableViewController.swift in Sources */,

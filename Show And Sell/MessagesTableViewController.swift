@@ -9,6 +9,11 @@
 import UIKit
 
 class MessagesTableViewController: UITableViewController {
+    
+    var messages = [Message]()
+    
+    // variables assigned by prepare for segue
+    var item: Item!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,8 +21,18 @@ class MessagesTableViewController: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // Add button for posting a message to the thread.
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(postMessage))
+        //self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(handleRefresh))
+        self.navigationItem.title = "Chat"
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 140
+        
+        handleRefresh()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        handleRefresh()
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,24 +43,49 @@ class MessagesTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        // one section for all messages.
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        // return count of messages array
+        return messages.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
 
+        // get the messages sorted by the date, at the given index.
+        let message = messages.sorted(by: {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "M/d/yyyy hh:mm:ss a"
+            
+            let date1 = formatter.date(from: $0.datePosted)
+            let date2 = formatter.date(from: $1.datePosted)
+            
+            return date1! < date2!
+        })[indexPath.row]
         // Configure the cell...
+        cell.nameLabel.text = message.posterName
+        cell.messageLabel.text = message.body
+        
+        // customize based on who sent.
+        if message.posterId == (AppDelegate.user?.userId ?? "") {
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.323, alpha: 0.5286)
+            cell.nameLabel.textAlignment = .right
+            cell.messageLabel.textAlignment = .right
+        }
+        else if message.posterId == item.ownerId {
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+        }
+        else if message.posterId == (AppDelegate.group?.groupId ?? "") {
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+        }
 
         return cell
     }
-    */
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -91,5 +131,39 @@ class MessagesTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: Functions
+    
+    func postMessage() {
+        
+        let inputController = UIAlertController(title: "Post Message", message: "What would you like to say?", preferredStyle: .alert)
+        let doneAction = UIAlertAction(title: "Post", style: .default) { inputAction in
+            // post message
+            if let text = inputController.textFields?[0].text, text.characters.count > 0 {
+                HttpRequestManager.postMessage(posterId: AppDelegate.user?.userId ?? "", posterPassword: AppDelegate.user?.password ?? "", itemId: self.item.itemId, text: text) { message, response, error in
+                    print("Message posted")
+                    self.handleRefresh()
+                }
+            }
+            else {
+                inputController.title = "Text cannot be empty"
+                self.present(inputController, animated: true, completion: nil)
+            }
+        }
+        
+        inputController.addTextField(configurationHandler: nil)
+        inputController.addAction(doneAction)
+        
+        present(inputController, animated: true, completion: nil)
+    }
 
+    func handleRefresh() {
+        HttpRequestManager.getMessages(itemId: item.itemId) { messages, response, error in
+            self.messages = messages
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
 }

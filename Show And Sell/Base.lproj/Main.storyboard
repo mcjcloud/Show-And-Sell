@@ -346,7 +346,7 @@
                         <outlet property="messagesButton" destination="go6-9v-VhX" id="qYh-1a-clW"/>
                         <outlet property="nameLabel" destination="FS1-Gm-AVn" id="uIz-nK-D9J"/>
                         <outlet property="priceLabel" destination="zqb-J8-bSK" id="bqU-5J-qUx"/>
-                        <segue destination="gTK-A5-H2h" kind="show" id="Fjf-nX-yKS"/>
+                        <segue destination="gTK-A5-H2h" kind="show" identifier="detailToMessages" id="Fjf-nX-yKS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hKe-ur-jAZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -357,16 +357,22 @@
         <scene sceneID="5ol-YV-hFs">
             <objects>
                 <tableViewController id="gTK-A5-H2h" customClass="MessagesTableViewController" customModule="Show_And_Sell" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Cbc-dv-NCh">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Cbc-dv-NCh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="a3f-f1-yfg">
+                            <rect key="frame" x="0.0" y="91" width="375" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="63" id="ln0-Nn-uzG" customClass="MessageTableViewCell" customModule="Show_And_Sell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="messageCell" rowHeight="63" id="ln0-Nn-uzG" customClass="MessageTableViewCell" customModule="Show_And_Sell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="63"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ln0-Nn-uzG" id="HPF-aH-qab">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mcH-Pb-TcF">
@@ -1085,7 +1091,7 @@
             </objects>
             <point key="canvasLocation" x="2341.5999999999999" y="-361.16941529235385"/>
         </scene>
-        <!--Title-->
+        <!--Find Group-->
         <scene sceneID="ogG-fd-LLZ">
             <objects>
                 <tableViewController modalPresentationStyle="formSheet" id="TA8-Oi-hUD" customClass="FindGroupTableViewController" customModule="Show_And_Sell" customModuleProvider="target" sceneMemberID="viewController">
@@ -1139,7 +1145,7 @@
                             <outlet property="delegate" destination="TA8-Oi-hUD" id="xQG-ax-Zr9"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="SIB-Ex-Mje">
+                    <navigationItem key="navigationItem" title="Find Group" id="SIB-Ex-Mje">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="2he-Gi-6zM">
                             <connections>
                                 <action selector="donePressed:" destination="TA8-Oi-hUD" id="0tT-qj-tzX"/>

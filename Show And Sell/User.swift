@@ -15,6 +15,7 @@ class User: NSObject {
     var firstName: String
     var lastName: String
     var email: String
+    
     var groupId: String {
         didSet {
             // Make PUT request for user
@@ -39,46 +40,37 @@ class User: NSObject {
     init?(userJson: Data) {
         
         //get the json in object
-        var json: [String: Any]!
+        var json = try! JSONSerialization.jsonObject(with: userJson) as! [String: Any]
         
-        do {
-            print("user data: \(String(data: userJson, encoding: .utf8))")
+        if let id = json["ssUserId"] as? String,
+            let uname = json["username"] as? String,
+            let pword = json["password"] as? String,
+            let fName = json["firstName"] as? String,
+            let lName = json["lastName"] as? String,
+            let mail = json["email"] as? String {
             
-            json = try JSONSerialization.jsonObject(with: userJson) as! [String: Any]
-            if let id = json["ssUserId"] as? String,
-                let uname = json["username"] as? String,
-                let pword = json["password"] as? String,
-                let fName = json["firstName"] as? String,
-                let lName = json["lastName"] as? String,
-                let mail = json["email"] as? String {
-                
-                userId = id
-                username = uname
-                password = pword
-                firstName = fName
-                lastName = lName
-                email = mail
-                
-                if let group = json["groupId"] as? String {
-                    groupId = group
-                }
-                else {
-                    groupId = ""
-                }
-                
-                super.init()
+            self.userId = id
+            self.username = uname
+            self.password = pword
+            self.firstName = fName
+            self.lastName = lName
+            self.email = mail
+            
+            if let group = json["groupId"] as? String {
+                self.groupId = group
             }
             else {
-                print()
-                print("RETURNING NIL DUE TO INVALID VALUE IN DICTIONARY")
-                return nil
+                self.groupId = ""
             }
             
+            super.init()
         }
-        catch {
-            print("ERROR IN ARRAY JSON")
+        else {
+            print()
+            print("RETURNING NIL DUE TO INVALID VALUE IN DICTIONARY")
             return nil
         }
+        
     }
     
     // Manual init
