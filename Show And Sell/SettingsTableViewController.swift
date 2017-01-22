@@ -68,7 +68,7 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                         
                         self.present(nav, animated: true, completion: nil)
                         */
-                        let inputController = UIAlertController(title: "Create Group", message: "Enter the name for the group", preferredStyle: .alert)
+                        let inputController = UIAlertController(title: "Create Group", message: "Enter Group information.", preferredStyle: .alert)
                         let doneAction = UIAlertAction(title: "Create", style: .default) { inputAction in
                             
                             // disable manage cell 

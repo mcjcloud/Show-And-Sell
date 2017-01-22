@@ -29,6 +29,12 @@ class HttpRequestManager {
         // make the request and call the completion method with the new user
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            
+            if (response as! HTTPURLResponse).statusCode != 200 {
+                completion(nil, response)
+                return
+            }
+            
             completion(User(userJson: data!), response)
         }
         task.resume()
@@ -44,7 +50,14 @@ class HttpRequestManager {
         // make the request for the user, and return it in the completion method
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if (response as! HTTPURLResponse).statusCode != 200 {
+                completion(nil, response, error)
+                return
+            }
+            
             if let d = data {
+                
+                
                 completion(User(userJson: d), response, error)
             }
             else {

@@ -69,6 +69,7 @@ class MessagesTableViewController: UITableViewController {
         // Configure the cell...
         cell.nameLabel.text = message.posterName
         cell.messageLabel.text = message.body
+        cell.selectionStyle = .none
         
         // customize based on who sent.
         if message.posterId == (AppDelegate.user?.userId ?? "") {
@@ -173,7 +174,9 @@ class MessagesTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 //self.tableView.setContentOffset(CGPoint(x: 0, y: CGFloat.greatestFiniteMagnitude), animated: false)
-                self.tableView.scrollToRow(at: IndexPath(row: messages.count - 1, section: 0), at: .bottom, animated: false)
+                if messages.count > 0 {
+                    self.tableView.scrollToRow(at: IndexPath(row: messages.count - 1, section: 0), at: .bottom, animated: false)
+                }
             }
         }
     }
