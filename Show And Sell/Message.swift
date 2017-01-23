@@ -20,7 +20,14 @@ class Message: NSObject {
     init?(data messageJson: Data?) {
         
         if let data = messageJson {
-            var json: [String: Any] = try! JSONSerialization.jsonObject(with: data) as! [String : Any]
+            
+            var json: [String: Any]!
+            do {
+                json = try JSONSerialization.jsonObject(with: data) as! [String : Any]
+            }
+            catch {
+                return nil
+            }
             
             if let messId = json["ssMessageId"] as? String,
                 let itId = json["itemId"] as? String,
@@ -54,5 +61,29 @@ class Message: NSObject {
         self.posterName = posterName
         self.datePosted = datePosted
         self.body = body
+    }
+    
+    // get array of Message from json
+    static func messageArray(with messageJson: Data?) -> [Message] {
+        var result = [Message]()
+        
+        if let data = messageJson {
+            var json: [[String: Any]]!
+            do {
+                json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            }
+            catch {
+                return result
+            }
+            
+            for message in json {
+                if let msg = Message(data: try! JSONSerialization.data(withJSONObject: message)) {
+                    result.append(msg)
+                }
+            }
+        }
+        
+        // return result
+        return result
     }
 }

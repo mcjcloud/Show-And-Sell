@@ -9,6 +9,8 @@
 import Foundation
 
 class User: NSObject {
+    
+    // Properties
     var userId: String
     var username: String
     var password: String
@@ -37,40 +39,50 @@ class User: NSObject {
     }
     
     // init with data (may return nil)
-    init?(userJson: Data) {
+    init?(data userJson: Data?) {
         
-        //get the json in object
-        var json = try! JSONSerialization.jsonObject(with: userJson) as! [String: Any]
-        
-        if let id = json["ssUserId"] as? String,
-            let uname = json["username"] as? String,
-            let pword = json["password"] as? String,
-            let fName = json["firstName"] as? String,
-            let lName = json["lastName"] as? String,
-            let mail = json["email"] as? String {
+        if let data = userJson {
+            //get the json in object
+            var json: [String: Any]!
+            do {
+                json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+            }
+            catch {
+                return nil
+            }
             
-            self.userId = id
-            self.username = uname
-            self.password = pword
-            self.firstName = fName
-            self.lastName = lName
-            self.email = mail
-            
-            if let group = json["groupId"] as? String {
-                self.groupId = group
+            if let id = json["ssUserId"] as? String,
+                let uname = json["username"] as? String,
+                let pword = json["password"] as? String,
+                let fName = json["firstName"] as? String,
+                let lName = json["lastName"] as? String,
+                let mail = json["email"] as? String {
+                
+                self.userId = id
+                self.username = uname
+                self.password = pword
+                self.firstName = fName
+                self.lastName = lName
+                self.email = mail
+                
+                if let group = json["groupId"] as? String {
+                    self.groupId = group
+                }
+                else {
+                    self.groupId = ""
+                }
+                
+                super.init()
             }
             else {
-                self.groupId = ""
+                print()
+                print("RETURNING NIL DUE TO INVALID VALUE IN DICTIONARY")
+                return nil
             }
-            
-            super.init()
         }
         else {
-            print()
-            print("RETURNING NIL DUE TO INVALID VALUE IN DICTIONARY")
             return nil
         }
-        
     }
     
     // Manual init
