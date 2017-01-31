@@ -17,6 +17,8 @@ class SSTabBarViewController: UITabBarController {
         /*
          * Perform actions needed when the user logs in.
          */
+        // pass the loginVC a reference to self
+        self.loginVC.tabController = self
  
         // load the current group.
         if let groupId = AppDelegate.user?.groupId {
@@ -59,5 +61,24 @@ class SSTabBarViewController: UITabBarController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK: Helper functions
+    
+    // clear data of table view controllers
+    func clearTabData() {
+        print("clear data")
+        // browse
+        if let browseController = self.childViewControllers[0].childViewControllers[0] as? BrowseTableViewController {
+            print("clearing browse")
+            browseController.items = [Item]()
+            browseController.filteredItems = [Item]()
+        }
+        // bookmarks
+        if let bookmarkController = self.childViewControllers[1].childViewControllers[0] as? BookmarksTableViewController {
+            print("clearing bookmarks")
+            bookmarkController.bookmarkItems = [Item]()
+            bookmarkController.bookmarks = [Item: String]()
+        }
+    }
 
 }

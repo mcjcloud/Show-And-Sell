@@ -73,17 +73,17 @@ class MessagesTableViewController: UITableViewController {
         
         // customize based on who sent.
         if message.posterId == (AppDelegate.user?.userId ?? "") {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.323, alpha: 0.5286)
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.323, alpha: 0.5286)    // Green
             cell.nameLabel.textAlignment = .right
             cell.messageLabel.textAlignment = .right
         }
         else if message.posterId == item.ownerId {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)     // Gold
             cell.nameLabel.textAlignment = .left
             cell.messageLabel.textAlignment = .left
         }
-        else if message.posterId == (AppDelegate.group?.groupId ?? "") {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+        else if message.posterId == message.adminId {
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)     // Gold
             cell.nameLabel.textAlignment = .left
             cell.messageLabel.textAlignment = .left
         }

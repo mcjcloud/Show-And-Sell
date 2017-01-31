@@ -35,6 +35,7 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         
         // refresh control
         self.refreshControl = UIRefreshControl()
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
         refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         // load all items.
@@ -71,6 +72,7 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         destination.condition = item.condition
         destination.desc = item.itemDescription
         destination.item = appDelItem ?? item
+        destination.previousVC = self
         
         let imageData = Data(base64Encoded: item.thumbnail)
         if let data = imageData {

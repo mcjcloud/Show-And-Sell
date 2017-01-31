@@ -108,7 +108,7 @@ class HttpRequestManager {
         // make the request, call the completion method
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // call the completion, creating a new user object for the user that was just created.
-            completion(User(data: data!), response, error)
+            completion(User(data: data), response, error)
         }
         task.resume()
     }
@@ -262,21 +262,8 @@ class HttpRequestManager {
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            var json: [String: Any]!
-            do {
-                json = try JSONSerialization.jsonObject(with: data!) as? [String: Any]
-            }
-            catch {
-                print("error creating item")
-            }
-            
-            var item: Item?
-            if let itemId = json["ssItemId"] as? String, let groupId = json["groupId"] as? String, let ownerId = json["ownerId"] as? String, let name = json["name"] as? String, let price = json["price"] as? String, let description = json["description"] as? String, let condition = json["condition"] as? String, let thumbnail = json["thumbnail"] as? String, let approved = json["approved"] as? Bool {
-                item = Item(itemId: itemId, groupId: groupId, ownerId: ownerId, name: name, price: price, condition: condition, itemDescription: description, thumbnail: thumbnail, approved: approved)
-            }
-            
             // complete the request
-            completion(item, response, error)
+            completion(Item(data: data), response, error)
         }
         task.resume()
     }
@@ -298,21 +285,8 @@ class HttpRequestManager {
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-            var json: [String: Any]!
-            do {
-                json = try JSONSerialization.jsonObject(with: data!) as? [String: Any]
-            }
-            catch {
-                print("error creating item")
-            }
-            
-            var item: Item?
-            if let itemId = json["ssItemId"] as? String, let groupId = json["groupId"] as? String, let ownerId = json["ownerId"] as? String, let name = json["name"] as? String, let price = json["price"] as? String, let description = json["description"] as? String, let condition = json["condition"] as? String, let thumbnail = json["thumbnail"] as? String, let approved = json["approved"] as? Bool {
-                item = Item(itemId: itemId, groupId: groupId, ownerId: ownerId, name: name, price: price, condition: condition, itemDescription: description, thumbnail: thumbnail, approved: approved)
-            }
-            
             // complete the request
-            completion(item, response, error)
+            completion(Item(data: data), response, error)
         }
         task.resume()
     }
@@ -421,19 +395,16 @@ class HttpRequestManager {
                 print("error parsing resulting json")
             }
             
-            
-            var bookmarkId: String?
-            var itemId: String?
-            var userId: String?
-            // create the bookmark
-            if let jsonObj = json {
-                bookmarkId = jsonObj["ssBookmarkId"] as? String
-                itemId = jsonObj["itemId"] as? String
-                userId = jsonObj["userId"] as? String
+            if let bookmarkId = json["ssBookmarkId"] as? String,
+                let itemId = json["itemId"] as? String,
+                let userId = json["userId"] as? String {
+                
+                // completion
+                completion((bookmarkId, userId, itemId), response, error)
             }
-            
-            // completiton
-            completion((bookmarkId, itemId, userId), response, error)
+            else {
+                completion((nil, nil, nil), response, error)
+            }
         }
         task.resume()
     }
@@ -448,25 +419,25 @@ class HttpRequestManager {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             
-            var json: [String: String]!
+            var json: [String: Any]!
             do {
-                json = try JSONSerialization.jsonObject(with: data!) as? [String: String]
+                json = try JSONSerialization.jsonObject(with: data!) as? [String: Any]
             }
             catch {
                 print("Error parsing bookmark")
             }
             
-            var bookmarkId: String?
-            var itemId: String?
-            var userId: String?
-            if let jsonObj = json {
-                bookmarkId = jsonObj["ssBookmarkId"]
-                itemId = jsonObj["itemId"]
-                userId = jsonObj["userId"]
+            if let bookmarkId = json["ssBookmarkId"] as? String,
+                let itemId = json["itemId"] as? String,
+                let userId = json["userId"] as? String {
+                
+                // completion
+                completion((bookmarkId, userId, itemId), response, error)
             }
-            
-            // completion
-            completion((bookmarkId, userId, itemId), response, error)
+            else {
+                completion((nil, nil, nil), response, error)
+            }
+        
         }
         task.resume()
     }
@@ -504,6 +475,7 @@ class HttpRequestManager {
         }
         task.resume()
     }
+    
     /*
      * Helper methods
      */

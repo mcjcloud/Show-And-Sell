@@ -53,21 +53,7 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                     let alertController = UIAlertController(title: "Group not found", message: "A group with your user was not found.", preferredStyle: .alert)
                     
                     let createAction = UIAlertAction(title: "Create", style: .default) { action in
-                        // TODO: Create group.
-                        /*
-                        let viewController: UIViewController! = self.storyboard?.instantiateViewController(withIdentifier: "createGroup")
-                        let nav = UINavigationController(rootViewController: viewController)
-                        nav.modalPresentationStyle = .popover
-                        let popover = nav.popoverPresentationController
-                        
-                        // size the popover.
-                        viewController.preferredContentSize = CGSize(width: UIScreen.main.bounds.width - 10, height: UIScreen.main.bounds.height * 0.5)
-                        popover?.delegate = self
-                        popover?.sourceView = self.view
-                        popover?.sourceRect = CGRect(x: 100, y: 100, width: 0, height: 0)
-                        
-                        self.present(nav, animated: true, completion: nil)
-                        */
+                        // Create group.
                         let inputController = UIAlertController(title: "Create Group", message: "Enter Group information.", preferredStyle: .alert)
                         let doneAction = UIAlertAction(title: "Create", style: .default) { inputAction in
                             

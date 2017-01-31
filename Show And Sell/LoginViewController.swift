@@ -16,6 +16,9 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
     @IBOutlet var createAccountButton: UIButton!
     
+    // refrence to tab bar controller to clear data
+    var tabController: SSTabBarViewController?
+    
     var user: User!
     
     var autoLogin: Bool = true
@@ -49,18 +52,20 @@ class LoginViewController: UIViewController {
         // save data from session
         AppDelegate.saveData()
         
+        // clear tab bar data
+        print("tabController: \(self.tabController)")
+        self.tabController?.clearTabData()
+        
         // clear fields
         usernameField.text = ""
         passwordField.text = ""
         messageLabel.text = ""
         
-        /*
         // clear non-persistant data.
         AppDelegate.myGroup = nil
-        AppDelegate.group = nil
         AppDelegate.user = nil
+        AppDelegate.group = nil
         AppDelegate.bookmarks = nil
-        */
         
         loginButton.isEnabled = true
         createAccountButton.isEnabled = true

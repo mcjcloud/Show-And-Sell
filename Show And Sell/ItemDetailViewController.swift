@@ -30,6 +30,7 @@ class ItemDetailViewController: UIViewController {
     
     // data
     var item: Item!
+    var previousVC: UIViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +60,20 @@ class ItemDetailViewController: UIViewController {
         // Buy item 
         HttpRequestManager.buy(itemId: item?.itemId ?? "", userId: AppDelegate.user?.userId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
             print("made BUY request with status code: \((response as? HTTPURLResponse)?.statusCode)")
+        }
+        
+        var unwindSegue: UIStoryboardSegue?
+        if let prev = previousVC as? BrowseTableViewController {
+            unwindSegue = UIStoryboardSegue(identifier: "itemDetail", source: prev, destination: self)
+        }
+        else if let prev = previousVC as? BookmarksTableViewController {
+            unwindSegue = UIStoryboardSegue(identifier: "bookmarkDetail", source: prev, destination: self)
+        }
+        if let segue = unwindSegue {
+            unwind(for: segue, towardsViewController: previousVC)
+        }
+        else {
+            print("nil segue")
         }
     }
     
@@ -95,6 +110,15 @@ class ItemDetailViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dest = segue.destination as? MessagesTableViewController {
             dest.item = item
+        }
+        else if let dest = segue.destination as? BrowseTableViewController {
+            let index = dest.items.index(where: { e in e.itemId == self.item.itemId })
+            if let i = index {
+                dest.items.remove(at: i)
+            }
+        }
+        else if let dest = segue.destination as? BookmarksTableViewController {
+            dest.bookmarks.removeValue(forKey: self.item)
         }
     }
 }

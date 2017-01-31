@@ -26,6 +26,7 @@ class BookmarksTableViewController: UITableViewController {
         
         // refresh control
         self.refreshControl = UIRefreshControl()
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
         refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         // load all bookmarks.
@@ -62,6 +63,7 @@ class BookmarksTableViewController: UITableViewController {
         destination.price = item.price
         destination.condition = item.condition
         destination.desc = item.itemDescription
+        destination.previousVC = self
         
         let imageData = Data(base64Encoded: item.thumbnail)
         if let data = imageData {

@@ -14,6 +14,8 @@ class Message: NSObject {
     var itemId: String
     var posterId: String
     var posterName: String
+    var adminId: String
+    var adminName: String
     var datePosted: String
     var body: String
     
@@ -33,6 +35,8 @@ class Message: NSObject {
                 let itId = json["itemId"] as? String,
                 let postId = json["posterId"] as? String,
                 let postName = json["posterName"] as? String,
+                let adminId = json["adminId"] as? String,
+                let adminName = json["adminName"] as? String,
                 let date = json["datePosted"] as? String,
                 let bod = json["body"] as? String {
                 
@@ -40,6 +44,8 @@ class Message: NSObject {
                 self.itemId = itId
                 self.posterId = postId
                 self.posterName = postName
+                self.adminId = adminId
+                self.adminName = adminName
                 self.datePosted = date
                 self.body = bod
                 
@@ -54,11 +60,13 @@ class Message: NSObject {
         }
     }
     
-    init(messageId: String, itemId: String, posterId: String, posterName: String, datePosted: String, body: String) {
+    init(messageId: String, itemId: String, posterId: String, posterName: String, adminId: String, adminName: String, datePosted: String, body: String) {
         self.messageId = messageId
         self.itemId = itemId
         self.posterId = posterId
         self.posterName = posterName
+        self.adminId = adminId
+        self.adminName = adminName
         self.datePosted = datePosted
         self.body = body
     }
