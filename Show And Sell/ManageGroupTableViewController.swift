@@ -47,6 +47,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         // load all items.
         refreshControl?.beginRefreshing()
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
         handleRefresh(self.refreshControl!)
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -137,7 +138,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 let item = self.items.first(where: { e in e.name == cell.itemTitle.text })
                 
                 // delete the Item
-                HttpRequestManager.deleteItem(id: item?.itemId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
+                HttpRequestManager.delete(itemWithId: item?.itemId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
                     print("Item delete response: \((response as? HTTPURLResponse)?.statusCode)")
                 }
                 tableView.reloadData()
@@ -251,7 +252,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         print("refreshing")
         // get a list of all items (for now)
         // TODO: get items based on owned group.
-        HttpRequestManager.getItems(with: AppDelegate.myGroup!.groupId) { itemsArray, response, error in
+        HttpRequestManager.items(withGroupId: AppDelegate.myGroup!.groupId) { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items

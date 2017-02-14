@@ -26,6 +26,8 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Show &amp; Sell would like to access your photos to enable you to chose a photo to upload.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Show &amp; Sell would like to access your camera for uploading images.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -9,27 +9,27 @@
 import UIKit
 
 class SSTabBarViewController: UITabBarController {
-    
-    var loginVC: LoginViewController!                       // reference to login to prevent garbage collection.
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // select the middle tab
+        self.selectedIndex = 1
+        
         /*
          * Perform actions needed when the user logs in.
          */
-        // pass the loginVC a reference to self
-        self.loginVC.tabController = self
+        AppDelegate.tabVC = self    // give app delegate reference to this
  
         // load the current group.
         if let groupId = AppDelegate.user?.groupId {
             // make an http request for the group.
-            HttpRequestManager.getGroup(withId: groupId) { group, response, error in
+            HttpRequestManager.group(withId: groupId) { group, response, error in
                 if let g = group {
                     AppDelegate.group = g
                 }
                 else {
-                    self.present(FindGroupTableViewController(), animated: true) { () -> Void in
-                        print("Chose initial group")
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "tabsToFinder", sender: self)
                     }
                 }
                 AppDelegate.saveData()
@@ -37,7 +37,7 @@ class SSTabBarViewController: UITabBarController {
         }
         
         // load the owned group
-        HttpRequestManager.getGroup(with: AppDelegate.user?.userId ?? "") { group, response, error in
+        HttpRequestManager.group(withAdminId: AppDelegate.user?.userId ?? "") { group, response, error in
             AppDelegate.myGroup = group
             AppDelegate.saveData()
             
@@ -67,12 +67,19 @@ class SSTabBarViewController: UITabBarController {
     // clear data of table view controllers
     func clearTabData() {
         print("clear data")
+        clearBrowseData()
+        clearBookmarksData()
+    }
+    
+    func clearBrowseData() {
         // browse
         if let browseController = self.childViewControllers[0].childViewControllers[0] as? BrowseTableViewController {
             print("clearing browse")
             browseController.items = [Item]()
             browseController.filteredItems = [Item]()
         }
+    }
+    func clearBookmarksData() {
         // bookmarks
         if let bookmarkController = self.childViewControllers[1].childViewControllers[0] as? BookmarksTableViewController {
             print("clearing bookmarks")

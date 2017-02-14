@@ -12,29 +12,15 @@ class User: NSObject {
     
     // Properties
     var userId: String
-    var username: String
+    var email: String
     var password: String
     var firstName: String
     var lastName: String
-    var email: String
-    
-    var groupId: String {
-        didSet {
-            // Make PUT request for user
-            HttpRequestManager.updateUser(id: userId, newUsername: username, oldPassword: password, newPassword: password, newFirstName: firstName, newLastName: lastName, newEmail: email, newGroupId: groupId) { user, response, error in
-                print("Update user returned")
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    if statusCode != 200 {
-                        print("ERROR UPDATING USER")
-                    }
-                }
-            }
-        }
-    }
+    var groupId: String
     
     override var description: String {
         get {
-            return "\(userId) \(username) \(password) \(firstName) \(lastName) \(email)"
+            return "\(userId) \(password) \(firstName) \(lastName) \(email)"
         }
     }
     
@@ -52,18 +38,16 @@ class User: NSObject {
             }
             
             if let id = json["ssUserId"] as? String,
-                let uname = json["username"] as? String,
                 let pword = json["password"] as? String,
                 let fName = json["firstName"] as? String,
                 let lName = json["lastName"] as? String,
                 let mail = json["email"] as? String {
                 
                 self.userId = id
-                self.username = uname
+                self.email = mail
                 self.password = pword
                 self.firstName = fName
                 self.lastName = lName
-                self.email = mail
                 
                 if let group = json["groupId"] as? String {
                     self.groupId = group
@@ -86,13 +70,23 @@ class User: NSObject {
     }
     
     // Manual init
-    init(userId: String, groupId: String, username: String, password: String, firstName: String, lastName: String, email: String) {
+    init(userId: String, email: String, groupId: String, password: String, firstName: String, lastName: String) {
         self.userId = userId
+        self.email = email
         self.groupId = groupId
-        self.username = username
         self.password = password
         self.firstName = firstName
         self.lastName = lastName
+    }
+    
+    // manual init without userId or groupId
+    init(email: String, password: String, firstName: String, lastName: String) {
         self.email = email
+        self.password = password
+        self.firstName = firstName
+        self.lastName = lastName
+        
+        self.userId = ""
+        self.groupId = ""
     }
 }

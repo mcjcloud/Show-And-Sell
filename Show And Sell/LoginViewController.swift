@@ -10,14 +10,11 @@ import UIKit
 
 class LoginViewController: UIViewController {
     // GUI properties
-    @IBOutlet var usernameField: UITextField!
+    @IBOutlet var emailField: UITextField!
     @IBOutlet var passwordField: UITextField!
     @IBOutlet var messageLabel: UILabel!
     @IBOutlet var loginButton: UIButton!
     @IBOutlet var createAccountButton: UIButton!
-    
-    // refrence to tab bar controller to clear data
-    var tabController: SSTabBarViewController?
     
     var user: User!
     
@@ -25,20 +22,36 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("Login view did load")
+        
+        // set gray color for disabled button
+        loginButton.setTitleColor(UIColor.gray, for: .disabled)
+        createAccountButton.setTitleColor(UIColor.gray, for: .disabled)
+        
+        // assign textField methods
+        emailField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+        passwordField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
         
         // Do any additional setup after loading the view, typically from a nib.
+        AppDelegate.loginVC = self      // pass a reference to the AppDelegate
         messageLabel.text = ""
         
-        
         // auto login
-        if let uname = AppDelegate.save.username, let pword = AppDelegate.save.password {
-            usernameField.text = uname
+        if let email = AppDelegate.save.email, let pword = AppDelegate.save.password {
+            emailField.text = email
             passwordField.text = pword
             
             if autoLogin {
                 logIn(loginButton)
             }
         }
+        
+        // enable/disable login button
+        loginButton.isEnabled = shouldEnableLogin()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        // enable/disable login button
+        loginButton.isEnabled = shouldEnableLogin()
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,11 +66,10 @@ class LoginViewController: UIViewController {
         AppDelegate.saveData()
         
         // clear tab bar data
-        print("tabController: \(self.tabController)")
-        self.tabController?.clearTabData()
+        AppDelegate.tabVC?.clearTabData()
         
         // clear fields
-        usernameField.text = ""
+        emailField.text = ""
         passwordField.text = ""
         messageLabel.text = ""
         
@@ -71,26 +83,24 @@ class LoginViewController: UIViewController {
         createAccountButton.isEnabled = true
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // if the next view controller is the finder, give it a reference of self to know where to navigate next.
         if let dest = segue.destination as? FindGroupTableViewController {
-            dest.loginVC = self
-        }
-        else if let dest = segue.destination as? CreateAccountViewController {
-            dest.loginVC = self
-        }
-        else if let dest = segue.destination as? SSTabBarViewController {
-            dest.loginVC = self
+            dest.previousVC = self
         }
     }
     
     // IBOutlet functions
     @IBAction func logIn(_ sender: UIButton) {
+        // clear error message
+        messageLabel.text = ""
+        
         // GET user data.
-        if let username = usernameField.text, let password = passwordField.text {
+        if let email = emailField.text, let password = passwordField.text {
             // disable login button and create account button (until login attempt is complete)
             loginButton.isEnabled = false
             createAccountButton.isEnabled = false
         
-            HttpRequestManager.getUser(withUsername: username, andPassword: password) { user, response, error in
+            HttpRequestManager.user(withEmail: email, andPassword: password) { user, response, error in
                 // check error
                 
                 if let _ = error {
@@ -105,7 +115,7 @@ class LoginViewController: UIViewController {
                     // if the signed in user is not the same as the saved user, reasign the "save user"
                     AppDelegate.user = u
                     
-                    AppDelegate.save.username = u.username
+                    AppDelegate.save.email = u.email
                     AppDelegate.save.password = u.password
                     
                     AppDelegate.saveData()
@@ -114,6 +124,7 @@ class LoginViewController: UIViewController {
                     DispatchQueue.main.async(execute: {
                         print("Logging in, groupId: \(u.groupId)")
                         if let groupId = AppDelegate.user?.groupId, groupId.characters.count > 0 {
+                            print("segue to tabs")
                             self.performSegue(withIdentifier: "loginToTabs", sender: self)
                         }
                         else {  // if there is no group, segue to choose a group
@@ -128,7 +139,7 @@ class LoginViewController: UIViewController {
                 }
                 else {
                     // Tell user the process failed.
-                    self.messageLabel.text = "Error getting user. Please make sure username and password are correct."
+                    self.messageLabel.text = "Error getting user. Please make sure email and password are correct."
                     
                     // re-enable buttons
                     self.loginButton.isEnabled = true
@@ -141,5 +152,14 @@ class LoginViewController: UIViewController {
         }
     }
 
+    // MARK: Helper
+    func textChanged(_ textField: UITextField) {
+        loginButton.isEnabled = shouldEnableLogin()
+    }
+    
+    // check if the login button should be enabled.
+    func shouldEnableLogin() -> Bool {
+        return (emailField.text?.characters.count ?? 0) > 0 && (passwordField.text?.characters.count ?? 0) > 0
+    }
 }
 

@@ -15,13 +15,12 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
     var filteredItems = [Item]()
     
     var searchController: UISearchController!
+    
+    let loadInterval = 10
 
     override func viewDidLoad() {
         print("VIEW DID LOAD BROWSE CONTROLLER")
         super.viewDidLoad()
-        
-        // set back bar button
-        //self.navigationItem.backBarButtonItem = UIBarButtonItem()
         
         // setup search bar
         searchController  = UISearchController(searchResultsController: nil)
@@ -43,6 +42,12 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         handleRefresh(self.refreshControl!)
     }
     override func viewWillAppear(_ animated: Bool) {
+        // if there is no data, refresh
+        if items.count == 0 {
+            refreshControl?.beginRefreshing()
+            handleRefresh(self.refreshControl!)
+        }
+        
         // reload the table data
         tableView.reloadData()
     }
@@ -57,30 +62,38 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // prepare to go to detail view
-        let cell = sender as! ItemTableViewCell
-        let destination: ItemDetailViewController = segue.destination as! ItemDetailViewController
-        
-        // select item based on weather or not search is active
-        let item = (searchController.isActive && searchController.searchBar.text! != "") ? filteredItems[(tableView.indexPath(for: cell)?.row)!] : items[(tableView.indexPath(for: cell)?.row)!]
-        // get the item obj from AppDelegate to fix bug in ItemDetailVC where Unbookmark doesn't work.
-        let appDelItem = AppDelegate.bookmarks?.first(where: { (k, v) in k.itemId == item.itemId })?.key
-        
-        // assign the data from the item to the fields in the destination view controller
-        destination.name = item.name
-        destination.price = item.price
-        destination.condition = item.condition
-        destination.desc = item.itemDescription
-        destination.item = appDelItem ?? item
-        destination.previousVC = self
-        
-        let imageData = Data(base64Encoded: item.thumbnail)
-        if let data = imageData {
-            destination.thumbnail = UIImage(data: data)
+        // going to item detail
+        if let destination = segue.destination as? ItemDetailViewController {
+            // prepare to go to detail view
+            let cell = sender as! ItemTableViewCell
+            
+            // select item based on weather or not search is active
+            let item = (searchController.isActive && searchController.searchBar.text! != "") ? filteredItems[(tableView.indexPath(for: cell)?.row)!] : items[(tableView.indexPath(for: cell)?.row)!]
+            // get the item obj from AppDelegate to fix bug in ItemDetailVC where Unbookmark doesn't work.
+            let appDelItem = AppDelegate.bookmarks?.first(where: { (k, v) in k.itemId == item.itemId })?.key
+            
+            // assign the data from the item to the fields in the destination view controller
+            destination.name = item.name
+            destination.price = item.price
+            destination.condition = item.condition
+            destination.desc = item.itemDescription
+            destination.item = appDelItem ?? item
+            destination.previousVC = self
+            destination.segue = segue
+            
+            let imageData = Data(base64Encoded: item.thumbnail)
+            if let data = imageData {
+                destination.thumbnail = UIImage(data: data)
+            }
+            else {
+                destination.thumbnail = UIImage(named: "noimage")
+            }
         }
-        else {
-            destination.thumbnail = UIImage(named: "noimage")
-        }
+        // otherwise, going to settings
+    }
+    // handle unwind here.
+    @IBAction func unwindToBrowse(segue: UIStoryboardSegue) {
+        print("unwind to browse")
     }
     
     // MARK: TableView delegate
@@ -123,18 +136,21 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
         let cell = tableView.cellForRow(at: indexPath)
         performSegue(withIdentifier: "itemDetails", sender: cell)
     }
-    
-    // handle unwind here.
-    @IBAction func unwindToBrowse(segue: UIStoryboardSegue) {
-        print("unwind to browse")
+    /* reimplement for load interval at a time.
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // check if its the last tableViewCell
+        if indexPath.row == items.count - 1 {
+            // load next indecies
+            loadNext()
+        }
     }
-
+     */
+    
     // Handles a drag to refresh
     func handleRefresh(_ refreshControl: UIRefreshControl) {
-        print()
         print("refreshing")
         // get a list of all items (for now)
-        HttpRequestManager.getApproved(with: AppDelegate.group?.groupId ?? "") { itemsArray, response, error in
+        HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? "") { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items
@@ -146,6 +162,26 @@ class BrowseTableViewController: UITableViewController, UISearchResultsUpdating 
                 self.refreshControl?.endRefreshing()
             }
             print("refresh ending")
+        }
+        /*
+        HttpRequestManager.approvedItems(with: AppDelegate.group?.groupId ?? "", inRange: items.count, to: items.count + loadInterval) { items, response, error in
+            self.items += items
+            
+            DispatchQueue.main.async {
+                // update GUI
+                self.tableView.reloadData()
+            }
+        }
+        */
+    }
+    func loadNext() {
+        HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? "", inRange: items.count, to: items.count + loadInterval) { items, response, error in
+            self.items += items
+            
+            DispatchQueue.main.async {
+                // update GUI
+                self.tableView.reloadData()
+            }
         }
     }
     

@@ -17,34 +17,30 @@ class SaveData: NSObject, NSCoding {
     
     // a series of properties for the data to be saved.
     struct Keys {
-        static let usernameKey = "usernameKey"
+        static let emailKey = "emailKey"
         static let passwordKey = "passwordKey"
         //static let groupKey = "groupKey"
     }
     
     // user data
-    var username: String?
+    var email: String?
     var password: String?
     //var groupId: String?
         
     // MARK: Coder
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.username, forKey: Keys.usernameKey)
-        aCoder.encode(self.password, forKey: Keys.passwordKey)
-        //aCoder.encode(self.groupId, forKey: Keys.groupKey)
-    }
+        aCoder.encode(self.email, forKey: Keys.emailKey)
+        aCoder.encode(self.password, forKey: Keys.passwordKey)    }
     
-    init(username: String?, password: String?/*, group: String?*/) {
-        self.username = username
+    init(email: String?, password: String?) {
+        self.email = email
         self.password = password
-        //self.groupId = group
     }
     required convenience init?(coder aDecoder: NSCoder) {
-        let username = aDecoder.decodeObject(forKey: Keys.usernameKey) as? String
+        let email = aDecoder.decodeObject(forKey: Keys.emailKey) as? String
         let password = aDecoder.decodeObject(forKey: Keys.passwordKey) as? String
-        //let group = aDecoder.decodeObject(forKey: Keys.groupKey) as? String
         
         // init the save data, user new array if no bookmarks.
-        self.init(username: username, password: password/*, group: group*/)
+        self.init(email: email, password: password)
     }
 }

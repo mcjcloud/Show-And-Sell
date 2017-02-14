@@ -15,7 +15,8 @@ class Group: NSObject {
     var name: String
     var adminId: String
     var dateCreated: String
-    var location: String
+    var latitude: Double
+    var longitude: Double
     var locationDetail: String
     //var itemsSold: Int         // TODO: include this is needed
  
@@ -36,14 +37,16 @@ class Group: NSObject {
                 let name = json["name"] as? String,
                 let adminId = json["adminId"] as? String,
                 let dateCreated = json["dateCreated"] as? String,
-                let location = json["location"] as? String,
+                let latitude = json["latitude"] as? Double,
+                let longitude = json["longitude"] as? Double,
                 let locationDetail = json["locationDetail"] as? String {
                 
                 self.groupId = groupId
                 self.name = name
                 self.adminId = adminId
                 self.dateCreated = dateCreated
-                self.location = location
+                self.latitude = latitude
+                self.longitude = longitude
                 self.locationDetail = locationDetail
                 
                 // init object
@@ -58,13 +61,25 @@ class Group: NSObject {
         }
     }
     
-    init(groupId: String, name: String, adminId: String, dateCreated: String, location: String, locationDetail: String) {
+    init(groupId: String, name: String, adminId: String, dateCreated: String, latitude: Double, longitude: Double, locationDetail: String) {
         self.groupId = groupId
         self.name = name
         self.adminId = adminId
         self.dateCreated = dateCreated
-        self.location = location
+        self.latitude = latitude
+        self.longitude = longitude
         self.locationDetail = locationDetail
+    }
+    // group without groupId or date
+    init(name: String, adminId: String, latitude: Double, longitude: Double, locationDetail: String) {
+        self.name = name
+        self.adminId = adminId
+        self.latitude = latitude
+        self.longitude = longitude
+        self.locationDetail = locationDetail
+        
+        self.groupId = ""
+        self.dateCreated = ""
     }
     
     // get Group array from json

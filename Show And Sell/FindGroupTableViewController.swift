@@ -15,6 +15,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     
     // UI Elements
     @IBOutlet var doneButton: UIBarButtonItem!
+    @IBOutlet var addButton: UIBarButtonItem!
     var searchController: UISearchController!
     
     var oldGroup: Group?
@@ -31,7 +32,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     var filteredGroups: [Group] = [Group]()
     
     // segue -
-    var previousViewController: SettingsTableViewController!
+    var previousVC: UIViewController?
 
     override func viewDidLoad() {
         print()
@@ -56,6 +57,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         // get other groups and use activity indicator.
         
         self.refreshControl = UIRefreshControl()
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
         self.refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         // start refresh manually
@@ -63,10 +65,9 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         handleRefresh(self.refreshControl!)
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillAppear(_ animated: Bool) {
+        // when the view appears, check if the addButton should be enabled
+        addButton.isEnabled = shouldEnableAddButton()
     }
     
 
@@ -130,8 +131,8 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // return if you select the current group
-        
-        if tableView.headerView(forSection: indexPath.section)?.textLabel?.text == "Current Group" {
+        if currentGroup != nil && indexPath.section == 0 {
+            print("current group section selected")
             tableView.reloadData()
             return
         }
@@ -143,36 +144,27 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     }
     @IBAction func donePressed(_ sender: UIBarButtonItem) {
         print("done pressed")
-        // go to browse
-        if previousViewController != nil {
-            self.dismiss(animated: true, completion: {})
+        // determine where to go
+        if let vc = previousVC, (vc is LoginViewController || vc is CreateAccountViewController) {
+            // the last screen was the login or create, so go to tabs
+            if currentGroup != oldGroup {
+                // clear the data
+                AppDelegate.tabVC?.clearBrowseData()
+            }
+            self.performSegue(withIdentifier: "finderToTabs", sender: self)
         }
         else {
-            if currentGroup == oldGroup {
-                print("unwind to browse")
-                self.performSegue(withIdentifier: "unwindToBrowse", sender: self)
-            }
-            else {
-                
-                print("segue finderToTabs")
-                print("prev: \(previousViewController != nil)")
-                self.performSegue(withIdentifier: "finderToTabs", sender: self)
-            }
+            // dismiss to whatever you were previously at
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
     // function to handle the data refreshing
     func handleRefresh(_ refreshControl: UIRefreshControl) {
-        HttpRequestManager.getGroups() { groups, response, error in
+        HttpRequestManager.groups { groups, response, error in
             print("error: \(error)")
             
-            if let groupArray = groups {
-                print("groupArray: \(groupArray)")
-                self.groups = groupArray
-            }
-            else {
-                
-            }
+            self.groups = groups
             
             // update the UI in the main thread
             DispatchQueue.main.async {
@@ -184,10 +176,12 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     
     // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dest = segue.destination as? SSTabBarViewController {
-            dest.loginVC = self.loginVC
-        }
+        
     }
+    @IBAction func unwindToFinder(_ segue: UIStoryboardSegue) {
+        print("finder unwind")
+    }
+    
     
     // MARK: Searchbar
     func filterGroups(for searchText: String) {
@@ -198,5 +192,12 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     func updateSearchResults(for searchController: UISearchController) {
         filterGroups(for: searchController.searchBar.text!)
         tableView.reloadData()
+    }
+    
+    // MARK: Helper
+    
+    // returns if true if there is the user doesn't have a group
+    func shouldEnableAddButton() -> Bool {
+        return AppDelegate.myGroup == nil
     }
 }

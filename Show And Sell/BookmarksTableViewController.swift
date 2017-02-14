@@ -52,29 +52,33 @@ class BookmarksTableViewController: UITableViewController {
     
      // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // prepare to go to detail view
-        let cell = sender as! ItemTableViewCell
-        let destination: ItemDetailViewController = segue.destination as! ItemDetailViewController
-        
-        let item = bookmarkItems[(self.tableView.indexPath(for: cell)?.row)!]
-         
-        // assign the data from the item to the fields in the destination view controller
-        destination.name = item.name
-        destination.price = item.price
-        destination.condition = item.condition
-        destination.desc = item.itemDescription
-        destination.previousVC = self
-        
-        let imageData = Data(base64Encoded: item.thumbnail)
-        if let data = imageData {
-            destination.thumbnail = UIImage(data: data)
+        // if going to item detail
+        if let destination: ItemDetailViewController = segue.destination as? ItemDetailViewController {
+            // prepare to go to detail view
+            let cell = sender as! ItemTableViewCell
+            
+            let item = bookmarkItems[(self.tableView.indexPath(for: cell)?.row)!]
+             
+            // assign the data from the item to the fields in the destination view controller
+            destination.name = item.name
+            destination.price = item.price
+            destination.condition = item.condition
+            destination.desc = item.itemDescription
+            destination.previousVC = self
+            destination.segue = segue
+            
+            let imageData = Data(base64Encoded: item.thumbnail)
+            if let data = imageData {
+                destination.thumbnail = UIImage(data: data)
+            }
+            else {
+                destination.thumbnail = UIImage(named: "noimage")
+            }
+            
+            //print("bookmarked: \(item.isBookmarked)")
+            destination.item = item
         }
-        else {
-            destination.thumbnail = UIImage(named: "noimage")
-        }
-        
-        //print("bookmarked: \(item.isBookmarked)")
-        destination.item = item
+        // else, going to settings
     }
  
     // MARK: Table View Delegate
@@ -118,7 +122,7 @@ class BookmarksTableViewController: UITableViewController {
         print()
         print("refreshing")
         // get a list of all items (for now)
-        HttpRequestManager.getBookmarks(userId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+        HttpRequestManager.bookmarks(forUserWithId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items

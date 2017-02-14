@@ -14,17 +14,19 @@ import Foundation
 class HttpRequestManager {
     public static let SERVER_URL = "http://68.248.214.70:8080/showandsell"
     //public static let SERVER_URL = "http://192.168.1.107:8080/showandsell"
+    static let requestTimeout = 5.0
     
-    /*
-     *      USER METHODS
-     */
-    static func getUser(withGuid id: String, andPassword password: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+    // MARK: User
+    
+    // get a user with user id and password
+    static func user(withId id: String, andPassword password: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
         
         // the url to make the URLRequest to
         let requestURL = URL(string: "\(SERVER_URL)/api/users/userbyuserid?id=\(id)&password=\(password)")
         
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         // make the request and call the completion method with the new user
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -32,13 +34,15 @@ class HttpRequestManager {
         }
         task.resume()
     }
-    static func getUser(withUsername username: String, andPassword password: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+    // get a user with email and password
+    static func user(withEmail email: String, andPassword password: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
         
         // the request URL
-        let requestURL = URL(string: "\(SERVER_URL)/api/users/userbyusername?username=\(username)&password=\(password)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/users/userbyemail?email=\(email)&password=\(password)")
         
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         // make the request for the user, and return it in the completion method
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -48,18 +52,24 @@ class HttpRequestManager {
     }
     
     // create user request
-    static func createUser(username: String, password: String, firstName: String, lastName: String, email: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+    static func post(user: User, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+        
+        // instance variables
+        let email = user.email
+        let password = user.password
+        let firstName = user.firstName
+        let lastName = user.lastName
         
         // check validity of data
         let pattern = "[a-zA-Z0-9]"
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
-        if !(numberOfMatches(withRegex: regex, andStrings: username, password, firstName, lastName, email) > 0) {
+        if !(numberOfMatches(withRegex: regex, andStrings: password, firstName, lastName, email) > 0) {
             // call completion, invalid input
             completion(nil, nil, nil)
         }
         
         // create json of user data in dictionary
-        let json = ["username":"\(username)", "password":"\(password)", "firstName":"\(firstName)", "lastName":"\(lastName)", "email":"\(email)"]
+        let json = ["email":"\(email)", "password":"\(password)", "firstName":"\(firstName)", "lastName":"\(lastName)"]
         let body = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
         
         // create request
@@ -68,6 +78,7 @@ class HttpRequestManager {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         // a JSON of the user to be created.
         request.httpBody = body
@@ -81,18 +92,26 @@ class HttpRequestManager {
     }
     
     // update user
-    static func updateUser(id: String, newUsername: String, oldPassword: String, newPassword: String, newFirstName: String, newLastName: String, newEmail: String, newGroupId: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+    static func put(user: User, currentPassword: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+        
+        // instance variables
+        let id = user.userId
+        let newEmail = user.email
+        let newPassword = user.password
+        let newFirstName = user.firstName
+        let newLastName = user.lastName
+        let newGroupId = user.groupId
         
         // check validity of data
         let pattern = "[a-zA-Z0-9]"
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
-        if !(numberOfMatches(withRegex: regex, andStrings: newUsername, newPassword, newFirstName, newLastName, newEmail) > 0) {
+        if !(numberOfMatches(withRegex: regex, andStrings: newPassword, newFirstName, newLastName, newEmail) > 0) {
             // call completion, invalid input
             completion(nil, nil, nil)
         }
         
         // create json of user data in dictionary
-        let json = ["newUsername":"\(newUsername)", "oldPassword":"\(oldPassword)", "newPassword":"\(newPassword)", "newFirstName":"\(newFirstName)", "newLastName":"\(newLastName)", "newEmail":"\(newEmail)", "newGroupId":"\(newGroupId)"]
+        let json = ["newEmail":"\(newEmail)", "oldPassword":"\(currentPassword)", "newPassword":"\(newPassword)", "newFirstName":"\(newFirstName)", "newLastName":"\(newLastName)", "newGroupId":"\(newGroupId)"]
         let body = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
         
         // create request
@@ -101,6 +120,7 @@ class HttpRequestManager {
         request.httpMethod = "PUT"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         // a JSON of the user to be created.
         request.httpBody = body
@@ -113,17 +133,17 @@ class HttpRequestManager {
         task.resume()
     }
     
-    /*
-     *      GET GROUP METHODS
-     */
+    // MARK: Group
+    
     // get a group by its group id.
-    static func getGroup(withId id: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
+    static func group(withId id: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
         
         // build request
         let requestURL = URL(string: "\(SERVER_URL)/api/groups/group?id=\(id)")
         
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         // create tast
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -134,13 +154,15 @@ class HttpRequestManager {
         task.resume()
     }
     
-    static func getGroups(completion: @escaping ([Group]?, URLResponse?, Error?) -> Void) {
+    // get all groups
+    static func groups(completion: @escaping ([Group], URLResponse?, Error?) -> Void) {
         
         // setup request
         let requestURL = URL(string: "\(SERVER_URL)/api/groups/allgroups")
         
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
@@ -152,10 +174,11 @@ class HttpRequestManager {
     }
     
     // GET group by adminId
-    static func getGroup(with adminId: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
-        let requestURL = URL(string: "\(SERVER_URL)/api/groups/groupwithadmin?adminId=\(adminId)")
+    static func group(withAdminId id: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/groupwithadmin?adminId=\(id)")
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // complete
@@ -164,8 +187,37 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // GET groups within a certain radius of the given coordinates
+    static func groups(inRadius r: Float, fromLatitude lat: Double, longitude long: Double, completion: @escaping ([Group], URLResponse?, Error?) -> Void) {
+        // create request
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/groupsinradius?radius=\(r)&latitude=\(lat)&longitude=\(long)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            completion(Group.groupArray(with: data), response, error)
+        }
+        task.resume()
+    }
+    
+    // GET n closest groups to given coordinates
+    static func groups(n: Int, closestToLatitude lat: Double, longitude long: Double, completion: @escaping ([Group], URLResponse?, Error?) -> Void) {
+        // create request
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/closestgroups?n=\(n)&latitude=\(lat)&longitude=\(long)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            completion(Group.groupArray(with: data), response, error)
+        }
+        task.resume()
+    }
+    
     // POST group
-    static func postGroup(name: String, adminId: String, password: String, location: String, locationDetail: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
+    static func post(group: Group, password: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
+        
         // create the request
         let requestURL = URL(string: "\(SERVER_URL)/api/groups/create")
         var request = URLRequest(url: requestURL!)
@@ -174,9 +226,10 @@ class HttpRequestManager {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         // build body
-        let bodyJson: [String: Any] = ["group":["name":"\(name)", "adminId":"\(adminId)", "location":"\(location)", "locationDetail":"\(locationDetail)"], "password":"\(password)"]
+        let bodyJson: [String: Any] = ["group":["name":"\(group.name)", "adminId":"\(group.adminId)", "latitude":group.latitude, "longitude":group.longitude, "locationDetail":"\(group.locationDetail)"], "password":"\(password)"]
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -187,17 +240,17 @@ class HttpRequestManager {
         task.resume()
     }
     
-    /*
-     *      ITEM METHODS
-     */
+    // MARK: Item
+    
     // Get all items in the database.
-    static func getAllItems(completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
+    static func items(completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
         
         let requestURL = URL(string: "\(SERVER_URL)/api/items/allitems")
         
         // url request
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // call the completion method, giving back the items and teh response
@@ -207,17 +260,16 @@ class HttpRequestManager {
     }
     
     // get items from a particular group
-    static func getItems(with groupId: String, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
+    static func items(withGroupId id: String, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
         
-        let requestURL = URL(string: "\(SERVER_URL)/api/items/items?groupId=\(groupId)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/items?groupId=\(id)")
         
         // url request
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
-        request.timeoutInterval = 10    // seconds
+        request.timeoutInterval = requestTimeout
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             
             // call the completion method, giving back the items and teh response
             completion(Item.itemArray(with: data), response, error)
@@ -226,17 +278,34 @@ class HttpRequestManager {
         task.resume()
     }
     
-    static func getApproved(with groupId: String, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
+    // get all approved items within a group
+    static func approvedItems(withGroupId id: String, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
         
-        let requestURL = URL(string: "\(SERVER_URL)/api/items/approved?groupId=\(groupId)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/approved?groupId=\(id)")
         
         // url request
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
-        request.timeoutInterval = 10    // seconds
+        request.timeoutInterval = requestTimeout
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // call the completion method, giving back the items and teh response
+            completion(Item.approvedArray(with: data), response, error)
+            
+        }
+        task.resume()
+    }
+    
+    // get all approved items in a group within a certain range
+    static func approvedItems(withGroupId id: String, inRange start: Int, to end: Int, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/approvedinrange?groupId=\(id)&start=\(start)&end=\(end)")
+        
+        // url request
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // call the completion method, giving back the items and teh response
             completion(Item.approvedArray(with: data), response, error)
             
@@ -255,6 +324,7 @@ class HttpRequestManager {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         // build body
         let bodyJson: [String: String] = ["groupId":"\(item.groupId)", "ownerId":"\(item.ownerId)", "name":"\(item.name)", "price":"\(item.price)", "condition":"\(item.condition)", "description":"\(item.itemDescription)", "thumbnail":"\(item.thumbnail)"]
@@ -278,6 +348,7 @@ class HttpRequestManager {
         request.httpMethod = "PUT"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         // build body
         let bodyJson: [String: String] = ["newName":"\(item.name)", "newPrice":"\(item.price)", "newCondition":"\(item.condition)", "newDescription":"\(item.itemDescription)", "newThumbnail":"\(item.thumbnail)", "approved":"\(item.approved)"]
@@ -292,13 +363,14 @@ class HttpRequestManager {
     }
     
     // delete an item
-    static func deleteItem(id: String, password: String, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
+    static func delete(itemWithId id: String, password: String, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
         
         let requestURL = URL(string: "\(SERVER_URL)/api/items/delete?id=\(id)&password=\(password)")
         
         // url request
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "DELETE"
+        request.timeoutInterval = requestTimeout
         
         // create task
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -310,12 +382,13 @@ class HttpRequestManager {
     }
     
     // buy an item
-    static func buy(itemId: String, userId: String, password: String, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
+    static func buy(itemWithId id: String, userId: String, password: String, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
         
-        let requestURL = URL(string: "\(SERVER_URL)/api/items/buyitem?id=\(itemId)&userId=\(userId)&password=\(password)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/buyitem?id=\(id)&userId=\(userId)&password=\(password)")
         var request = URLRequest(url: requestURL!)
         
         request.httpMethod = "POST"
+        request.timeoutInterval = requestTimeout
         
         // create task
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -325,13 +398,14 @@ class HttpRequestManager {
         task.resume()
     }
     
-    /*
-     *  Bookmarks method
-     */
-    static func getBookmarks(userId: String, password: String, completion: @escaping ([Item: String]?, URLResponse?, Error?) -> Void) {
-        let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/bookmarks?userId=\(userId)&password=\(password)")
+    // MARK: Bookmark
+    
+    // get bookmarks for a user with the given ID
+    static func bookmarks(forUserWithId id: String, password: String, completion: @escaping ([Item: String]?, URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/bookmarks?userId=\(id)&password=\(password)")
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
@@ -374,16 +448,18 @@ class HttpRequestManager {
         task.resume()
     }
     
-    static func postBookmark(userId: String, itemId: String, completion: @escaping ((bookmarkId: String?, itemId: String?, userId: String?), URLResponse?, Error?) -> Void) {
+    // post a bookmark to the server
+    static func post(bookmarkForUserWithId id: String, itemId: String, completion: @escaping ((bookmarkId: String?, itemId: String?, userId: String?), URLResponse?, Error?) -> Void) {
         
         // create the request
-        let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/create?userId=\(userId)&itemId=\(itemId)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/create?userId=\(id)&itemId=\(itemId)")
         var request = URLRequest(url: requestURL!)
         
         // request properties
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
@@ -409,12 +485,14 @@ class HttpRequestManager {
         task.resume()
     }
     
-    static func deleteBookmark(bookmarkId: String, completion: @escaping ((bookmarkId: String?, userId: String?, itemId: String?), URLResponse?, Error?) -> Void) {
+    // delete a bookmark with the given bookmark id
+    static func delete(bookmarkWithId id: String, completion: @escaping ((bookmarkId: String?, userId: String?, itemId: String?), URLResponse?, Error?) -> Void) {
         
-        let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/delete?id=\(bookmarkId)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/delete?id=\(id)")
         var request = URLRequest(url: requestURL!)
         
         request.httpMethod = "DELETE"
+        request.timeoutInterval = requestTimeout
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
@@ -443,11 +521,12 @@ class HttpRequestManager {
     }
     
     // get messages for an Item
-    static func getMessages(itemId: String, completion: @escaping ([Message], URLResponse?, Error?) -> Void) {
+    static func messages(forItemId id: String, completion: @escaping ([Message], URLResponse?, Error?) -> Void) {
         
-        let requestURL = URL(string: "\(SERVER_URL)/api/chat/messages?itemId=\(itemId)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/chat/messages?itemId=\(id)")
         var request = URLRequest(url: requestURL!)
         request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
         
         // create task
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -457,14 +536,16 @@ class HttpRequestManager {
         task.resume()
     }
     
-    static func postMessage(posterId: String, posterPassword: String, itemId: String, text: String, completion: @escaping (Message?, URLResponse?, Error?) -> Void) {
+    // post a message
+    static func post(messageWithPosterId id: String, posterPassword: String, itemId: String, text: String, completion: @escaping (Message?, URLResponse?, Error?) -> Void) {
         
-        let requestURL = URL(string: "\(SERVER_URL)/api/chat/create?posterId=\(posterId)&password=\(posterPassword)")
+        let requestURL = URL(string: "\(SERVER_URL)/api/chat/create?posterId=\(id)&password=\(posterPassword)")
         var request = URLRequest(url: requestURL!)
         
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
         
         let body = ["itemId":"\(itemId)", "body":"\(text)"]
         request.httpBody = try! JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
@@ -476,9 +557,7 @@ class HttpRequestManager {
         task.resume()
     }
     
-    /*
-     * Helper methods
-     */
+    // MARK: Helper
     static func numberOfMatches(withRegex regex: NSRegularExpression, andStrings strings: String...) -> Int {
         var matchCount = 0
         for string in strings {

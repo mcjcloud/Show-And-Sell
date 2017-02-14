@@ -34,83 +34,39 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
             // prepare for the login screen.
             destination.autoLogin = false
         }
-        else if let destination = segue.destination as? FindGroupTableViewController {
-            print("setting prev VC")
-            destination.previousViewController = self
-        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             switch(indexPath.row) {
-            case 0:
+            case 0:     // Choose Group
                 self.performSegue(withIdentifier: "settingsToFinder", sender: self)
-            case 1:
+            case 1:     // Manage Group
                 if let _ = AppDelegate.myGroup {
+                    print("my group: \(AppDelegate.myGroup?.name)")
                     self.performSegue(withIdentifier: "settingsToManage", sender: self)
                 }
                 else {
                     let alertController = UIAlertController(title: "Group not found", message: "A group with your user was not found.", preferredStyle: .alert)
                     
                     let createAction = UIAlertAction(title: "Create", style: .default) { action in
-                        // Create group.
-                        let inputController = UIAlertController(title: "Create Group", message: "Enter Group information.", preferredStyle: .alert)
-                        let doneAction = UIAlertAction(title: "Create", style: .default) { inputAction in
-                            
-                            // disable manage cell 
-                            DispatchQueue.main.async {
-                                self.manageCell.isUserInteractionEnabled = false
-                            }
-                            
-                            // TODO: create the group with the specified name.
-                            if let fields = inputController.textFields {
-                                if let name = fields[0].text, let loc = fields[1].text, let locDetail = fields[2].text, name.characters.count > 0, loc.characters.count > 0, locDetail.characters.count > 0 {
-                                    HttpRequestManager.postGroup(name: name, adminId: AppDelegate.user!.userId, password: AppDelegate.user!.password, location: loc, locationDetail: locDetail) { group, response, error in
-                                        print("Group request returned: \((response as? HTTPURLResponse)?.statusCode)")
-                                        
-                                        // enable manage cell
-                                        DispatchQueue.main.async {
-                                            self.manageCell.isUserInteractionEnabled = true
-                                            self.tableView.reloadData()
-                                        }
-                                    }
-                                }
-                                else {
-                                    inputController.title = "Name cannot be empty"
-                                    self.present(inputController, animated: true, completion: nil)
-                                }
-                            }
-                        }
-                        
-                        inputController.addTextField(configurationHandler: { $0.placeholder = "Group Name" })
-                        inputController.addTextField(configurationHandler: { $0.placeholder = "Group Address" })
-                        inputController.addTextField(configurationHandler: { $0.placeholder = "Location Details" })
-                        inputController.addAction(doneAction)
-                        
-                        self.present(inputController, animated: true, completion: nil)
+                        // go to Create Group
+                        self.performSegue(withIdentifier: "settingsToCreateGroup", sender: self)
                     }
                     let reloadAction = UIAlertAction(title: "Reload", style: .default) { action in
                         print("reloading myGroup")
-                        // start animation
-                        let refresher = UIRefreshControl(frame: self.arrowView.frame)
                         DispatchQueue.main.async {
-                            self.arrowImage.removeFromSuperview()
-                            self.arrowView.addSubview(refresher)
                             
-                            refresher.beginRefreshing()
                             self.manageCell.isUserInteractionEnabled = false
                         }
                         // get myGroup
-                        HttpRequestManager.getGroup(with: AppDelegate.user!.userId) { group, response, error in
+                        HttpRequestManager.group(withAdminId: AppDelegate.user!.userId) { group, response, error in
                             print("got myGroup")
                             AppDelegate.myGroup = group
                             AppDelegate.saveData()
                             
                             DispatchQueue.main.async {
-                                refresher.endRefreshing()
                                 self.manageCell.isUserInteractionEnabled = true
-                                refresher.removeFromSuperview()
-                                self.arrowView.addSubview(self.arrowImage)
                                 tableView.reloadData()
                             }
                         }
@@ -121,6 +77,9 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                     
                     self.present(alertController, animated: true, completion: nil)
                 }
+            case 2:     // Account Settings
+                // TODO: segue to account settings
+                self.performSegue(withIdentifier: "settingsToAccount", sender: self)
             default: break
             }
         }
@@ -128,5 +87,9 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
     
     @IBAction func unwindToSettings(segue: UIStoryboardSegue) {
         
+    }
+    @IBAction func done(_ sender: UIBarButtonItem) {
+        // release vc
+        self.dismiss(animated: true, completion: nil)
     }
 }

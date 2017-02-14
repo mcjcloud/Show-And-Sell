@@ -18,21 +18,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var save: SaveData!
     
     static var bookmarks: [Item: String]?
-    static var user: User?
+    static var user: User? {
+        didSet {
+            AppDelegate.save.email = user?.email
+            AppDelegate.save.password = user?.password
+            AppDelegate.saveData()
+        }
+    }
     static var group: Group? {
         didSet {
             //save.groupId = group?.groupId
             user?.groupId = group?.groupId ?? ""
             AppDelegate.saveData()
+            
+            if let u = self.user {
+                // Make PUT request for user
+                HttpRequestManager.put(user: u, currentPassword: AppDelegate.user?.password ?? "") { user, response, error in
+                    AppDelegate.user = user
+                }
+            }
         }
     }
     static var myGroup: Group?
+    
+    // references to UI controllers
+    static var loginVC: LoginViewController?
+    static var tabVC: SSTabBarViewController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         // load saved data.
-        AppDelegate.save = AppDelegate.loadData() ?? SaveData(username: nil, password: nil/*, group: nil*/)
+        AppDelegate.save = AppDelegate.loadData() ?? SaveData(email: nil, password: nil)
         
         return true
     }
