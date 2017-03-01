@@ -19,6 +19,8 @@ class SSTabBarViewController: UITabBarController {
          * Perform actions needed when the user logs in.
          */
         AppDelegate.tabVC = self    // give app delegate reference to this
+        
+        self.tabBar.unselectedItemTintColor = UIColor.white //UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.380, alpha: 1.0)
  
         // load the current group.
         if let groupId = AppDelegate.user?.groupId {
@@ -73,7 +75,7 @@ class SSTabBarViewController: UITabBarController {
     
     func clearBrowseData() {
         // browse
-        if let browseController = self.childViewControllers[0].childViewControllers[0] as? BrowseTableViewController {
+        if let browseController = self.childViewControllers[0].childViewControllers[0] as? BrowseCollectionViewController {
             print("clearing browse")
             browseController.items = [Item]()
             browseController.filteredItems = [Item]()

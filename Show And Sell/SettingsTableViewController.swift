@@ -34,6 +34,10 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
             // prepare for the login screen.
             destination.autoLogin = false
         }
+        else if let destination = segue.destination as? FindGroupTableViewController {
+            destination.navigationItem.rightBarButtonItem = destination.navigationItem.leftBarButtonItem
+            destination.navigationItem.leftBarButtonItem = nil
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

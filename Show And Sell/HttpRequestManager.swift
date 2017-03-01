@@ -5,9 +5,8 @@
 //  Created by Brayden Cloud on 9/23/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
-/*
-    Defines a set of functions to be be used to make URL requests and manage user, group and item models from the database
- */
+//  Defines a set of functions to be be used to make URL requests and manage user, group and item models from the database
+//
 
 import Foundation
 
@@ -313,6 +312,25 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // get a purchase token
+    static func paymentToken(completion: @escaping (String?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/paymenttoken")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        
+        // make request
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let d = data {
+                print("token: \(String(data: d, encoding: .utf8))")
+                completion(String(data: d, encoding: .utf8))
+            }
+            else {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
     // post an item to a group
     static func post(item: Item, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
         
@@ -330,8 +348,7 @@ class HttpRequestManager {
         let bodyJson: [String: String] = ["groupId":"\(item.groupId)", "ownerId":"\(item.ownerId)", "name":"\(item.name)", "price":"\(item.price)", "condition":"\(item.condition)", "description":"\(item.itemDescription)", "thumbnail":"\(item.thumbnail)"]
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // complete the request
             completion(Item(data: data), response, error)
         }
@@ -354,8 +371,7 @@ class HttpRequestManager {
         let bodyJson: [String: String] = ["newName":"\(item.name)", "newPrice":"\(item.price)", "newCondition":"\(item.condition)", "newDescription":"\(item.itemDescription)", "newThumbnail":"\(item.thumbnail)", "approved":"\(item.approved)"]
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             // complete the request
             completion(Item(data: data), response, error)
         }
@@ -382,18 +398,32 @@ class HttpRequestManager {
     }
     
     // buy an item
-    static func buy(itemWithId id: String, userId: String, password: String, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
+    static func buy(itemWithId id: String, userId: String, password: String, paymentDetails: (token: String, nonce: String, amount: Double), completion: @escaping ([String: Any], URLResponse?, Error?) -> Void) {
         
         let requestURL = URL(string: "\(SERVER_URL)/api/items/buyitem?id=\(id)&userId=\(userId)&password=\(password)")
         var request = URLRequest(url: requestURL!)
         
         request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.timeoutInterval = requestTimeout
+        
+        // create request body
+        let bodyJson: [String: Any] = ["token":paymentDetails.token, "paymentMethodNonce":paymentDetails.nonce, "amount":paymentDetails.amount]
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
         // create task
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            var json: [String: Any]!
+            do {
+                json = try JSONSerialization.jsonObject(with: data ?? "".data(using: .utf8)!) as! [String: Any]
+            }
+            catch {
+                print("error with returned data from BUY")
+                completion([String: Any](), response, error)
+            }
             
-            completion(Item(data: data), response, error)
+            completion(json, response, error)
         }
         task.resume()
     }
@@ -469,6 +499,7 @@ class HttpRequestManager {
             }
             catch {
                 print("error parsing resulting json")
+                completion((nil, nil, nil), response, error)
             }
             
             if let bookmarkId = json["ssBookmarkId"] as? String,

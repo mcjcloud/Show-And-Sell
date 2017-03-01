@@ -5,6 +5,8 @@
 //  Created by Brayden Cloud on 9/5/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
+//  UIViewController implementation to show a Login screen for accessing the server
+//
 
 import UIKit
 
@@ -83,8 +85,9 @@ class LoginViewController: UIViewController {
         createAccountButton.isEnabled = true
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("dest from login: \(segue.destination)")
         // if the next view controller is the finder, give it a reference of self to know where to navigate next.
-        if let dest = segue.destination as? FindGroupTableViewController {
+        if let dest = (segue.destination as? UINavigationController)?.childViewControllers[0] as? FindGroupTableViewController {
             dest.previousVC = self
         }
     }
@@ -103,10 +106,14 @@ class LoginViewController: UIViewController {
             HttpRequestManager.user(withEmail: email, andPassword: password) { user, response, error in
                 // check error
                 
-                if let _ = error {
-                    self.messageLabel.text = "Error logging in."
-                    self.loginButton.isEnabled = true
-                    self.createAccountButton.isEnabled = true
+                if let e = error {
+                    print("error logging in: \(e)")
+                    // switch buttons and change message label in main thread
+                    DispatchQueue.main.async {
+                        self.messageLabel.text = "Error logging in."
+                        self.loginButton.isEnabled = true
+                        self.createAccountButton.isEnabled = true
+                    }
                 }
                 else if let u = user {
                     self.user = u

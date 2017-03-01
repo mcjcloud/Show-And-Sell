@@ -33,6 +33,8 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     
     // segue -
     var previousVC: UIViewController?
+    
+    var loadInterval = 10
 
     override func viewDidLoad() {
         print()
@@ -142,10 +144,27 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         AppDelegate.group = currentGroup
         self.tableView.reloadData()
     }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == groups.count - 1 {
+            
+        }
+    }
+    
+    // MARK: IBAction
     @IBAction func donePressed(_ sender: UIBarButtonItem) {
         print("done pressed")
+        print("previousVC: \(self.previousVC)")
         // determine where to go
-        if let vc = previousVC, (vc is LoginViewController || vc is CreateAccountViewController) {
+        if let _ = previousVC as? LoginViewController {
+            // the last screen was the login or create, so go to tabs
+            if currentGroup != oldGroup {
+                // clear the data
+                AppDelegate.tabVC?.clearBrowseData()
+            }
+            self.performSegue(withIdentifier: "finderToTabs", sender: self)
+        }
+        else if let _ = previousVC as? CreateAccountViewController {
             // the last screen was the login or create, so go to tabs
             if currentGroup != oldGroup {
                 // clear the data

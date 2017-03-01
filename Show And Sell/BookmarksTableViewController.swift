@@ -26,7 +26,7 @@ class BookmarksTableViewController: UITableViewController {
         
         // refresh control
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.380, alpha: 1.0) // Gold
         refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         // load all bookmarks.
@@ -41,11 +41,6 @@ class BookmarksTableViewController: UITableViewController {
         
         tableView.reloadData()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
 
     // MARK: - Navigation
@@ -53,7 +48,7 @@ class BookmarksTableViewController: UITableViewController {
      // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // if going to item detail
-        if let destination: ItemDetailViewController = segue.destination as? ItemDetailViewController {
+        if let destination = segue.destination as? ItemDetailTableViewController {
             // prepare to go to detail view
             let cell = sender as! ItemTableViewCell
             
@@ -95,6 +90,13 @@ class BookmarksTableViewController: UITableViewController {
         let item = bookmarkItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "bookmarkCell") as! ItemTableViewCell
      
+        // assign data
+        cell.item = item
+        cell.itemTitle.adjustsFontSizeToFitWidth = true
+        cell.itemTitle.textAlignment = .left
+        cell.itemPrice.adjustsFontSizeToFitWidth = true
+        cell.itemPrice.textAlignment = .right
+        
         cell.itemTitle.text = item.name
         cell.itemPrice.text = String(format: "$%.02f", Double(item.price) ?? 0.0)   // cast the string to double, and format.
         cell.itemCondition.text = item.condition

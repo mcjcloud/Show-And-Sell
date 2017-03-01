@@ -73,7 +73,7 @@ class MessagesTableViewController: UITableViewController {
         
         // customize based on who sent.
         if message.posterId == (AppDelegate.user?.userId ?? "") {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.323, alpha: 0.5286)    // Green
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0)    // Green
             cell.nameLabel.textAlignment = .right
             cell.messageLabel.textAlignment = .right
         }

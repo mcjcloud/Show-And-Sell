@@ -5,6 +5,8 @@
 //  Created by Brayden Cloud on 9/5/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
+//  UIViewController implementation to prompt the user for Item details for donating an item (posting it to server)
+//
 
 import UIKit
 
@@ -44,7 +46,7 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
         itemNameField.text = item?.name
         itemPriceField.text = item?.price
         itemConditionField.text = item?.condition
-        itemDescription.text = item?.itemDescription
+        itemDescription.text = (item?.itemDescription.characters.count ?? 0) > 0 ? item?.itemDescription : "A Short Description"
         
         // get image
         if let pic = item?.thumbnail {
@@ -67,7 +69,15 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
 
     // MARK: Text field/view
     func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "" {
+            textView.text = "A Short Description"
+        }
         textChanged(itemNameField)
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "A Short Description" {
+            textView.text = ""
+        }
     }
     
     // MARK: Image picker

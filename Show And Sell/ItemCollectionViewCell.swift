@@ -10,5 +10,6 @@ import UIKit
 
 class ItemCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet var priceLabel: UILabel!
     @IBOutlet var itemImageView: UIImageView!
 }

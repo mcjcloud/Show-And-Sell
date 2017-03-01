@@ -5,6 +5,8 @@
 //  Created by Brayden Cloud on 12/16/16.
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
+//  UIViewController implementation to prompt a user for details to create a group (POST to server).
+//
 
 import UIKit
 import MapKit

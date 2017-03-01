@@ -95,7 +95,13 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         let item = indexPath.section == 0 ? unapproved[indexPath.row] : approved[indexPath.row]
         
-        // assign data from item to fields of cell
+        // assign data
+        cell.item = item
+        cell.itemTitle.adjustsFontSizeToFitWidth = true
+        cell.itemTitle.textAlignment = .left
+        cell.itemPrice.adjustsFontSizeToFitWidth = true
+        cell.itemPrice.textAlignment = .right
+        
         cell.itemTitle.text = item.name
         cell.itemPrice.text = String(format: "$%.02f", Double(item.price) ?? 0.0)   // cast the string to double, and format.
         cell.itemCondition.text = item.condition
@@ -147,7 +153,8 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 
                 // get the Item selected
                 let cell = tableView.cellForRow(at: indexPath) as! ItemTableViewCell
-                let item = self.items.first(where: { e in e.name == cell.itemTitle.text })
+                print("cell: \(cell.itemTitle.text)")
+                let item = self.items.first(where: { e in e.itemId == cell.item.itemId })
                 
                 // PUT the item with approved: true
                 if let i = item {
