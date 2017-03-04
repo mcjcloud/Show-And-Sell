@@ -17,6 +17,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     var items = [Item]()
     var filteredItems = [Item]()
     var loadInterval = 10
+    var canLoadMore = true
     
     var searchController: UISearchController!
     var refreshControl: UIRefreshControl!
@@ -78,7 +79,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         print("PREPARE IN BROWSE")
         if let destination = segue.destination as? ItemDetailTableViewController {
             // get the item to use for details
-            let item = self.items[(collectionView!.indexPath(for: sender as! ItemCollectionViewCell)?.row)!]
+            let item = sender as! Item
             // get the item obj from AppDelegate to fix bug in ItemDetailVC where Unbookmark doesn't work.
             let appDelItem = AppDelegate.bookmarks?.first(where: { (k, v) in k.itemId == item.itemId })?.key
             
@@ -134,29 +135,45 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         return cell
     }
     
-    /*  TODO: try to implement load more button (to save data)
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionElementKindSectionFooter {
-            
-        }
-    }
-    */
-    
     //MARK: CollectionView Delegate
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: update with searchbar
         print("did select cell")
-        let cell = collectionView.cellForItem(at: indexPath)
-        self.performSegue(withIdentifier: "browseToDetail", sender: cell)
+        let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
+        self.performSegue(withIdentifier: "browseToDetail", sender: item)
     }
-    /*  Implement to load more at bottom.
+    
+    // Implement to load more at bottom.
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         // load more items if we're displaying the last one
-        if indexPath.row == items.count - 1 {
+        if indexPath.row == items.count - 1 && canLoadMore {
             loadMoreItems()
+            canLoadMore = false
+        }
+    }
+    /*
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == items.count - 1 {
+            print("last item did end display")
+            canLoadMore = true
         }
     }
     */
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        var lastVisible = false
+        if let cView = collectionView {
+            for cell in cView.visibleCells {
+                if cView.indexPath(for: cell)?.row ?? 0 == items.count - 1 {
+                    lastVisible = true
+                }
+            }
+            canLoadMore = !lastVisible
+            print("didEndDecelerate, canLoadMore: \(canLoadMore)")
+        }
+        else {
+            canLoadMore = false
+        }
+    }
     
     // MARK: IBAction
     @IBAction func displaySearch(_ sender: UIBarButtonItem) {
@@ -199,7 +216,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         print("refreshing")
         // get a list of all items (for now)
         // TODO: remove temp arguments
-        HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? ""/*, inRange: 0, to: loadInterval*/) { itemsArray, response, error in
+        HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? "", inRange: 0, to: loadInterval) { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items
@@ -226,6 +243,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     }
     
     func loadMoreItems() {
+        print("LOADING MORE TO BROWSE")
         HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? "", inRange: self.items.count, to: self.items.count + loadInterval) { items, response, error in
             DispatchQueue.main.async {
                 self.items += items

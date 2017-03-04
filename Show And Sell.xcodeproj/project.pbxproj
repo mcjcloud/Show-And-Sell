@@ -34,6 +34,7 @@
 		D87BF9881E36E7FB00AA7EA1 /* Star.png in Resources */ = {isa = PBXBuildFile; fileRef = D87BF9801E36E7FB00AA7EA1 /* Star.png */; };
 		D87BF98A1E36EF8600AA7EA1 /* right-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = D87BF9891E36EF8600AA7EA1 /* right-arrow.png */; };
 		D88C05FD1E30696500A30FFB /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C05FC1E30696500A30FFB /* Message.swift */; };
+		D89394921E695F63004EF5BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D89394911E695F63004EF5BB /* GoogleService-Info.plist */; };
 		D8A2CA2E1D91928200E5ADC4 /* SSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */; };
 		D8A2CA301D9193F100E5ADC4 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */; };
 		D8A2CA331D942F1C00E5ADC4 /* ZoomSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA321D942F1C00E5ADC4 /* ZoomSegue.swift */; };
@@ -95,6 +96,7 @@
 		D87BF9801E36E7FB00AA7EA1 /* Star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Star.png; sourceTree = "<group>"; };
 		D87BF9891E36EF8600AA7EA1 /* right-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow.png"; sourceTree = "<group>"; };
 		D88C05FC1E30696500A30FFB /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		D89394911E695F63004EF5BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSTabBarViewController.swift; sourceTree = "<group>"; };
 		D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
 		D8A2CA321D942F1C00E5ADC4 /* ZoomSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomSegue.swift; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 		D8FDE3AB1D7DF5A500B98B48 = {
 			isa = PBXGroup;
 			children = (
+				D89394911E695F63004EF5BB /* GoogleService-Info.plist */,
 				D8FDE3B61D7DF5A600B98B48 /* Show And Sell */,
 				D8FDE3B51D7DF5A500B98B48 /* Products */,
 				7710E8BD90E963F04DCEFFD1 /* Pods */,
@@ -396,6 +399,7 @@
 				D8E9D3D91E654D0400AA1B7C /* showandsell-small2.png in Resources */,
 				D85BD1BC1E561C370099FCD5 /* Search Filled.png in Resources */,
 				D85BD1C61E56D26A0099FCD5 /* shadow.png in Resources */,
+				D89394921E695F63004EF5BB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -137,7 +137,7 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
         let condition = itemConditionField.text!
         let desc = itemDescription.text!
         
-        let imageData = UIImagePNGRepresentation(resizeImage(image: imageButton.currentBackgroundImage!, targetSize: CGSize(width: 250, height: 250)))
+        let imageData = UIImagePNGRepresentation(resizeImage(image: imageButton.currentBackgroundImage!, targetSize: CGSize(width: imageButton.currentBackgroundImage!.size.width * 0.1, height: imageButton.currentBackgroundImage!.size.height * 0.1)))
         let thumbnail = imageData!.base64EncodedString()
         
         // make a post request to add the item to the appropriate group TODO:
@@ -150,24 +150,23 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
             }
             
             // see if the item was posted
-            let httpResponse = response as! HTTPURLResponse
-            switch httpResponse.statusCode {
+            let httpResponse = response as? HTTPURLResponse
+            switch httpResponse?.statusCode ?? 0 {
             case 200:
                 // TODO: display success message.
                 print("ITEM POSTED")
+                // dismiss in UI thread
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
             default:
                 DispatchQueue.main.async {
                     // display error message from the server
-                    let errorAlert = UIAlertController(title: "Error", message: "\(httpResponse)", preferredStyle: .alert)
+                    let errorAlert = UIAlertController(title: "Error", message: "Error donating Item.", preferredStyle: .alert)
                     let dismissAction = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
                     errorAlert.addAction(dismissAction)
                     self.present(errorAlert, animated: true, completion: nil)
                 }
-            }
-            
-            // dismiss in UI thread
-            DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
             }
         }
     }

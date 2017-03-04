@@ -19,6 +19,7 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var locationButton: UIButton!
     @IBOutlet var locationDetailField: UITextView!
     var annotation: MKPointAnnotation?
+    var address: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +59,8 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
         activityView.startAnimating()
         
         // make the create group request
-        let newGroup = Group(name: nameField.text!, adminId: AppDelegate.user?.userId ?? "", latitude: annotation!.coordinate.latitude, longitude: annotation!.coordinate.longitude, locationDetail: locationDetailField.text!)
+        let address = annotation!.subtitle
+        let newGroup = Group(name: nameField.text!, adminId: AppDelegate.user?.userId ?? "", address: address ?? "Address not specified", latitude: annotation!.coordinate.latitude, longitude: annotation!.coordinate.longitude, locationDetail: locationDetailField.text!)
         HttpRequestManager.post(group: newGroup, password: AppDelegate.user?.password ?? "") { group, response, error in
             print("response: \(response as! HTTPURLResponse)")
             // stop animation

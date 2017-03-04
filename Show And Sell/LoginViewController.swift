@@ -9,26 +9,43 @@
 //
 
 import UIKit
+import Google
+import GoogleSignIn
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate {
     // GUI properties
     @IBOutlet var emailField: UITextField!
     @IBOutlet var passwordField: UITextField!
     @IBOutlet var messageLabel: UILabel!
     @IBOutlet var loginButton: UIButton!
+    @IBOutlet var googleButton: GIDSignInButton!
     @IBOutlet var createAccountButton: UIButton!
     
     var user: User!
     
     var autoLogin: Bool = true
     
+    var loadOverlay = OverlayView(type: .loading, text: "Loading...")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Login view did load")
         
+        // configure google delegate
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        //assert(configureError == nil, "Error configuring Google services: \(configureError)")
+    
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().uiDelegate = self
+        
         // set gray color for disabled button
         loginButton.setTitleColor(UIColor.gray, for: .disabled)
         createAccountButton.setTitleColor(UIColor.gray, for: .disabled)
+        
+        // adjust google button
+        googleButton.colorScheme = .dark
+        googleButton.addTarget(self, action: #selector(googleSignIn), for: .touchUpInside)
         
         // assign textField methods
         emailField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
@@ -75,11 +92,7 @@ class LoginViewController: UIViewController {
         passwordField.text = ""
         messageLabel.text = ""
         
-        // clear non-persistant data.
-        AppDelegate.myGroup = nil
-        AppDelegate.user = nil
-        AppDelegate.group = nil
-        AppDelegate.bookmarks = nil
+        logout()
         
         loginButton.isEnabled = true
         createAccountButton.isEnabled = true
@@ -104,59 +117,63 @@ class LoginViewController: UIViewController {
             createAccountButton.isEnabled = false
         
             HttpRequestManager.user(withEmail: email, andPassword: password) { user, response, error in
-                // check error
-                
-                if let e = error {
-                    print("error logging in: \(e)")
-                    // switch buttons and change message label in main thread
-                    DispatchQueue.main.async {
-                        self.messageLabel.text = "Error logging in."
-                        self.loginButton.isEnabled = true
-                        self.createAccountButton.isEnabled = true
-                    }
-                }
-                else if let u = user {
-                    self.user = u
-                    self.autoLogin = true
-                    
-                    // if the signed in user is not the same as the saved user, reasign the "save user"
-                    AppDelegate.user = u
-                    
-                    AppDelegate.save.email = u.email
-                    AppDelegate.save.password = u.password
-                    
-                    AppDelegate.saveData()
-                    
-                    // go to tabs segue from main thread
-                    DispatchQueue.main.async(execute: {
-                        print("Logging in, groupId: \(u.groupId)")
-                        if let groupId = AppDelegate.user?.groupId, groupId.characters.count > 0 {
-                            print("segue to tabs")
-                            self.performSegue(withIdentifier: "loginToTabs", sender: self)
-                        }
-                        else {  // if there is no group, segue to choose a group
-                            print("loginToFinder segue")
-                            print("saved groupId: \(AppDelegate.user?.groupId)")
-                            self.performSegue(withIdentifier: "loginToFinder", sender: self)
-                        }
-                    })
-                    
-                    // save data
-                    AppDelegate.saveData()
-                }
-                else {
-                    // Tell user the process failed.
-                    self.messageLabel.text = "Error getting user. Please make sure email and password are correct."
-                    
-                    // re-enable buttons
-                    self.loginButton.isEnabled = true
-                    self.createAccountButton.isEnabled = true
-                }
+                self.postLogin(user: user, response: response, error: error)
             }
         }
         else {
             messageLabel.text = "Please make sure all fields are filled."
         }
+    }
+    
+    // MARK: Google Auth
+    func application(application: UIApplication, openURL url: URL, options: [String: Any]) -> Bool {
+        return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication.rawValue] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation.rawValue])
+    }
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if (error == nil) {
+            // Perform any operations on signed in user here.
+            let userId = user.userID                  // For client-side use only!
+            let email = user.profile.email
+            let name = user.profile.name?.components(separatedBy: " ")
+            let firstName = name?[0]
+            let lastName = name?[1]
+            
+            // do sign in for google account
+            print("userId: \(userId)")
+            print("\(email) signed in")
+            print("name: \(name)")
+            if let email = email, let userId = userId, let firstName = firstName, let lastName = lastName {
+                loadOverlay.showOverlay(view: self.view)
+                HttpRequestManager.googleUser(email: email, userId: userId, firstName: firstName, lastName: lastName) { user, response, error in
+                    print("calling postlogin from google sign in")
+                    // finish login
+                    self.postLogin(user: user, response: response, error: error)
+                }
+            }
+        }
+        else {
+            print("signin error: \(error.localizedDescription)")
+        }
+    }
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
+        // disconnect
+        print("google disconnect")
+    }
+    
+    func sign(inWillDispatch signIn: GIDSignIn!, error: Error!) {
+        // stop loading icon
+        print("stop loading")
+        loadOverlay.hideOverlayView()
+    }
+    func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
+        // present a sign in vc
+        print("should present VC")
+        self.present(viewController, animated: true, completion: nil)
+    }
+    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
+        // dismiss the sign in vc
+        print("should dismissVC")
+        self.dismiss(animated: true, completion: nil)
     }
 
     // MARK: Helper
@@ -167,6 +184,101 @@ class LoginViewController: UIViewController {
     // check if the login button should be enabled.
     func shouldEnableLogin() -> Bool {
         return (emailField.text?.characters.count ?? 0) > 0 && (passwordField.text?.characters.count ?? 0) > 0
+    }
+    
+    func postLogin(user: User?, response: URLResponse?, error: Error?) {
+        
+        print("postlogin response: \((response as! HTTPURLResponse).statusCode)")
+        // stop any loading
+        DispatchQueue.main.async {
+            self.loadOverlay.hideOverlayView()
+        }
+        
+        // check error
+        if let e = error {
+            print("error logging in: \(e)")
+            // switch buttons and change message label in main thread
+            DispatchQueue.main.async {
+                self.messageLabel.text = "Error logging in."
+                self.loginButton.isEnabled = true
+                self.createAccountButton.isEnabled = true
+            }
+        }
+        else if let u = user {
+            print("user recieved: \(u.email)")
+            self.user = u
+            self.autoLogin = true
+            
+            // if the signed in user is not the same as the saved user, reasign the "save user"
+            AppDelegate.user = u
+            
+            AppDelegate.save.email = u.email
+            AppDelegate.save.password = u.password
+            
+            AppDelegate.saveData()
+            
+            // go to tabs segue from main thread
+            DispatchQueue.main.async(execute: {
+                print("Logging in, groupId: \(u.groupId)")
+                if let groupId = AppDelegate.user?.groupId, groupId.characters.count > 0 {
+                    print("segue to tabs")
+                    self.performSegue(withIdentifier: "loginToTabs", sender: self)
+                }
+                else {  // if there is no group, segue to choose a group
+                    print("loginToFinder segue")
+                    print("saved groupId: \(AppDelegate.user?.groupId)")
+                    self.performSegue(withIdentifier: "loginToFinder", sender: self)
+                }
+            })
+            
+            // save data
+            AppDelegate.saveData()
+        }
+        else {
+            DispatchQueue.main.async {
+                if let status = (response as? HTTPURLResponse)?.statusCode {
+                    // check error
+                    switch(status) {
+                    case 409:
+                        self.messageLabel.text = "Account with gmail address already exists."
+                        GIDSignIn.sharedInstance().signOut()
+                    case 401:
+                        self.messageLabel.text = "Incorrect username or password."
+                    default:
+                        self.messageLabel.text = "Error getting user."
+                    }
+                    
+                }
+                else {
+                    // generic error message
+                    self.messageLabel.text = "Error getting user."
+                }
+                
+                // re-enable buttons
+                self.loginButton.isEnabled = true
+                self.createAccountButton.isEnabled = true
+            }
+        }
+    }
+    
+    // when the google button is clicked
+    func googleSignIn() {
+        // clear message label
+        messageLabel.text = ""
+        print("google button clicked")
+        loadOverlay.showOverlay(view: self.view)
+    }
+    
+    // log the user out
+    func logout() {
+        // clear non-persistant data.
+        AppDelegate.myGroup = nil
+        AppDelegate.user = nil
+        AppDelegate.group = nil
+        AppDelegate.bookmarks = nil
+        
+        // logout google user
+        GIDSignIn.sharedInstance().signOut()
     }
 }
 

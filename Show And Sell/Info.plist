@@ -20,14 +20,25 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.92236175706-mhmjnh88g32bfhu1a6ohq6k2spmtgpdj</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Show &amp; Sell would like to access your photos to enable you to chose a photo to upload.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Show &amp; Sell would like to access your camera for uploading images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Show &amp; Sell would like to access your photos to enable you to chose a photo to upload.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

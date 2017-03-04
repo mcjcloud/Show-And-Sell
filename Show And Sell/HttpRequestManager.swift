@@ -13,7 +13,7 @@ import Foundation
 class HttpRequestManager {
     public static let SERVER_URL = "http://68.248.214.70:8080/showandsell"
     //public static let SERVER_URL = "http://192.168.1.107:8080/showandsell"
-    static let requestTimeout = 5.0
+    static let requestTimeout = 20.0
     
     // MARK: User
     
@@ -46,6 +46,29 @@ class HttpRequestManager {
         // make the request for the user, and return it in the completion method
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
            completion(User(data: data), response, error)
+        }
+        task.resume()
+    }
+    
+    // POST google user and 
+    static func googleUser(email: String, userId: String, firstName: String, lastName: String, completion: @escaping (User?, URLResponse?, Error?) -> Void) {
+        
+        // create the request
+        let requestURL = URL(string: "\(SERVER_URL)/api/users/googleuser")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
+        
+        // create the http body
+        let json = ["email":"\(email)", "userId":"\(userId)", "firstName":"\(firstName)", "lastName":"\(lastName)"]
+        let body = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+        request.httpBody = body
+        
+        // make request
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            completion(User(data: data), response, error)
         }
         task.resume()
     }
@@ -228,7 +251,7 @@ class HttpRequestManager {
         request.timeoutInterval = requestTimeout
         
         // build body
-        let bodyJson: [String: Any] = ["group":["name":"\(group.name)", "adminId":"\(group.adminId)", "latitude":group.latitude, "longitude":group.longitude, "locationDetail":"\(group.locationDetail)"], "password":"\(password)"]
+        let bodyJson: [String: Any] = ["group":["name":"\(group.name)", "adminId":"\(group.adminId)", "address":"\(group.address)", "latitude":group.latitude, "longitude":group.longitude, "locationDetail":"\(group.locationDetail)"], "password":"\(password)"]
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -349,6 +372,11 @@ class HttpRequestManager {
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let e = error {
+                print("error: \(e)")
+                completion(nil, nil, nil)
+            }
+            
             // complete the request
             completion(Item(data: data), response, error)
         }

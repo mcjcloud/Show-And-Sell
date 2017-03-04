@@ -28,7 +28,8 @@ class OverlayView: UIView {
         switch type {
         case .loading:
             activityIndicator = UIActivityIndicatorView()
-            activityIndicator!.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            activityIndicator!.frame = CGRect(x: 0, y: 0, width: 150, height: 150)
+            activityIndicator!.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             activityIndicator!.center = CGPoint(x: self.bounds.width * 0.5, y: self.bounds.height * 0.5)
             activityIndicator!.activityIndicatorViewStyle = .whiteLarge
             self.addSubview(activityIndicator!)
@@ -40,12 +41,17 @@ class OverlayView: UIView {
         default: break
         }
         
-        //if let message = text {
+        if let message = text {
             let messageLabel = UILabel()
-            messageLabel.frame = CGRect(x: 0, y: self.center.y + 30, width: 240, height: 60)
-            messageLabel.text = "Message"
+            messageLabel.frame = CGRect(x: 0, y: self.center.y + 30, width: 150, height: 60)
+            messageLabel.textAlignment = .center
+            messageLabel.textColor = UIColor.lightGray
+            messageLabel.text = message
             self.addSubview(messageLabel)
-        //}
+        }
+        else {
+            print("MESSAGE NOT AVAILABLE")
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

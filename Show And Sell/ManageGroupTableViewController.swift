@@ -143,6 +143,13 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 let cell = tableView.cellForRow(at: indexPath) as! ItemTableViewCell
                 let item = self.items.first(where: { e in e.name == cell.itemTitle.text })
                 
+                // remove item from array
+                if let item = item {
+                    if let i = self.items.index(of: item) {
+                        self.items.remove(at: i)
+                    }
+                }
+                
                 // delete the Item
                 HttpRequestManager.delete(itemWithId: item?.itemId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
                     print("Item delete response: \((response as? HTTPURLResponse)?.statusCode)")
@@ -207,15 +214,6 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         // assign data from cell.
         destination.item = item
-        /*
-        destination.imageButton.contentMode = .scaleAspectFit
-        destination.imageButton.setBackgroundImage(source.itemImage.image, for: .normal)
-        
-        destination.itemNameField.text = item?.name
-        destination.itemPriceField.text = item?.price
-        destination.itemDescription.text = item?.itemDescription
-        destination.itemConditionField.text = item?.condition
-        */
     }
     
     @IBAction func updateItem(segue: UIStoryboardSegue) {
