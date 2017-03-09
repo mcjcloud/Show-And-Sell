@@ -7,12 +7,11 @@
 //
 
 import UIKit
+import MessageUI
 
-class SettingsTableViewController: UITableViewController, UIPopoverPresentationControllerDelegate {
+class SettingsTableViewController: UITableViewController, UIPopoverPresentationControllerDelegate, MFMailComposeViewControllerDelegate {
     @IBOutlet var manageCell: UITableViewCell!
-
-    @IBOutlet var arrowView: UIView!
-    @IBOutlet var arrowImage: UIImageView!
+    @IBOutlet var reportBugCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,11 +20,6 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
     }
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: Navigation
@@ -87,10 +81,30 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
             default: break
             }
         }
+        else {
+            if indexPath.row == 0 {
+                self.tableView.reloadData()
+                // compose email
+                let mailComposerVC = MFMailComposeViewController()
+                mailComposerVC.mailComposeDelegate = self
+                
+                mailComposerVC.setToRecipients(["showandsellmail@gmail.com"])
+                mailComposerVC.setSubject("Bug Report")
+                mailComposerVC.setMessageBody("I found a bug!", isHTML: false)
+                if MFMailComposeViewController.canSendMail() {
+                    self.present(mailComposerVC, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    // MARK: MFMailViewController delegate
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func unwindToSettings(segue: UIStoryboardSegue) {
-        
+        // do nothing
     }
     @IBAction func done(_ sender: UIBarButtonItem) {
         // release vc

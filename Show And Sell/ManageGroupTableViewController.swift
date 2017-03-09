@@ -120,12 +120,9 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // segue to the view displaying the item.
+        searchController.resignFirstResponder()
         let cell = tableView.cellForRow(at: indexPath)
         performSegue(withIdentifier: "manageToEdit", sender: cell)
-    }
-    // make table view cell respond to swipe
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        // TODO: implement if necessary
     }
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true

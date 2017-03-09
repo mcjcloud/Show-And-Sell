@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class FindGroupTableViewController: UITableViewController, UISearchResultsUpdating {
+class FindGroupTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, CLLocationManagerDelegate {
     
     // reference
     var loginVC: LoginViewController!                   // reference to prevent garbage collection
@@ -30,11 +31,20 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     }
     var groups: [Group] = [Group]()
     var filteredGroups: [Group] = [Group]()
+    var searchedGroups: [Group] = [Group]()
     
     // segue -
     var previousVC: UIViewController?
     
-    var loadInterval = 10
+    // location
+    var locationManager: CLLocationManager!
+    
+    // data
+    let loadInterval = 10
+    let groupRadius: Float = 10.0
+    var locationAuth = false
+    var coordinates: CLLocationCoordinate2D?
+    var overlay = OverlayView(type: .loading, text: nil)
 
     override func viewDidLoad() {
         print()
@@ -52,19 +62,22 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         // setup search bar
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         
-        // get other groups and use activity indicator.
+        // request location
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        overlay.showOverlay(view: self.view)        // display loading while we get location
         
+        // get other groups and use activity indicator.
         self.refreshControl = UIRefreshControl()
         self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
         self.refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
-        
-        // start refresh manually
-        self.refreshControl!.beginRefreshing()
-        handleRefresh(self.refreshControl!)
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -110,7 +123,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         if tableView.numberOfSections > 1 {                             // if the table view has more than one section
             if indexPath.section == 0 {                                     // if its the first row.
                 cell.nameLabel.text = currentGroup?.name
-                cell.checkBox.image = UIImage(named: "checkmark")
+                cell.checkBox.image = UIImage(named: "green-check")
             }
             else {
                 if (searchController.isActive && searchController.searchBar.text! != "") {
@@ -145,10 +158,44 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         self.tableView.reloadData()
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == groups.count - 1 {
-            
+    // MARK: Location
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("did change authorization")
+        if status == .authorizedWhenInUse {
+            if CLLocationManager.isMonitoringAvailable(for: CLBeaconRegion.self) && CLLocationManager.isRangingAvailable() {
+                // location is working
+                locationAuth = true
+                locationManager.startUpdatingLocation()
+            }
         }
+        else {
+            locationAuth = false
+        }
+    }
+    
+    // when the location is recieved, update the global variable
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last?.coordinate
+        self.coordinates = location
+        manager.stopUpdatingLocation()
+        
+        // stop loading
+        overlay.hideOverlayView()
+        locationAuth = true
+        
+        // start refresh manually
+        self.refreshControl!.beginRefreshing()
+        handleRefresh(self.refreshControl!)
+    }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        // an error occurred getting location. Use non-location group loading.
+        // stop loading
+        overlay.hideOverlayView()
+        locationAuth = false
+        
+        // start refresh
+        self.refreshControl!.beginRefreshing()
+        handleRefresh(self.refreshControl!)
     }
     
     // MARK: IBAction
@@ -180,6 +227,23 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     
     // function to handle the data refreshing
     func handleRefresh(_ refreshControl: UIRefreshControl) {
+        if locationAuth {
+            if let loc = coordinates {
+                print("getting by location")
+                print("lat: \(loc.latitude) long: \(loc.longitude)")
+                HttpRequestManager.groups(inRadius: groupRadius, fromLatitude: loc.latitude, longitude: loc.longitude) { groups, response, error in
+                    self.groups = groups
+                    
+                    DispatchQueue.main.async {
+                        self.refreshControl!.endRefreshing()
+                        self.tableView.reloadData()
+                    }
+                }
+                return
+            }
+        }
+        
+        print("getting all groups")
         HttpRequestManager.groups { groups, response, error in
             print("error: \(error)")
             
@@ -209,8 +273,19 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         }
     }
     func updateSearchResults(for searchController: UISearchController) {
-        filterGroups(for: searchController.searchBar.text!)
-        tableView.reloadData()
+        //filterGroups(for: searchController.searchBar.text!)
+        //tableView.reloadData()
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // make search request
+        HttpRequestManager.groups(matching: searchBar.text ?? "") { groups, response, error in
+            print("searched: \(groups)")
+            self.filteredGroups = groups
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: Helper

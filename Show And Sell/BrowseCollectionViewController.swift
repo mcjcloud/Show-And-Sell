@@ -29,6 +29,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         
         // setup search bar
         searchController  = SimpleSearchController(searchResultsController: nil)
+        searchController.searchBar.placeholder = "Filter"
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
@@ -72,6 +73,9 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
             // reload the table data
             self.reloadData(collectionView)
         }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        print("BROWSE VIEW APPEARED")
     }
 
     // MARK: Navigation

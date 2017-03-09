@@ -29,6 +29,10 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
         
         // assign textfields to text changed function
         nameField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+        setupTextField(nameField)
+        
+        // make textfields dismiss when uiview tapped
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         
         // setup activityIndicatorItem
         self.activityView = UIActivityIndicatorView(activityIndicatorStyle: .white)
@@ -108,6 +112,26 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
     // MARK: Helper
     func textChanged(_ textField: UITextField) {
         doneButton.isEnabled = shouldEnableDoneButton()
+    }
+    
+    // setup the custom TextField
+    func setupTextField(_ textfield: UITextField) {
+        // edit password field
+        let width = CGFloat(1.5)
+        let border = CALayer()
+        border.borderColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0).cgColor // Green
+        border.frame = CGRect(x: 0, y: textfield.frame.size.height - width, width:  textfield.frame.size.width, height: textfield.frame.size.height)
+        
+        border.borderWidth = width
+        textfield.layer.addSublayer(border)
+        textfield.layer.masksToBounds = true
+        textfield.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+    }
+    
+    // dismiss a keyboard
+    func dismissKeyboard() {
+        nameField.resignFirstResponder()
+        locationDetailField.resignFirstResponder()
     }
     
     // returns true if all fields are filled.

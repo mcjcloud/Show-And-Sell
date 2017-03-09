@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Social
 import Braintree
 import BraintreeDropIn
 
@@ -18,6 +19,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
     @IBOutlet var descriptionView: UITextView!
     @IBOutlet var buyButton: UIButton!
     @IBOutlet var bookmarkButton: UIButton!
+    @IBOutlet var shareButton: UIButton!
     @IBOutlet var messagesButton: UIButton!
     
     @IBOutlet var footerView: UIView!
@@ -91,15 +93,14 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         setupNavBar()
     }
     override func viewWillDisappear(_ animated: Bool) {
+        // call super method
+        super.viewWillDisappear(animated)
         
         // make navigation bar untransparent again
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         
         self.navigationController?.navigationBar.shadowImage = nil
         self.navigationController?.navigationBar.isTranslucent = false
-        
-        // call super method
-        super.viewWillDisappear(animated)
     }
 
     // MARK: - Navigation
@@ -112,7 +113,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
     // MARK: TableView Delegate
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         // calculate height
-        let height = nameLabel.frame.height + priceLabel.frame.height + conditionLabel.frame.height + descriptionView.frame.height + buyButton.frame.height + bookmarkButton.frame.height + messagesButton.frame.height + 100
+        let height = nameLabel.frame.height + priceLabel.frame.height + conditionLabel.frame.height + descriptionView.frame.height + buyButton.frame.height + bookmarkButton.frame.height + shareButton.frame.height + messagesButton.frame.height + 100
         
         // set footer view to take up remaining space
         footerView.frame = CGRect(origin: footerView.frame.origin, size: CGSize(width: self.view.frame.width, height: self.view.frame.height - tableView.contentSize.height))
@@ -179,6 +180,22 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
                 print("post bookmark response returned")
                 AppDelegate.bookmarks?[self.item] = bookmarkData.bookmarkId
             }
+        }
+    }
+    
+    @IBAction func shareItem(_ sender: UIButton) {
+        // twitter sharing
+        if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter) {
+            let tweetSheet = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+            //tweetSheet
+            tweetSheet?.setInitialText("Check out \"\(item.name)\" on Show & Sell!")
+            tweetSheet?.add(URL(string: "ich-showandsell.gear.host/?itemId=\(item.itemId)"))
+            self.present(tweetSheet!, animated: true, completion: nil)
+        }
+        else {
+            let errorAlert = UIAlertController(title: "Not Available", message: "Make sure Twitter is installed and you are signed in.", preferredStyle: .alert)
+            errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+            self.present(errorAlert, animated: true, completion: nil)
         }
     }
     

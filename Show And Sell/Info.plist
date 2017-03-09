@@ -30,6 +30,16 @@
 				<string>com.googleusercontent.apps.92236175706-mhmjnh88g32bfhu1a6ohq6k2spmtgpdj</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.insertcoolnamehere.Show-And-Sell</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>showandsell</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -38,7 +48,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Show &amp; Sell would like to access your camera for uploading images.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Show &amp; Sell would like to access your photos to enable you to chose a photo to upload.</string>
+	<string>Show &amp; Sell would like to access your camera roll to enable you to upload images.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Show &amp; Sell would like to access your location for finding near by groups.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

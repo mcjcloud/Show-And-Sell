@@ -237,6 +237,19 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // GET search for groups including string
+    static func groups(matching: String, completion: @escaping ([Group], URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/search?name=\(matching)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            completion(Group.groupArray(with: data), response, error)
+        }
+        task.resume()
+    }
+    
     // POST group
     static func post(group: Group, password: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
         
@@ -263,6 +276,18 @@ class HttpRequestManager {
     }
     
     // MARK: Item
+    
+    // get an item by its ID
+    static func item(id: String, completion: @escaping (Item?, URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/item?id=\(id)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            completion(Item(data: data), response, error)
+        }
+        task.resume()
+    }
     
     // Get all items in the database.
     static func items(completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
@@ -626,6 +651,40 @@ class HttpRequestManager {
         }
         
         return matchCount
+    }
+    
+    static func encrypt(_ text: String) -> String {
+        // Caesar shift +1
+        var result = ""
+        for char in text.utf16 {
+            let u = UnicodeScalar(char + 1)!
+            result += String(Character(u))
+        }
+        
+        // base64 encode
+        let resultData = result.data(using: .utf8)
+        let encrypted = resultData!.base64EncodedString()
+        
+        // return encrypted
+        return encrypted
+    }
+    
+    static func decrypt(_ text: String) -> String {
+        // convert from base64
+        let data = Data(base64Encoded: text)
+        var decrypted = ""
+        if let data = data {
+            let decodedString = String(data: data, encoding: .utf8)
+            
+            // caesar shift - 1
+            for char in decodedString!.utf16 {
+                let u = UnicodeScalar(char - 1)!
+                decrypted += String(Character(u))
+            }
+        }
+        
+        // return the decoded string
+        return decrypted
     }
 }
 

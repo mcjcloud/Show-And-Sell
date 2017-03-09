@@ -9,9 +9,13 @@
 import UIKit
 
 class SSTabBarViewController: UITabBarController {
+    
+    static var shared: SSTabBarViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        SSTabBarViewController.shared = self
+        
         // select the middle tab
         self.selectedIndex = 1
         
@@ -46,23 +50,26 @@ class SSTabBarViewController: UITabBarController {
             if let e = error { print("error with owner group: \(e)") }
         }
         
+        // register for didBecomeActive notification
+        //NotificationCenter.default.addObserver(self, selector: #selector(appBecameActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewDidAppear(_ animated: Bool) {
+        presentQueuedItem()
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func presentQueuedItem() {
+        print("view appeared in tabs")
+        // check if there's an item in need of display.
+        if let item = AppDelegate.displayItem {
+            print("item: \(item)")
+            print("browseVC: \(self.childViewControllers[1].childViewControllers[0])")
+            if let browseVC = self.childViewControllers[1].childViewControllers[0] as? BrowseCollectionViewController {
+                print("showing item!")
+                browseVC.performSegue(withIdentifier: "browseToDetail", sender: item)
+                AppDelegate.displayItem = nil
+            }
+        }
     }
-    */
     
     // MARK: Helper functions
     
@@ -75,7 +82,7 @@ class SSTabBarViewController: UITabBarController {
     
     func clearBrowseData() {
         // browse
-        if let browseController = self.childViewControllers[0].childViewControllers[0] as? BrowseCollectionViewController {
+        if let browseController = self.childViewControllers[1].childViewControllers[0] as? BrowseCollectionViewController {
             print("clearing browse")
             browseController.items = [Item]()
             browseController.filteredItems = [Item]()
@@ -83,7 +90,7 @@ class SSTabBarViewController: UITabBarController {
     }
     func clearBookmarksData() {
         // bookmarks
-        if let bookmarkController = self.childViewControllers[1].childViewControllers[0] as? BookmarksTableViewController {
+        if let bookmarkController = self.childViewControllers[0].childViewControllers[0] as? BookmarksTableViewController {
             print("clearing bookmarks")
             bookmarkController.bookmarkItems = [Item]()
             bookmarkController.bookmarks = [Item: String]()

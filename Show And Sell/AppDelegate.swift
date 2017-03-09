@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var user: User? {
         didSet {
             AppDelegate.save.email = user?.email
-            AppDelegate.save.password = user?.password
+            AppDelegate.save.password = user?.password ?? ""
             AppDelegate.saveData()
         }
     }
@@ -43,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     static var myGroup: Group?
+    static var displayItem: Item?
     
     // references to UI controllers
     static var loginVC: LoginViewController?
@@ -50,9 +51,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let enc = HttpRequestManager.encrypt("105697857720129832853")
+        print("password: \(enc)")
+        print("decrypted: \(HttpRequestManager.decrypt(enc))")
         
         // load saved data.
-        AppDelegate.save = AppDelegate.loadData() ?? SaveData(email: nil, password: nil)
+        AppDelegate.save = AppDelegate.loadData() ?? SaveData(email: nil, password: nil, isGoogleSigned: false)
         
         return true
     }
@@ -89,7 +93,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        print("opening URL: \(url.scheme)")
+        if let scheme = url.scheme, scheme.contains("google") {   // google
+            return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        }
+        else if let scheme = url.scheme, scheme.contains("showandsell") {       // twitter
+                let components = url.absoluteString.components(separatedBy: "/")
+                if components.count > 2 {
+                    let id = components[components.count - 1]
+                    print("making item request")
+                    HttpRequestManager.item(id: id) { item, response, error in
+                        AppDelegate.displayItem = item
+                        DispatchQueue.main.async {
+                            if let _ = AppDelegate.user {   // logged in
+                                print("item returned")
+                                let rootVC = self.window?.rootViewController as? LoginViewController
+                                rootVC?.performSegue(withIdentifier: "loginToTabs", sender: rootVC)
+                                SSTabBarViewController.shared.presentQueuedItem()
+                            }
+                            else {                          // not logged in
+                                // show alert
+                                let accountAlert = UIAlertController(title: "Log-In or Create Account", message: "You must create an account or sign in to an existing account to view this item.", preferredStyle: .alert)
+                                accountAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                                    self.window?.rootViewController?.present(accountAlert, animated: true, completion: nil)
+                            }
+                        }
+                    }
+                }
+            return false
+        }
+        else {
+            return false
+        }
     }
 
     // MARK: NSCoding

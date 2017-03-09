@@ -10,7 +10,7 @@
 
 import UIKit
 
-class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // UI Elements
     var activityView: UIActivityIndicatorView!
     @IBOutlet var itemNameField: UITextField!
@@ -22,9 +22,11 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
     @IBOutlet var doneButton: UIBarButtonItem!
     
     let picker = UIImagePickerController()
+    let completeOverlay = OverlayView(type: .complete, text: "Item Donated!")
     
     // data
     var item: Item?
+    let priceMinimum = 0.31
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +36,16 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
         activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         
         // give textfield edit change targets
+        setupTextField(itemNameField)
         itemNameField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+        setupTextField(itemPriceField)
         itemPriceField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+        itemPriceField.delegate = self
+        setupTextField(itemConditionField)
         itemConditionField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+        
+        // make textfields dismiss when uiview tapped
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
         
         // assign necessary delegates
         picker.delegate = self
@@ -60,14 +69,23 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
         // start the button as false.
         doneButton.isEnabled = false
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillDisappear(_ animated: Bool) {
+        dismissKeyboard()
     }
     
 
     // MARK: Text field/view
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let price = Double(textField.text!)!
+        if price < 0.31 {
+            textField.text = "0.31"
+            
+            // display alert
+            let priceAlert = UIAlertController(title: "Price is too low", message: "The price of your item cannot be less than $0.31", preferredStyle: .alert)
+            priceAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+            self.present(priceAlert, animated: true, completion: nil)
+        }
+    }
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text == "" {
             textView.text = "A Short Description"
@@ -99,6 +117,9 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
 
     // MARK: IBAction
     @IBAction func chooseImage(_ sender: UIButton) {
+        // dismiss keyboard
+        dismissKeyboard()
+        
         // prompt for choose or take
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let chooseAction = UIAlertAction(title: "Choose Photo", style: .default) { action in
@@ -127,6 +148,21 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
     }
     
     @IBAction func donate(_ sender: UIBarButtonItem) {
+        // dismiss keyobard
+        dismissKeyboard()
+        
+        // check that the price is okay
+        let dPrice = Double(itemPriceField.text!)!
+        if dPrice < priceMinimum {   // 31 cent price minimum due to braintree
+            itemPriceField.text = "0.31"
+            
+            // display alert
+            let priceAlert = UIAlertController(title: "Price is too low", message: "The price of your item cannot be less than $0.31", preferredStyle: .alert)
+            priceAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+            self.present(priceAlert, animated: true, completion: nil)
+            return
+        }
+        
         // start animation
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.activityView)
         self.activityView.startAnimating()
@@ -153,11 +189,12 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
             let httpResponse = response as? HTTPURLResponse
             switch httpResponse?.statusCode ?? 0 {
             case 200:
-                // TODO: display success message.
                 print("ITEM POSTED")
                 // dismiss in UI thread
                 DispatchQueue.main.async {
                     self.dismiss(animated: true, completion: nil)
+                    let window = UIApplication.shared.keyWindow
+                    self.completeOverlay.showAnimatedOverlay(view: window!)
                 }
             default:
                 DispatchQueue.main.async {
@@ -181,9 +218,32 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UIImagePic
         // check if the fields are empty.
         return (itemNameField.text?.characters.count)! > 0 &&
             (itemPriceField.text?.characters.count)! > 0 &&
+            (Double(itemPriceField.text ?? "0.0")!) > 0.30 &&
             (itemConditionField.text?.characters.count)! > 0 &&
             (itemDescription.text?.characters.count)! > 0 &&
             imageButton.backgroundImage(for: .normal) != nil
+    }
+    
+    // setup the custom TextField
+    func setupTextField(_ textfield: UITextField) {
+        // edit password field
+        let width = CGFloat(1.5)
+        let border = CALayer()
+        border.borderColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0).cgColor // Green
+        border.frame = CGRect(x: 0, y: textfield.frame.size.height - width, width:  textfield.frame.size.width, height: textfield.frame.size.height)
+        
+        border.borderWidth = width
+        textfield.layer.addSublayer(border)
+        textfield.layer.masksToBounds = true
+        textfield.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+    }
+    
+    // dismiss a keyboard
+    func dismissKeyboard() {
+        itemNameField.resignFirstResponder()
+        itemPriceField.resignFirstResponder()
+        itemConditionField.resignFirstResponder()
+        itemDescription.resignFirstResponder()
     }
     
     // resize image
