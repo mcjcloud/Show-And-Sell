@@ -47,6 +47,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         // load all items.
         refreshControl?.beginRefreshing()
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
         handleRefresh(self.refreshControl!)
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -94,7 +95,13 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         let item = indexPath.section == 0 ? unapproved[indexPath.row] : approved[indexPath.row]
         
-        // assign data from item to fields of cell
+        // assign data
+        cell.item = item
+        cell.itemTitle.adjustsFontSizeToFitWidth = true
+        cell.itemTitle.textAlignment = .left
+        cell.itemPrice.adjustsFontSizeToFitWidth = true
+        cell.itemPrice.textAlignment = .right
+        
         cell.itemTitle.text = item.name
         cell.itemPrice.text = String(format: "$%.02f", Double(item.price) ?? 0.0)   // cast the string to double, and format.
         cell.itemCondition.text = item.condition
@@ -113,12 +120,9 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // segue to the view displaying the item.
+        searchController.resignFirstResponder()
         let cell = tableView.cellForRow(at: indexPath)
         performSegue(withIdentifier: "manageToEdit", sender: cell)
-    }
-    // make table view cell respond to swipe
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        // TODO: implement if necessary
     }
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -136,8 +140,15 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 let cell = tableView.cellForRow(at: indexPath) as! ItemTableViewCell
                 let item = self.items.first(where: { e in e.name == cell.itemTitle.text })
                 
+                // remove item from array
+                if let item = item {
+                    if let i = self.items.index(of: item) {
+                        self.items.remove(at: i)
+                    }
+                }
+                
                 // delete the Item
-                HttpRequestManager.deleteItem(id: item?.itemId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
+                HttpRequestManager.delete(itemWithId: item?.itemId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
                     print("Item delete response: \((response as? HTTPURLResponse)?.statusCode)")
                 }
                 tableView.reloadData()
@@ -146,7 +157,8 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 
                 // get the Item selected
                 let cell = tableView.cellForRow(at: indexPath) as! ItemTableViewCell
-                let item = self.items.first(where: { e in e.name == cell.itemTitle.text })
+                print("cell: \(cell.itemTitle.text)")
+                let item = self.items.first(where: { e in e.itemId == cell.item.itemId })
                 
                 // PUT the item with approved: true
                 if let i = item {
@@ -199,15 +211,6 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         // assign data from cell.
         destination.item = item
-        /*
-        destination.imageButton.contentMode = .scaleAspectFit
-        destination.imageButton.setBackgroundImage(source.itemImage.image, for: .normal)
-        
-        destination.itemNameField.text = item?.name
-        destination.itemPriceField.text = item?.price
-        destination.itemDescription.text = item?.itemDescription
-        destination.itemConditionField.text = item?.condition
-        */
     }
     
     @IBAction func updateItem(segue: UIStoryboardSegue) {
@@ -251,7 +254,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         print("refreshing")
         // get a list of all items (for now)
         // TODO: get items based on owned group.
-        HttpRequestManager.getItems(with: AppDelegate.myGroup!.groupId) { itemsArray, response, error in
+        HttpRequestManager.items(withGroupId: AppDelegate.myGroup!.groupId) { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items

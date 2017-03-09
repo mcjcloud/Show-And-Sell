@@ -26,6 +26,7 @@ class BookmarksTableViewController: UITableViewController {
         
         // refresh control
         self.refreshControl = UIRefreshControl()
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.380, alpha: 1.0) // Gold
         refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
         // load all bookmarks.
@@ -40,39 +41,39 @@ class BookmarksTableViewController: UITableViewController {
         
         tableView.reloadData()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
 
     // MARK: - Navigation
     
      // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // prepare to go to detail view
-        let cell = sender as! ItemTableViewCell
-        let destination: ItemDetailViewController = segue.destination as! ItemDetailViewController
-        
-        let item = bookmarkItems[(self.tableView.indexPath(for: cell)?.row)!]
-         
-        // assign the data from the item to the fields in the destination view controller
-        destination.name = item.name
-        destination.price = item.price
-        destination.condition = item.condition
-        destination.desc = item.itemDescription
-        
-        let imageData = Data(base64Encoded: item.thumbnail)
-        if let data = imageData {
-            destination.thumbnail = UIImage(data: data)
+        // if going to item detail
+        if let destination = segue.destination as? ItemDetailTableViewController {
+            // prepare to go to detail view
+            let cell = sender as! ItemTableViewCell
+            
+            let item = bookmarkItems[(self.tableView.indexPath(for: cell)?.row)!]
+             
+            // assign the data from the item to the fields in the destination view controller
+            destination.name = item.name
+            destination.price = item.price
+            destination.condition = item.condition
+            destination.desc = item.itemDescription
+            destination.previousVC = self
+            destination.segue = segue
+            
+            let imageData = Data(base64Encoded: item.thumbnail)
+            if let data = imageData {
+                destination.thumbnail = UIImage(data: data)
+            }
+            else {
+                destination.thumbnail = UIImage(named: "noimage")
+            }
+            
+            //print("bookmarked: \(item.isBookmarked)")
+            destination.item = item
         }
-        else {
-            destination.thumbnail = UIImage(named: "noimage")
-        }
-        
-        //print("bookmarked: \(item.isBookmarked)")
-        destination.item = item
+        // else, going to settings
     }
  
     // MARK: Table View Delegate
@@ -89,6 +90,13 @@ class BookmarksTableViewController: UITableViewController {
         let item = bookmarkItems[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "bookmarkCell") as! ItemTableViewCell
      
+        // assign data
+        cell.item = item
+        cell.itemTitle.adjustsFontSizeToFitWidth = true
+        cell.itemTitle.textAlignment = .left
+        cell.itemPrice.adjustsFontSizeToFitWidth = true
+        cell.itemPrice.textAlignment = .right
+        
         cell.itemTitle.text = item.name
         cell.itemPrice.text = String(format: "$%.02f", Double(item.price) ?? 0.0)   // cast the string to double, and format.
         cell.itemCondition.text = item.condition
@@ -116,7 +124,7 @@ class BookmarksTableViewController: UITableViewController {
         print()
         print("refreshing")
         // get a list of all items (for now)
-        HttpRequestManager.getBookmarks(userId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+        HttpRequestManager.bookmarks(forUserWithId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items

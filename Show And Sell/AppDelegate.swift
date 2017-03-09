@@ -6,8 +6,11 @@
 //  Copyright © 2016 Brayden Cloud. All rights reserved.
 //
 //  Show And Sell Yardale app.
+//
 
 import UIKit
+import Google
+import GoogleSignIn
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,21 +21,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var save: SaveData!
     
     static var bookmarks: [Item: String]?
-    static var user: User?
+    static var user: User? {
+        didSet {
+            AppDelegate.save.email = user?.email
+            AppDelegate.save.password = user?.password ?? ""
+            AppDelegate.saveData()
+        }
+    }
     static var group: Group? {
         didSet {
             //save.groupId = group?.groupId
             user?.groupId = group?.groupId ?? ""
             AppDelegate.saveData()
+            
+            if let u = self.user {
+                // Make PUT request for user
+                HttpRequestManager.put(user: u, currentPassword: AppDelegate.user?.password ?? "") { user, response, error in
+                    AppDelegate.user = user
+                }
+            }
         }
     }
     static var myGroup: Group?
+    static var displayItem: Item?
+    
+    // references to UI controllers
+    static var loginVC: LoginViewController?
+    static var tabVC: SSTabBarViewController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let enc = HttpRequestManager.encrypt("105697857720129832853")
+        print("password: \(enc)")
+        print("decrypted: \(HttpRequestManager.decrypt(enc))")
         
         // load saved data.
-        AppDelegate.save = AppDelegate.loadData() ?? SaveData(username: nil, password: nil/*, group: nil*/)
+        AppDelegate.save = AppDelegate.loadData() ?? SaveData(email: nil, password: nil, isGoogleSigned: false)
         
         return true
     }
@@ -63,6 +87,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // save data
         AppDelegate.saveData()
+        
+        // log out of google
+        GIDSignIn.sharedInstance().signOut()
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        print("opening URL: \(url.scheme)")
+        if let scheme = url.scheme, scheme.contains("google") {   // google
+            return GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        }
+        else if let scheme = url.scheme, scheme.contains("showandsell") {       // twitter
+                let components = url.absoluteString.components(separatedBy: "/")
+                if components.count > 2 {
+                    let id = components[components.count - 1]
+                    print("making item request")
+                    HttpRequestManager.item(id: id) { item, response, error in
+                        AppDelegate.displayItem = item
+                        DispatchQueue.main.async {
+                            if let _ = AppDelegate.user {   // logged in
+                                print("item returned")
+                                let rootVC = self.window?.rootViewController as? LoginViewController
+                                rootVC?.performSegue(withIdentifier: "loginToTabs", sender: rootVC)
+                                SSTabBarViewController.shared.presentQueuedItem()
+                            }
+                            else {                          // not logged in
+                                // show alert
+                                let accountAlert = UIAlertController(title: "Log-In or Create Account", message: "You must create an account or sign in to an existing account to view this item.", preferredStyle: .alert)
+                                accountAlert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                                    self.window?.rootViewController?.present(accountAlert, animated: true, completion: nil)
+                            }
+                        }
+                    }
+                }
+            return false
+        }
+        else {
+            return false
+        }
     }
 
     // MARK: NSCoding

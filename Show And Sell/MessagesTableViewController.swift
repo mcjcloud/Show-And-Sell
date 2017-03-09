@@ -73,17 +73,17 @@ class MessagesTableViewController: UITableViewController {
         
         // customize based on who sent.
         if message.posterId == (AppDelegate.user?.userId ?? "") {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.323, alpha: 0.5286)
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0)    // Green
             cell.nameLabel.textAlignment = .right
             cell.messageLabel.textAlignment = .right
         }
         else if message.posterId == item.ownerId {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)     // Gold
             cell.nameLabel.textAlignment = .left
             cell.messageLabel.textAlignment = .left
         }
-        else if message.posterId == (AppDelegate.group?.groupId ?? "") {
-            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)
+        else if message.posterId == message.adminId {
+            cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 0.7664)     // Gold
             cell.nameLabel.textAlignment = .left
             cell.messageLabel.textAlignment = .left
         }
@@ -95,42 +95,6 @@ class MessagesTableViewController: UITableViewController {
 
         return cell
     }
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 
     /*
     // MARK: - Navigation
@@ -147,10 +111,11 @@ class MessagesTableViewController: UITableViewController {
     func postMessage() {
         
         let inputController = UIAlertController(title: "Post Message", message: "What would you like to say?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
         let doneAction = UIAlertAction(title: "Post", style: .default) { inputAction in
             // post message
             if let text = inputController.textFields?[0].text, text.characters.count > 0 {
-                HttpRequestManager.postMessage(posterId: AppDelegate.user?.userId ?? "", posterPassword: AppDelegate.user?.password ?? "", itemId: self.item.itemId, text: text) { message, response, error in
+                HttpRequestManager.post(messageWithPosterId: AppDelegate.user?.userId ?? "", posterPassword: AppDelegate.user?.password ?? "", itemId: self.item.itemId, text: text) { message, response, error in
                     print("Message posted")
                     self.handleRefresh()
                 }
@@ -162,13 +127,14 @@ class MessagesTableViewController: UITableViewController {
         }
         
         inputController.addTextField(configurationHandler: nil)
+        inputController.addAction(cancelAction)
         inputController.addAction(doneAction)
         
         present(inputController, animated: true, completion: nil)
     }
 
     func handleRefresh() {
-        HttpRequestManager.getMessages(itemId: item.itemId) { messages, response, error in
+        HttpRequestManager.messages(forItemId: item.itemId) { messages, response, error in
             self.messages = messages
             
             DispatchQueue.main.async {

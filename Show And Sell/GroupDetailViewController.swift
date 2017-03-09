@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GroupViewController: UIViewController {
+class GroupDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
