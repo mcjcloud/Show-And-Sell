@@ -93,14 +93,15 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         setupNavBar()
     }
     override func viewWillDisappear(_ animated: Bool) {
-        // call super method
-        super.viewWillDisappear(animated)
         
         // make navigation bar untransparent again
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         
         self.navigationController?.navigationBar.shadowImage = nil
         self.navigationController?.navigationBar.isTranslucent = false
+        
+        // call super method
+        super.viewWillDisappear(animated)
     }
 
     // MARK: - Navigation
