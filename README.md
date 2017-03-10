@@ -15,7 +15,7 @@ Keller, TX
 When we began this project, we began with the following specifications in mind:
 >Create a mobile application that would allow a platform for a digital yard sale to raise funds to attend NLC. The app should allow for the donation of items, including picture, suggested price, and a rating for the condition of the item. The app should allow for interaction/comments on the items. Code should be error free.
 
-We believe that with Show & Sell, we have gone above and beyond these guidelines. Our application strives to be the most powerful, easiest-to-use platform for hosting digital yard sales, thanks to its inclusion of the following features:
+We believe that with Show & Sell, we have gone above and beyond these guidelines. Our application strives to be the most powerful, easy-to-use platform for hosting digital yard sales, thanks to its inclusion of the following features:
 
 * Item Donation, including a picture, suggested price, item condition, and more details about the item
 * Commenting threads on items
