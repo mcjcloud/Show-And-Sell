@@ -47,8 +47,10 @@ After completing the requirements, perform the following to install:
 1. Clone the project by either
   * Downloading the project zipped, and unpackaging it into the desired directory  
   OR
-  * If you have [git] (https://git-scm.com) installed, navigating to the desired directory in Terminal and executing the following command:  `$ git clone https://github.com/mcjcloud/Show-And-Sell.git`
-2. Navigate to the project directory (which includes a file named "Podfile") and execute the following command:  `$ pod install` 
+  * If you have [git] (https://git-scm.com) installed, navigating to the desired directory in Terminal and executing the following command:  
+  `$ git clone https://github.com/mcjcloud/Show-And-Sell.git`
+2. Navigate to the project directory (which includes a file named "Podfile") and execute the following command:  
+  `$ pod install` 
 3. Open the project by double clicking on the file named "Show And Sell.xcworkspace" in the project directory
 4. Wait for Xcode to finish indexing (as can be seen at the top of the Xcode window).
 5. Click on root file in the Project Navigator (located on the left) named "Show And Sell" to open the project settings.
