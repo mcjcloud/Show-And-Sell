@@ -100,7 +100,7 @@ class CreateAccountViewController: UIViewController {
                     }
                     else {
                         DispatchQueue.main.async {
-                            self.messageLabel.text = "Error creating user. Please check that your credentials are alphanumeric."
+                            self.messageLabel.text = "Error creating user. Check credentials."
                             // enable button
                             self.createAccountButton.isEnabled = true
                         }
