@@ -33,7 +33,7 @@ With Show & Sell, we empower FBLA chapters and other organizations to mobilize t
 
 ###Instructions for Installation
 
-Make sure you fulfill the following requirements before continuing:
+######Prerequisites
 
 * Have a reliable internet connection
 * Have a computer running OS X 10.11.5 or later
@@ -41,6 +41,7 @@ Make sure you fulfill the following requirements before continuing:
 * Have the latest version of [CocoaPods] (https://cocoapods.org/) installed.
 * Have an iPhone/iPod or emulator running iOS 10.0 or later
 
+######Installation
 After completing the requirements, perform the following to install:
 
 1. Clone the project by either
