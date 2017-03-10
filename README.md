@@ -57,5 +57,5 @@ Once installed, the app will run for three days before the codesigning expires, 
 
 ###Troubleshooting
 
-> 1. I created a brand new Bundle identifier, but the app still won't run.
->   * A: Follow [this] (https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppStoreDistributionTutorial/CreatingYourTeamProvisioningProfile/CreatingYourTeamProvisioningProfile.html) link to create a Code Signing Identity (provisioning profile)
+> Q: I created a brand new Bundle identifier, but the app still won't run.
+> A: Follow [this] (https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppStoreDistributionTutorial/CreatingYourTeamProvisioningProfile/CreatingYourTeamProvisioningProfile.html) link to create a Code Signing Identity (provisioning profile)
