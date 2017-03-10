@@ -41,3 +41,6 @@ Make sure you fulfill the following requirements before continuing:
 After completing the requirements, perform the following to install:
 
 1. Clone the project by either
+  * Downloading the project zipped, and unpackaging it into the desired directory.
+  * If you have [git] (https://git-scm.com) installed, navigating to the desired directory in Terminal and executing the following command: `git clone https://github.com/mcjcloud/Show-And-Sell.git`
+2. Navigate to the project directory (which includes a file named "Podfile") and execute the following command:
