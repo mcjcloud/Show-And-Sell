@@ -6,6 +6,9 @@ Keller, TX
 * [Overview] (#overview)
 * [Instructions for Installation] (#instructions-for-installation)
 * [Troubleshooting] (#troubleshooting)
+* [Software Used] (#software-used)
+* [Templates Used] (#templates-used)
+* [Source of Information] (#source-of-information)
 
 ###Overview
 When we began this project, we began with the following specifications in mind:
@@ -76,3 +79,29 @@ Once installed, the app will run for three days before the codesigning expires, 
 > A: Be sure the repository is spelled correctly "https://github.com/mcjcloud/Show-And-Sell.git"
 
 If problems persist, try deleting the project, and following the instructions again.
+
+
+###Software Used
+* Xcode 8 IDE
+* Visiual Studios IDE (for backend API)
+* GIMP Image Editor
+
+
+###Templates Used
+* No templates other than those provided by Xcode were used
+
+
+###Source of Information
+* [Apple API Reference] (https://developer.apple.com/ios/resources/) - for reference of iOS APIs and general knowledge
+* [Google Sign-In for iOS] (https://developers.google.com/identity/sign-in/ios/start-integrating) - for implementing Google OAuth sign in support
+* [Twitter Developer Documentation] (https://dev.twitter.com/cards/overview) - for implementing item tweeting and Deep-Links
+* [StackOverflow] (https://www.stackoverflow.com) - for debugging
+* [Braintree Developer Documentation] (https://developers.braintreepayments.com/home) - for implementing digital transactions
+
+
+###Copyright Notations
+| Source         | Usage                     |
+| -------------- | ------------------------- |
+| [icons8] (https://icons8.com) | Resource for TabBar icons, distributed under the Creative Commons Attribution-NoDerivs 3.0 License |
+| [Google Sign In] (https://developers.google.com/identity/sign-in/ios/sdk/) | SDK used for Google OAuth implementation, licensed under the Creative Commons Attribution 3.0 License |
+| [Braintree] (https://developers.braintreepayments.com/start/hello-client/ios/v4) | SDK used for implementing digital transactions, licensed under the MIT License |
