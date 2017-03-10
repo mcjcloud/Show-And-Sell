@@ -1,4 +1,4 @@
-# Show & Sell
+#Show & Sell
 Central High School
 Keller, TX
 
@@ -30,7 +30,9 @@ We believe that with Show & Sell, we have gone above and beyond these guidelines
 With Show & Sell, we empower FBLA chapters and other organizations to mobilize their members and the community to harness the power of mobile technology to raise funds from the sale of donated items.
 
 ###Instructions for Installation
+
 Make sure you fulfill the following requirements before continuing:
+
 * Have a computer running OS X 10.11.5 or later
 * Have [Xcode 8] (https://developer.apple.com/xcode/downloads/) or later installed
 * Have the latest version of [CocoaPods] (https://cocoapods.org/) installed.
@@ -39,5 +41,3 @@ Make sure you fulfill the following requirements before continuing:
 After completing the requirements, perform the following to install:
 
 1. Clone the project by either
-  * Downloading the project zipped, and unpackaging it into the desired directory.
-  * If you have [git] (https://git-scm.com/) installed, navigating to the desired directory in Terminal and executing the following command: `git clone https://github.com/mcjcloud/Show-And-Sell.git`
