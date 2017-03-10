@@ -5,6 +5,7 @@ Keller, TX
 ###Quick Reference
 * [Overview] (#overview)
 * [Instructions for Installation] (#instructions-for-installation)
+* [Troubleshooting] (#troubleshooting)
 
 ###Overview
 When we began this project, we began with the following specifications in mind:
@@ -52,3 +53,9 @@ After completing the requirements, perform the following to install:
 8. If you're running on a real device, you must approve the developer profile before the app can run. Go to Settings > General > Device Management and verify the Provisioning Profile.
 
 Once installed, the app will run for three days before the codesigning expires, and the app must be installed again.
+
+
+###Troubleshooting
+
+> 1. Q: I created a brand new Bundle identifier, but the app still won't run.
+>   A: Follow [this] (https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppStoreDistributionTutorial/CreatingYourTeamProvisioningProfile/CreatingYourTeamProvisioningProfile.html) link to create a Code Signing Identity (provisioning profile)
