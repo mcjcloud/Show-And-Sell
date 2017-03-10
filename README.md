@@ -42,7 +42,8 @@ Make sure you fulfill the following requirements before continuing:
 After completing the requirements, perform the following to install:
 
 1. Clone the project by either
-  * Downloading the project zipped, and unpackaging it into the desired directory *OR*
+  * Downloading the project zipped, and unpackaging it into the desired directory...
+  OR
   * If you have [git] (https://git-scm.com) installed, navigating to the desired directory in Terminal and executing the following command: `$ git clone https://github.com/mcjcloud/Show-And-Sell.git`
 2. Navigate to the project directory (which includes a file named "Podfile") and execute the following command: `$ pod install` 
 3. Open the project by double clicking on the file named "Show And Sell.xcworkspace" in the project directory
@@ -57,6 +58,5 @@ Once installed, the app will run for three days before the codesigning expires, 
 
 ###Troubleshooting
 
-> Q: I created a brand new Bundle identifier, but the app still won't run.
-
+> Q: I created a brand new Bundle identifier, but the app still won't run. ...
 > A: Follow [this] (https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppStoreDistributionTutorial/CreatingYourTeamProvisioningProfile/CreatingYourTeamProvisioningProfile.html) link to create a Code Signing Identity (provisioning profile)
