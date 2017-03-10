@@ -30,14 +30,16 @@ We believe that with Show & Sell, we have gone above and beyond these guidelines
 
 With Show & Sell, we empower FBLA chapters and other organizations to mobilize their members and the community to harness the power of mobile technology to raise funds from the sale of donated items.
 
+
 ###Instructions for Installation
 
 Make sure you fulfill the following requirements before continuing:
 
+* Have a reliable internet connection
 * Have a computer running OS X 10.11.5 or later
 * Have [Xcode 8] (https://developer.apple.com/xcode/downloads/) or later installed
 * Have the latest version of [CocoaPods] (https://cocoapods.org/) installed.
-* Have an iOS device or emulator running iOS 10 or later
+* Have an iPhone/iPod or emulator running iOS 10.0 or later
 
 After completing the requirements, perform the following to install:
 
@@ -49,8 +51,8 @@ After completing the requirements, perform the following to install:
 3. Open the project by double clicking on the file named "Show And Sell.xcworkspace" in the project directory
 4. Wait for Xcode to finish indexing (as can be seen at the top of the Xcode window).
 5. Click on root file in the Project Navigator (located on the left) named "Show And Sell" to open the project settings.
-6. Navigate to the "General" tab and change the Bundle identifier (currently "com.insertcoolnamehere.Show-And-Sell") to a new, unique identifier (i.e. "com.randomidentifier.fblaapp")
-7. Once complete, run the app by clicking the play button located at the top left of the Xcode window.
+6. Navigate to the "General" tab and change the Bundle identifier (currently "com.insertcoolnamehere.Show-And-Sell") to a new, unique identifier (i.e. "com.randomidentifier.Show-And-Sell")
+7. Once complete, select your device or emulator from the device dropdown in the top left of teh Xcode window and run the app by clicking the play button.
 8. If you're running on a real device, you must approve the developer profile before the app can run. Go to Settings > General > Device Management and verify the Provisioning Profile.
 
 Once installed, the app will run for three days before the codesigning expires, and the app must be installed again.
@@ -60,3 +62,14 @@ Once installed, the app will run for three days before the codesigning expires, 
 
 > Q: I created a brand new Bundle identifier, but the app still won't run.  
 > A: Follow [this] (https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppStoreDistributionTutorial/CreatingYourTeamProvisioningProfile/CreatingYourTeamProvisioningProfile.html) link to create a Code Signing Identity (provisioning profile)
+
+> Q: Error "The run destination is not valid for Running the scheme 'Show And Sell'  
+> A: Make sure you are using an iPhone/iPod running iOS 10.0 or later.
+
+> Q: Build error "custom shell scripts: Permission Denied"
+> A: Be sure you successfully ran `$ pod install` with no errors in the project directory.
+
+> Q: Error "remote: Repository not found." when cloning project
+> A: Be sure the repository is spelled correctly "https://github.com/mcjcloud/Show-And-Sell.git"
+
+If problems persist, try deleting the project, and following the instructions again.
