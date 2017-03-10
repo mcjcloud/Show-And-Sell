@@ -677,7 +677,7 @@ class HttpRequestManager {
             let decodedString = String(data: data, encoding: .utf8)
             
             // caesar shift - 1
-            for char in decodedString!.utf16 {
+            for char in (decodedString ?? "").utf16 {
                 let u = UnicodeScalar(char - 1)!
                 decrypted += String(Character(u))
             }

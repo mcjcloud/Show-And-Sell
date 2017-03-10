@@ -78,7 +78,7 @@ class CreateAccountViewController: UIViewController {
         let pWord = passwordField.text,
         let cPWord = confirmPasswordField.text {
             if pWord == cPWord {
-                let userToPost = User(email: email, password: pWord, firstName: fName, lastName: lName)
+                let userToPost = User(email: email, password: HttpRequestManager.encrypt(pWord), firstName: fName, lastName: lName)
                 HttpRequestManager.post(user: userToPost) { user, response, error in
                     
                     if let u = user {
