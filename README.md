@@ -9,6 +9,7 @@ Keller, TX
 * [Software Used] (#software-used)
 * [Templates Used] (#templates-used)
 * [Source of Information] (#source-of-information)
+* [Copyright Notations] (#copyright-notations)
 
 ###Overview
 When we began this project, we began with the following specifications in mind:
