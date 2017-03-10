@@ -11,11 +11,14 @@ import UIKit
 class IntroViewController: UIViewController {
 
     // Properties to be accessed from other classes.
-    @IBOutlet var messageLabel: UILabel!
     
     override func viewDidLoad() {
-        if messageLabel == nil {
-            messageLabel = UILabel()
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dest = segue.destination.childViewControllers[0] as? FindGroupTableViewController {
+            dest.previousVC = self
         }
     }
     

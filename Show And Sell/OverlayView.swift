@@ -25,7 +25,7 @@ class OverlayView: UIView {
             activityIndicator!.frame = CGRect(x: 0, y: 0, width: 60, height: 60)
             //activityIndicator!.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
             activityIndicator!.center = CGPoint(x: self.bounds.width * 0.5, y: self.bounds.height * 0.5)
-            activityIndicator!.activityIndicatorViewStyle = .gray
+            activityIndicator!.activityIndicatorViewStyle = .whiteLarge
             self.addSubview(activityIndicator!)
         case .complete:
             super.init(frame: CGRect(x: 0, y: 0, width: 180, height: 180))

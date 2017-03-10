@@ -23,8 +23,7 @@ class MessagesTableViewController: UITableViewController {
 
         // Add button for posting a message to the thread.
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(postMessage))
-        //self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(handleRefresh))
-        self.navigationItem.title = "Chat"
+        self.navigationItem.title = "\(item.name)"
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 140
@@ -32,6 +31,7 @@ class MessagesTableViewController: UITableViewController {
         handleRefresh()
     }
     override func viewWillAppear(_ animated: Bool) {
+        
         handleRefresh()
     }
 
@@ -90,23 +90,13 @@ class MessagesTableViewController: UITableViewController {
 
         return cell
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
-    // MARK: Functions
+    // MARK: Helper
     
     func postMessage() {
         
         let inputController = UIAlertController(title: "Post Message", message: "What would you like to say?", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
         let doneAction = UIAlertAction(title: "Post", style: .default) { inputAction in
             // post message
             if let text = inputController.textFields?[0].text, text.characters.count > 0 {
@@ -121,7 +111,9 @@ class MessagesTableViewController: UITableViewController {
             }
         }
         
-        inputController.addTextField(configurationHandler: nil)
+        inputController.addTextField { field in
+            field.autocapitalizationType = .words
+        }
         inputController.addAction(cancelAction)
         inputController.addAction(doneAction)
         
@@ -129,10 +121,13 @@ class MessagesTableViewController: UITableViewController {
     }
 
     func handleRefresh() {
+        let loadOverlay = OverlayView(type: .loading, text: nil)
+        loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!)
         HttpRequestManager.messages(forItemId: item.itemId) { messages, response, error in
             self.messages = messages
             
             DispatchQueue.main.async {
+                loadOverlay.hideOverlayView()
                 self.tableView.reloadData()
                 //self.tableView.setContentOffset(CGPoint(x: 0, y: CGFloat.greatestFiniteMagnitude), animated: false)
                 if messages.count > 0 {

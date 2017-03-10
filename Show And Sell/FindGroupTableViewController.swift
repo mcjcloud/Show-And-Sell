@@ -211,7 +211,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
             }
             self.performSegue(withIdentifier: "finderToTabs", sender: self)
         }
-        else if let _ = previousVC as? CreateAccountViewController {
+        else if let _ = previousVC as? IntroViewController {
             // the last screen was the login or create, so go to tabs
             if currentGroup != oldGroup {
                 // clear the data

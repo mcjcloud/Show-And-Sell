@@ -11,43 +11,29 @@ import UIKit
 class IntroPageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     // Pages
-    var pages = [IntroViewController]()
+    var pages = [UIViewController]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        // fix black bar at the bottom of pagevc
+        UIPageControl.appearance().backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0)
         
         // set up page view controller
         self.delegate = self
         self.dataSource = self
         
-        // create view controllers
-        let page1: IntroViewController! = self.storyboard?.instantiateViewController(withIdentifier: "IntroController1") as! IntroViewController
-        let page2: IntroViewController! = self.storyboard?.instantiateViewController(withIdentifier: "IntroController2") as! IntroViewController
+        // populate vc array
+        for i in 1...5 {
+            let page: IntroViewController! = self.storyboard?.instantiateViewController(withIdentifier: "IntroController\(i)") as! IntroViewController
+            pages.append(page)
+        }
+        let lastPage = self.storyboard!.instantiateViewController(withIdentifier: "IntroController6")
+        pages.append(lastPage)
         
-        // add view controllers to array
-        pages.append(page1)
-        pages.append(page2)
-        
-        setViewControllers([page1], direction: .forward, animated: false, completion: nil)
+        setViewControllers([pages[0]], direction: .forward, animated: false, completion: nil)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: PageViewController data source and delegate
     
@@ -63,7 +49,7 @@ class IntroPageViewController: UIPageViewController, UIPageViewControllerDataSou
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let currentIndex = pages.index(of: (viewController as! IntroViewController))!
+        let currentIndex = pages.index(of: (viewController as! UIViewController))!
         let nextIndex = currentIndex + 1
         
         if nextIndex >= pages.count {

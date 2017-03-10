@@ -55,6 +55,13 @@
 		D8DC45951D9579CA00E53B34 /* HttpRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DC45941D9579CA00E53B34 /* HttpRequestManager.swift */; };
 		D8DC45971D957ACE00E53B34 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DC45961D957ACE00E53B34 /* User.swift */; };
 		D8E3889B1E423D5700E034C9 /* ChooseLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E3889A1E423D5700E034C9 /* ChooseLocationViewController.swift */; };
+		D8E98A7E1E729FEF00A7F449 /* sasbrowse.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A781E729FEF00A7F449 /* sasbrowse.PNG */; };
+		D8E98A7F1E729FEF00A7F449 /* saschat.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A791E729FEF00A7F449 /* saschat.PNG */; };
+		D8E98A801E729FEF00A7F449 /* saschoose.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A7A1E729FEF00A7F449 /* saschoose.PNG */; };
+		D8E98A811E729FEF00A7F449 /* sascreategroup.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A7B1E729FEF00A7F449 /* sascreategroup.PNG */; };
+		D8E98A821E729FEF00A7F449 /* sasdonate.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A7C1E729FEF00A7F449 /* sasdonate.PNG */; };
+		D8E98A831E729FEF00A7F449 /* sassettings.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A7D1E729FEF00A7F449 /* sassettings.PNG */; };
+		D8E98A851E72AEEC00A7F449 /* sasdetail.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D8E98A841E72AEEC00A7F449 /* sasdetail.PNG */; };
 		D8E9D3D71E654B3F00AA1B7C /* showandsell-small.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E9D3D61E654B3F00AA1B7C /* showandsell-small.png */; };
 		D8FDE3B81D7DF5A600B98B48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3B71D7DF5A600B98B48 /* AppDelegate.swift */; };
 		D8FDE3BA1D7DF5A600B98B48 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */; };
@@ -120,6 +127,13 @@
 		D8DC45941D9579CA00E53B34 /* HttpRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequestManager.swift; sourceTree = "<group>"; };
 		D8DC45961D957ACE00E53B34 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D8E3889A1E423D5700E034C9 /* ChooseLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseLocationViewController.swift; sourceTree = "<group>"; };
+		D8E98A781E729FEF00A7F449 /* sasbrowse.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sasbrowse.PNG; sourceTree = "<group>"; };
+		D8E98A791E729FEF00A7F449 /* saschat.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = saschat.PNG; sourceTree = "<group>"; };
+		D8E98A7A1E729FEF00A7F449 /* saschoose.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = saschoose.PNG; sourceTree = "<group>"; };
+		D8E98A7B1E729FEF00A7F449 /* sascreategroup.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sascreategroup.PNG; sourceTree = "<group>"; };
+		D8E98A7C1E729FEF00A7F449 /* sasdonate.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sasdonate.PNG; sourceTree = "<group>"; };
+		D8E98A7D1E729FEF00A7F449 /* sassettings.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sassettings.PNG; sourceTree = "<group>"; };
+		D8E98A841E72AEEC00A7F449 /* sasdetail.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sasdetail.PNG; sourceTree = "<group>"; };
 		D8E9D3D61E654B3F00AA1B7C /* showandsell-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "showandsell-small.png"; sourceTree = "<group>"; };
 		D8FDE3B41D7DF5A500B98B48 /* Show And Sell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Show And Sell.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8FDE3B71D7DF5A600B98B48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -170,6 +184,13 @@
 		D84393BC1DBF1C33008E7721 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				D8E98A781E729FEF00A7F449 /* sasbrowse.PNG */,
+				D8E98A841E72AEEC00A7F449 /* sasdetail.PNG */,
+				D8E98A791E729FEF00A7F449 /* saschat.PNG */,
+				D8E98A7A1E729FEF00A7F449 /* saschoose.PNG */,
+				D8E98A7B1E729FEF00A7F449 /* sascreategroup.PNG */,
+				D8E98A7C1E729FEF00A7F449 /* sasdonate.PNG */,
+				D8E98A7D1E729FEF00A7F449 /* sassettings.PNG */,
 				D8D316AF1E705EE000DB68F3 /* Compass.png */,
 				D8D316B11E705EE800DB68F3 /* Compass Filled.png */,
 				D8D316AD1E6FFE5700DB68F3 /* green-check.png */,
@@ -397,9 +418,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D87BF9871E36E7FB00AA7EA1 /* Star Filled.png in Resources */,
+				D8E98A821E729FEF00A7F449 /* sasdonate.PNG in Resources */,
+				D8E98A801E729FEF00A7F449 /* saschoose.PNG in Resources */,
 				D8D316B21E705EE800DB68F3 /* Compass Filled.png in Resources */,
 				D87BF9841E36E7FB00AA7EA1 /* Plus.png in Resources */,
+				D8E98A7E1E729FEF00A7F449 /* sasbrowse.PNG in Resources */,
 				D8D316AE1E6FFE5700DB68F3 /* green-check.png in Resources */,
+				D8E98A7F1E729FEF00A7F449 /* saschat.PNG in Resources */,
 				D87BF9881E36E7FB00AA7EA1 /* Star.png in Resources */,
 				D80D79161DDA39980055A307 /* noimage.png in Resources */,
 				D8FDE3C21D7DF5A700B98B48 /* LaunchScreen.storyboard in Resources */,
@@ -408,7 +433,10 @@
 				D8FDE3BF1D7DF5A700B98B48 /* Assets.xcassets in Resources */,
 				D8D316B41E70914200DB68F3 /* red-x.png in Resources */,
 				D8FDE3BD1D7DF5A600B98B48 /* Main.storyboard in Resources */,
+				D8E98A851E72AEEC00A7F449 /* sasdetail.PNG in Resources */,
+				D8E98A811E729FEF00A7F449 /* sascreategroup.PNG in Resources */,
 				D852416B1E53665F00DCC394 /* showandsell.png in Resources */,
+				D8E98A831E729FEF00A7F449 /* sassettings.PNG in Resources */,
 				D8E9D3D71E654B3F00AA1B7C /* showandsell-small.png in Resources */,
 				D8D316B01E705EE000DB68F3 /* Compass.png in Resources */,
 				D87BF9811E36E7FB00AA7EA1 /* Home Filled.png in Resources */,

@@ -92,7 +92,7 @@ class CreateAccountViewController: UIViewController {
                         
                         // perform segue to Browse View Controller.
                         DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "createToFinder", sender: self)
+                            self.performSegue(withIdentifier: "createToIntro", sender: self)
                         }
                         
                         // save data

@@ -74,9 +74,6 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
             self.reloadData(collectionView)
         }
     }
-    override func viewDidAppear(_ animated: Bool) {
-        print("BROWSE VIEW APPEARED")
-    }
 
     // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

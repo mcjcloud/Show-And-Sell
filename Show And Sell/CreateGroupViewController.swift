@@ -45,6 +45,14 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
     // MARK: TextView Delegate
     func textViewDidEndEditing(_ textView: UITextView) {
         doneButton.isEnabled = shouldEnableDoneButton()
+        if textView.text == "" {
+            textView.text = "Location Details"
+        }
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Location Details" {
+            textView.text = ""
+        }
     }
 
     // MARK: Navigation
@@ -106,6 +114,7 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
         }
     }
     @IBAction func cancel(_ sender: UIBarButtonItem) {
+        dismissKeyboard()
         dismiss(animated: true, completion: nil)
     }
     

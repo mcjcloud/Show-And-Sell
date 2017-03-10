@@ -38,7 +38,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
     var segue: UIStoryboardSegue!
     
     //var activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    var loadOverlay = OverlayView(type: .loading, text: "Loading")
+    var loadOverlay = OverlayView(type: .loading, text: nil)
     var tableOffset: CGFloat = -164
     
     override func viewDidLoad() {
@@ -106,9 +106,13 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dest = segue.destination as? MessagesTableViewController {
+        if let dest = segue.destination.childViewControllers[0] as? MessagesTableViewController {
             dest.item = item
         }
+    }
+    
+    @IBAction func unwindToItemDetail(_ segue: UIStoryboardSegue) {
+        // do nothing
     }
     
     // MARK: TableView Delegate
@@ -244,7 +248,10 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
                     // pop view controller in main thread
                     DispatchQueue.main.async {
                         self.stopLoading()
+                        // display purchsed message
+                        let successOverlay = OverlayView(type: .complete, text: "Item Purchased!")
                         let _ = self.navigationController?.popViewController(animated: true)
+                        successOverlay.showAnimatedOverlay(view: UIApplication.shared.keyWindow!)
                     }
                     
                 }
