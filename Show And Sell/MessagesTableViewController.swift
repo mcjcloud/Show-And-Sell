@@ -112,7 +112,7 @@ class MessagesTableViewController: UITableViewController {
         }
         
         inputController.addTextField { field in
-            field.autocapitalizationType = .words
+            field.autocapitalizationType = .sentences
         }
         inputController.addAction(cancelAction)
         inputController.addAction(doneAction)

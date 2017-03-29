@@ -239,6 +239,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
                         let index = dest.items.index(where: { e in e.itemId == self.item.itemId })
                         if let i = index {
                             dest.items.remove(at: i)
+                            dest.reloadData(dest.collectionView)
                         }
                     }
                     else if let dest = self.previousVC as? BookmarksTableViewController {
