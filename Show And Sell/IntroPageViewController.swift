@@ -49,7 +49,7 @@ class IntroPageViewController: UIPageViewController, UIPageViewControllerDataSou
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let currentIndex = pages.index(of: (viewController as! UIViewController))!
+        let currentIndex = pages.index(of: viewController)!
         let nextIndex = currentIndex + 1
         
         if nextIndex >= pages.count {

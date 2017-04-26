@@ -13,130 +13,242 @@ import BraintreeDropIn
 
 class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
 
-    @IBOutlet var nameLabel: UILabel!
-    @IBOutlet var priceLabel: UILabel!
-    @IBOutlet var conditionLabel: UILabel!
-    @IBOutlet var descriptionView: UITextView!
-    @IBOutlet var buyButton: UIButton!
-    @IBOutlet var bookmarkButton: UIButton!
-    @IBOutlet var shareButton: UIButton!
-    @IBOutlet var messagesButton: UIButton!
+    // MARK: UI Properties
+    var nameLabel: UILabel?
+    var groupLink: UIButton?
+    var priceLabel: UILabel?
+    var conditionLabel: UILabel?
+    var descriptionView: UITextView?
+    var buttonStack: UIStackView?
+    var buyButton: UIButton?
+    var bookmarkButton: UIButton?
+    var shareButton: UIButton?
     
-    @IBOutlet var footerView: UIView!
+    var imageView: UIImageView?
     
-    // data to store in above ui elements (all force unwrapped because they are passed in the prepare for segue)
-    var thumbnail: UIImage!
-    var name: String!
-    var price: String!
-    var condition: String!
-    var desc: String!
+    var commentButton: OverlayView?
     
+    // MARK: Properties
     var item: Item!
+    var messages = [Message]()
+    var group: Group?
     
+    // blur effect for image
+    var effect: UIBlurEffect!
+    var blurView: UIVisualEffectView!
     // references
     var previousVC: UIViewController!
     var segue: UIStoryboardSegue!
     
     //var activityView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    var loadOverlay = OverlayView(type: .loading, text: nil)
-    var tableOffset: CGFloat = -164
+    var loadOverlay = OverlayView(type: .loading, text: "Loading")
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // make table start lower to show image
-        self.tableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0)
+        commentButton = OverlayView(image: UIImage(named: "comment")!)
+        commentButton?.setOnClick(postMessage)
         
-        // corner radius
-        self.tableView.layer.cornerRadius = 10
-        self.tableView.layer.masksToBounds = true
+        // activity indicator
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 60, height: 60)                     // setup activity indicator
+        activityIndicator.hidesWhenStopped = true
         
-        // setup nav bar
-        setupNavBar()
+        let imageData = Data(base64Encoded: item.thumbnail)
+        let image = imageData != nil ? UIImage(data: imageData!) : UIImage(named: "noimage")
+        let headerView = ParallaxHeaderView.parallaxHeaderView(with: image, for: CGSize(width: self.tableView.frame.width, height: 250)) as! ParallaxHeaderView
+        self.tableView.tableHeaderView = headerView
         
-        // create UIView to encapsulate UIImage background and set background image.
-        let imageView = UIImageView(image: thumbnail)
-        if let img = imageView.image {
-            let scale: CGFloat = self.view.frame.width / img.size.width
-            imageView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: img.size.height * scale)
-        }
-        imageView.contentMode = .scaleAspectFit
         
-        let backView = UIView(frame: self.view.frame)
-        backView.addSubview(imageView)
-        
-        tableView.backgroundView = backView
-        
-        // set disable status for buttons
-        buyButton.setTitleColor(UIColor.gray, for: .disabled)
-        bookmarkButton.setTitleColor(UIColor.gray, for: .disabled)
-        messagesButton.setTitleColor(UIColor.gray, for: .disabled)
-        
-        // Do any additional setup after loading the view.
-        nameLabel.text = name
-        nameLabel.adjustsFontSizeToFitWidth = true
-        priceLabel.text = String(format: "$%.02f", Double(price) ?? 0.0)
-        conditionLabel.text = condition
-        descriptionView.text = desc
-        
-        // resize descriptionView
-        descriptionView.sizeToFit()
+        // set group button text
+        groupLink?.setTitle("Getting group", for: .disabled)
+        groupLink?.isEnabled = false
         
         // set state of bookmark button
-        print("item bookmark: \(item.isBookmarked)")
-        bookmarkButton.setTitle(item.isBookmarked! ? "Unbookmark Item" : "Bookmark Item", for: .normal)
+        bookmarkButton?.setImage(UIImage(named: item.isBookmarked! ? "unbookmark_button" : "bookmark_button"), for: .normal)
+        
+        // update the items group variable
+        getGroup()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // setup nav bar
-        setupNavBar()
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+ 
+        // update messages
+        handleRefresh()
+        
+        // show comment button
+        commentButton?.showOverlay(view: UIApplication.shared.keyWindow!, position: .bottomRight)
     }
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
         
-        // make navigation bar untransparent again
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        
         self.navigationController?.navigationBar.shadowImage = nil
         self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.view.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0)
         
-        // call super method
-        super.viewWillDisappear(animated)
+        commentButton?.hideOverlayView()
     }
 
-    // MARK: - Navigation
+    // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let dest = segue.destination.childViewControllers[0] as? MessagesTableViewController {
+        if let dest = segue.destination as? MessagesTableViewController {
             dest.item = item
+        }
+        else if let dest = segue.destination as? ImageDisplayViewController {
+            dest.image = imageView?.image
+        }
+        else if let dest = segue.destination as? GroupDetailViewController {
+            if let group = group {
+                dest.name = group.name
+                dest.location = group.address
+                dest.locationDetail = group.locationDetail
+                dest.rating = group.rating
+            }
         }
     }
     
-    @IBAction func unwindToItemDetail(_ segue: UIStoryboardSegue) {
+    @IBAction func unwindToItemDetail(segue: UIStoryboardSegue) {
         // do nothing
     }
     
     // MARK: TableView Delegate
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count > 0 ? messages.count + 2 : 2
+    }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "topCell") as! ItemDetailTableViewCell
+            
+            self.nameLabel = cell.nameLabel
+            self.groupLink = cell.groupLink
+            self.priceLabel = cell.priceLabel
+            self.conditionLabel = cell.conditionLabel
+            self.descriptionView = cell.descriptionView
+            self.buttonStack = cell.buttonStack
+            self.buyButton = cell.buyButton
+            self.bookmarkButton = cell.bookmarkButton
+            self.shareButton = cell.shareButton
+            
+            // set actions
+            buyButton?.addTarget(self, action: #selector(buyItem(_:)), for: .touchUpInside)
+            bookmarkButton?.addTarget(self, action: #selector(bookmarkItem(_:)), for: .touchUpInside)
+            
+            // set state of bookmark button
+            bookmarkButton?.setImage(UIImage(named: item.isBookmarked! ? "unbookmark_button" : "bookmark_button"), for: .normal)
+            
+            // assign data
+            nameLabel?.text = item.name
+            nameLabel?.adjustsFontSizeToFitWidth = true
+            priceLabel?.text = String(format: "$%.02f", Double(item.price) ?? 0.0)
+            conditionLabel?.text = item.condition
+            descriptionView?.text = item.itemDescription
+            
+            // resize descriptionView
+            descriptionView?.sizeToFit()
+            
+            return cell
+        }
+        else if indexPath.row == 1 && messages.count == 0 {
+            // setup table view cell with activity indicator
+            let cell = UITableViewCell()
+            activityIndicator.center = cell.center
+            cell.addSubview(activityIndicator)
+            cell.isUserInteractionEnabled = false
+            
+            return cell
+        }
+        else if indexPath.row == (messages.count > 0 ? messages.count + 2 : 2) - 1 {
+            let cell = UITableViewCell()
+            cell.isUserInteractionEnabled = false
+            return cell
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
+            
+            // get the messages sorted by the date, at the given index.
+            let message = messages.sorted(by: {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "M/d/yyyy hh:mm:ss a"
+                
+                let date1 = formatter.date(from: $0.datePosted)
+                let date2 = formatter.date(from: $1.datePosted)
+                
+                return date1! < date2!
+            })[indexPath.row - 1]
+            
+            // Configure the cell...
+            cell.nameLabel.text = message.posterName
+            cell.messageLabel.text = message.body
+            cell.selectionStyle = .none
+            
+            // customize based on who sent.
+            if message.posterId == (AppDelegate.user?.userId ?? "") {
+                cell.backgroundColor = UIColor(colorLiteralRed: 0.298, green: 0.686, blue: 0.322, alpha: 1.0)    // Green
+                cell.nameLabel.textAlignment = .right
+                cell.messageLabel.textAlignment = .right
+            }
+            else if message.posterId == item.ownerId {
+                cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 1.0)     // Gold
+                cell.nameLabel.textAlignment = .left
+                cell.messageLabel.textAlignment = .left
+            }
+            else if message.posterId == message.adminId {
+                cell.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.38, alpha: 1.0)     // Gold
+                cell.nameLabel.textAlignment = .left
+                cell.messageLabel.textAlignment = .left
+            }
+            else {
+                cell.backgroundColor = UIColor.white
+                cell.nameLabel.textAlignment = .left
+                cell.messageLabel.textAlignment = .left
+            }
+            
+            return cell
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        // calculate height
-        let height = nameLabel.frame.height + priceLabel.frame.height + conditionLabel.frame.height + descriptionView.frame.height + buyButton.frame.height + bookmarkButton.frame.height + shareButton.frame.height + messagesButton.frame.height + 100
-        
-        // set footer view to take up remaining space
-        footerView.frame = CGRect(origin: footerView.frame.origin, size: CGSize(width: self.view.frame.width, height: self.view.frame.height - tableView.contentSize.height))
+        var height: CGFloat = 0.0
+        if indexPath.row == 0 {
+            // calculate height
+            let uiParts: [UIView?] = [nameLabel, groupLink, priceLabel, conditionLabel, descriptionView, buttonStack]
+            for uiPart in uiParts {
+                height += uiPart?.frame.height ?? 0
+            }
+            height += 120
+        }
+        else {
+            height = 63.0
+        }
         
         return height
     }
-
+    
     // MARK: ScollView Delegate
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.navigationController?.navigationBar.alpha = (self.tableView.contentOffset.y) / self.tableOffset
+        // update ParallaxHeader
+        let header = self.tableView.tableHeaderView as! ParallaxHeaderView
+        header.layoutHeaderView(forScrollOffset: scrollView.contentOffset)
+        
+        self.tableView.tableHeaderView = header
     }
 
     // MARK: IBAction
-    @IBAction func buyItem(_ sender: UIButton) {
+    @IBAction func showGroup(_ sender: UIButton) {
+        // segue to group detail
+        self.performSegue(withIdentifier: "detailToGroup", sender: self)
+    }
+    func buyItem(_ sender: UIButton) {
         
         // start loading animations
         //self.startLoading()
-        loadOverlay.showOverlay(view: self.view)
+        loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         
         // Get request token
         HttpRequestManager.paymentToken { t in
@@ -163,11 +275,11 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    @IBAction func bookmarkItem(_ sender: UIButton) {
+    func bookmarkItem(_ sender: UIButton) {
         // bookmark/unbookmark item
         if item.isBookmarked! {
-            bookmarkButton.setTitle("Bookmark Item", for: .normal)
-            // send bookmark delete request
+            // set state of bookmark button
+            bookmarkButton?.setImage(UIImage(named: "bookmark_button"), for: .normal)            // send bookmark delete request
             print("sending bookmark delete")
             print("bookmarks: \(AppDelegate.bookmarks)")
             if let bookmarks = AppDelegate.bookmarks, let bookmarkId = bookmarks[item] {
@@ -179,7 +291,8 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
             }
         }
         else {
-            bookmarkButton.setTitle("Unbookmark Item", for: .normal)
+            // set state of bookmark button
+            bookmarkButton?.setImage(UIImage(named: "unbookmark_button"), for: .normal)
             // make bookmark post request.
             HttpRequestManager.post(bookmarkForUserWithId: AppDelegate.user?.userId ?? "", itemId: item.itemId) { bookmarkData, response, error in
                 print("post bookmark response returned")
@@ -188,7 +301,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    @IBAction func shareItem(_ sender: UIButton) {
+    func shareItem(_ sender: UIButton) {
         // twitter sharing
         if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter) {
             let tweetSheet = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
@@ -239,7 +352,6 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
                         let index = dest.items.index(where: { e in e.itemId == self.item.itemId })
                         if let i = index {
                             dest.items.remove(at: i)
-                            dest.reloadData(dest.collectionView)
                         }
                     }
                     else if let dest = self.previousVC as? BookmarksTableViewController {
@@ -249,10 +361,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
                     // pop view controller in main thread
                     DispatchQueue.main.async {
                         self.stopLoading()
-                        // display purchsed message
-                        let successOverlay = OverlayView(type: .complete, text: "Item Purchased!")
                         let _ = self.navigationController?.popViewController(animated: true)
-                        successOverlay.showAnimatedOverlay(view: UIApplication.shared.keyWindow!)
                     }
                     
                 }
@@ -262,18 +371,18 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         self.present(dropIn!, animated: true, completion: nil)
     }
     
+    
     // MARK: Helper
+    
     func startLoading() {
         // start loading wheel
         //self.activityView.startAnimating()
-        self.loadOverlay.showOverlay(view: self.tableView)
+        self.loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         //self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.activityView)
         
         // disable buttons
-        self.buyButton.isEnabled = false
-        self.bookmarkButton.isEnabled = false
-        self.messagesButton.isEnabled = false
-    }
+        self.buyButton?.isEnabled = false
+        self.bookmarkButton?.isEnabled = false    }
     
     func stopLoading() {
         // start loading wheel
@@ -282,23 +391,65 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         self.loadOverlay.hideOverlayView()
         
         // disable buttons
-        self.buyButton.isEnabled = true
-        self.bookmarkButton.isEnabled = true
-        self.messagesButton.isEnabled = true
+        self.buyButton?.isEnabled = true
+        self.bookmarkButton?.isEnabled = true
     }
     
-    func setupNavBar() {
-        //self.navigationController?.hidesBarsOnSwipe = true
+    func displayFullImage() {
+        print("displaying image")
+        let imageVC = storyboard?.instantiateViewController(withIdentifier: "imageVC") as! ImageDisplayViewController
+        //imageVC.image = imageView?.image
+        self.present(imageVC, animated: true)
+    }
+    
+    func handleRefresh() {
+        self.activityIndicator.startAnimating()
+        HttpRequestManager.messages(forItemId: item.itemId) { messages, response, error in
+            self.messages = messages
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func postMessage() {
         
-        // Make nav bar translucent
-        let navBar = navigationController?.navigationBar
-        navBar?.setBackgroundImage(UIImage(), for: .default)
-        navBar?.shadowImage = UIImage()
-        navBar?.isTranslucent = true
+        let inputController = UIAlertController(title: "Post Message", message: "What would you like to say?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+        let doneAction = UIAlertAction(title: "Post", style: .default) { inputAction in
+            // post message
+            if let text = inputController.textFields?[0].text, text.characters.count > 0 {
+                HttpRequestManager.post(messageWithPosterId: AppDelegate.user?.userId ?? "", posterPassword: AppDelegate.user?.password ?? "", itemId: self.item.itemId, text: text) { message, response, error in
+                    print("Message posted")
+                    self.handleRefresh()
+                }
+            }
+            else {
+                inputController.title = "Text cannot be empty"
+                self.present(inputController, animated: true, completion: nil)
+            }
+        }
         
-        self.navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
-        self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 2.0, height: 2.0)
-        self.navigationController?.navigationBar.layer.shadowRadius = 10.0
-        self.navigationController?.navigationBar.layer.shadowOpacity = 1.0
+        inputController.addTextField { field in
+            field.autocapitalizationType = .sentences
+        }
+        inputController.addAction(cancelAction)
+        inputController.addAction(doneAction)
+        
+        present(inputController, animated: true, completion: nil)
+    }
+    
+    func getGroup() {
+        HttpRequestManager.group(withId: item.groupId) { group, response, error in
+            if let group = group {
+                self.group = group
+                DispatchQueue.main.async {
+                    self.groupLink?.setTitle(group.name, for: .normal)
+                    self.groupLink?.isEnabled = true
+                }
+            }
+        }
     }
 }

@@ -56,10 +56,14 @@ PODS:
   - GTMSessionFetcher/Core (1.1.8)
   - GTMSessionFetcher/Full (1.1.8):
     - GTMSessionFetcher/Core (= 1.1.8)
+  - PHFComposeBarView (2.0.2):
+    - PHFDelegateChain (~> 1.0)
+  - PHFDelegateChain (1.0.1)
 
 DEPENDENCIES:
   - BraintreeDropIn
   - Google/SignIn
+  - PHFComposeBarView (~> 2.0.1)
 
 SPEC CHECKSUMS:
   Braintree: 85b7f6300aa5238df972b32ea58adc405c8ebfdc
@@ -75,7 +79,9 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
+  PHFComposeBarView: 758c73ce54be681df97223bc61543dd8828ae0d3
+  PHFDelegateChain: 491f9cd8a3fb8761f390ff05f74a0e168d48d285
 
-PODFILE CHECKSUM: a531b490750132c5a2d3b06622ee583eb5f29030
+PODFILE CHECKSUM: aa550c3585a33abddbe4e21071be4f0eeb55c62d
 
 COCOAPODS: 1.2.0

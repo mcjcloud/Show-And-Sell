@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import PHFComposeBarView
 
 class BrowseCollectionViewController: UICollectionViewController, StaggeredLayoutDelegate, UISearchResultsUpdating, UISearchControllerDelegate {
     
@@ -21,6 +22,8 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     
     var searchController: UISearchController!
     var refreshControl: UIRefreshControl!
+    
+    lazy var slideUpTransitionDelegate = SlideUpPresentationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +40,8 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         
         // enable scrolling at all times
         collectionView?.alwaysBounceVertical = true
+        self.collectionView?.panGestureRecognizer.require(toFail: self.navigationController!.interactivePopGestureRecognizer!)
+
         
         // set delegates
         searchController.delegate = self
@@ -55,16 +60,9 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         // load all items.
         refreshControl.beginRefreshing()
         handleRefresh(self.refreshControl)
-        
-        /*
-        // DEBUG (FAKE DATA)
-        refreshControl.addTarget(self, action: #selector(debugRefresh), for: .valueChanged)
-        refreshControl.beginRefreshing()
-        debugRefresh()
-        */
-        
     }
     override func viewWillAppear(_ animated: Bool) {
+        
         // if there is no data, refresh
         if items.count == 0 {
             refreshControl?.beginRefreshing()
@@ -80,26 +78,14 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         print("PREPARE IN BROWSE")
         if let destination = segue.destination as? ItemDetailTableViewController {
             // get the item to use for details
-            let item = sender as! Item
-            // get the item obj from AppDelegate to fix bug in ItemDetailVC where Unbookmark doesn't work.
+            let indexPath = (collectionView?.indexPath(for: sender as! ItemCollectionViewCell))!
+            let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
             let appDelItem = AppDelegate.bookmarks?.first(where: { (k, v) in k.itemId == item.itemId })?.key
             
             // assign the data from the item to the fields in the destination view controller
-            destination.name = item.name
-            destination.price = item.price
-            destination.condition = item.condition
-            destination.desc = item.itemDescription
             destination.item = appDelItem ?? item
             destination.previousVC = self
             destination.segue = segue
-            
-            let imageData = Data(base64Encoded: item.thumbnail)
-            if let data = imageData {
-                destination.thumbnail = UIImage(data: data)
-            }
-            else {
-                destination.thumbnail = UIImage(named: "noimage")
-            }
         }
         
         // release searchbar
@@ -133,15 +119,16 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
             cell.itemImageView.image = UIImage(named: "noimage")
         }
         cell.priceLabel.text = String(format: "$%.02f ", Double(item.price) ?? 0.0)
+        
         return cell
     }
     
     //MARK: CollectionView Delegate
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: update with searchbar
-        print("did select cell")
-        let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
-        self.performSegue(withIdentifier: "browseToDetail", sender: item)
+        
+        let cell = collectionView.cellForItem(at: indexPath) as! ItemCollectionViewCell
+        self.performSegue(withIdentifier: "browseToDetail", sender: cell)
     }
     
     // Implement to load more at bottom.
@@ -152,14 +139,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
             canLoadMore = false
         }
     }
-    /*
-    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == items.count - 1 {
-            print("last item did end display")
-            canLoadMore = true
-        }
-    }
-    */
+    
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         var lastVisible = false
         if let cView = collectionView {
@@ -193,7 +173,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     
     // MARK: StaggeredLayout Delegate
     func collectionView(_ collectionView: UICollectionView, heightForCellAt indexPath: IndexPath, with width: CGFloat) -> CGFloat {
-        print("height for cell: \(indexPath.row)")
+        //print("height for cell: \(indexPath.row)")
         let item = items[indexPath.row]
         
         let imageData = Data(base64Encoded: item.thumbnail)

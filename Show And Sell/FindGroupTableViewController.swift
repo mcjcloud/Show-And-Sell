@@ -72,7 +72,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        overlay.showOverlay(view: self.view)        // display loading while we get location
+        overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)        // display loading while we get location
         
         // get other groups and use activity indicator.
         self.refreshControl = UIRefreshControl()
@@ -93,7 +93,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if tableView.numberOfSections > 1 {
-            if (searchController.isActive && searchController.searchBar.text! != "") {
+            if searchController.isActive && searchController.searchBar.text! != "" {
                 return section == 0 ? 1 : filteredGroups.count
             }
             else {
@@ -169,6 +169,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
             }
         }
         else {
+            overlay.hideOverlayView()
             locationAuth = false
         }
     }

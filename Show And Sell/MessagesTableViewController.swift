@@ -122,7 +122,7 @@ class MessagesTableViewController: UITableViewController {
 
     func handleRefresh() {
         let loadOverlay = OverlayView(type: .loading, text: nil)
-        loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!)
+        loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         HttpRequestManager.messages(forItemId: item.itemId) { messages, response, error in
             self.messages = messages
             

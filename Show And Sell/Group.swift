@@ -16,10 +16,12 @@ class Group: NSObject {
     var adminId: String
     var dateCreated: String
     var address: String
+    var routing: String
     var latitude: Double
     var longitude: Double
     var locationDetail: String
-    //var itemsSold: Int         // TODO: include this is needed
+    var itemsSold: Int         // TODO: include this if needed
+    var rating: Float
  
     init?(data groupJson: Data?) {
         if let data = groupJson {
@@ -39,18 +41,24 @@ class Group: NSObject {
                 let adminId = json["adminId"] as? String,
                 let dateCreated = json["dateCreated"] as? String,
                 let address = json["address"] as? String,
+                let routing = json["routing"] as? String,
                 let latitude = json["latitude"] as? Double,
                 let longitude = json["longitude"] as? Double,
-                let locationDetail = json["locationDetail"] as? String {
+                let locationDetail = json["locationDetail"] as? String,
+                let itemsSold = json["itemsSold"] as? Int,
+                let rating = json["rating"] as? Float {
                 
                 self.groupId = groupId
                 self.name = name
                 self.adminId = adminId
                 self.dateCreated = dateCreated
                 self.address = address
+                self.routing = routing
                 self.latitude = latitude
                 self.longitude = longitude
                 self.locationDetail = locationDetail
+                self.itemsSold = itemsSold
+                self.rating = rating
                 
                 // init object
                 super.init()
@@ -64,27 +72,33 @@ class Group: NSObject {
         }
     }
     
-    init(groupId: String, name: String, adminId: String, dateCreated: String, address: String, latitude: Double, longitude: Double, locationDetail: String) {
+    init(groupId: String, name: String, adminId: String, dateCreated: String, address: String, routing: String, latitude: Double, longitude: Double, locationDetail: String, itemsSold: Int, rating: Float) {
         self.groupId = groupId
         self.name = name
         self.adminId = adminId
         self.dateCreated = dateCreated
         self.address = address
+        self.routing = routing
         self.latitude = latitude
         self.longitude = longitude
         self.locationDetail = locationDetail
+        self.itemsSold = itemsSold
+        self.rating = rating
     }
     // group without groupId or date
-    init(name: String, adminId: String, address: String, latitude: Double, longitude: Double, locationDetail: String) {
+    init(name: String, adminId: String, address: String, routing: String, latitude: Double, longitude: Double, locationDetail: String) {
         self.name = name
         self.adminId = adminId
         self.address = address
+        self.routing = routing
         self.latitude = latitude
         self.longitude = longitude
         self.locationDetail = locationDetail
         
         self.groupId = ""
         self.dateCreated = ""
+        self.rating = 0.0
+        self.itemsSold = 0
     }
     
     // get Group array from json

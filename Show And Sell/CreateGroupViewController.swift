@@ -72,7 +72,8 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
         
         // make the create group request
         let address = annotation!.subtitle
-        let newGroup = Group(name: nameField.text!, adminId: AppDelegate.user?.userId ?? "", address: address ?? "Address not specified", latitude: annotation!.coordinate.latitude, longitude: annotation!.coordinate.longitude, locationDetail: locationDetailField.text!)
+        // TODO: require routing number to create group
+        let newGroup = Group(name: nameField.text!, adminId: AppDelegate.user?.userId ?? "", address: address ?? "Address not specified", routing: "", latitude: annotation!.coordinate.latitude, longitude: annotation!.coordinate.longitude, locationDetail: locationDetailField.text!)
         HttpRequestManager.post(group: newGroup, password: AppDelegate.user?.password ?? "") { group, response, error in
             print("response: \(response as! HTTPURLResponse)")
             // stop animation

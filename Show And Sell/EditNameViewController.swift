@@ -81,10 +81,10 @@ class EditNameViewController: UIViewController, UITextFieldDelegate {
     // MARK: IBAction
     @IBAction func saveName(_ sender: UIBarButtonItem) {
         // display loading wheel
-        overlay.showOverlay(view: self.view)
+        overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         
         if let user = AppDelegate.user {
-            overlay.showOverlay(view: self.view)
+            overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
             user.firstName = firstNameField.text!
             user.lastName = lastNameField.text!
             HttpRequestManager.put(user: user, currentPassword: user.password) { user, response, error in

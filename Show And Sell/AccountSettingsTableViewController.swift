@@ -11,6 +11,7 @@ import UIKit
 class AccountSettingsTableViewController: UITableViewController {
 
     // MARK: UI Properties
+    @IBOutlet var emailCell: UITableViewCell!
     @IBOutlet var emailField: UILabel!
     @IBOutlet var nameField: UILabel!
     @IBOutlet var passwordCell: UITableViewCell!
@@ -28,6 +29,11 @@ class AccountSettingsTableViewController: UITableViewController {
         
         // check if password changing should be enabled
         if AppDelegate.save.isGoogleSigned ?? false {
+            
+            // disable email
+            emailCell.isUserInteractionEnabled = false
+            emailField.textColor = UIColor.lightGray
+            
             // disable password
             passwordCell.isUserInteractionEnabled = false
             passwordLabel.textColor = UIColor.lightGray

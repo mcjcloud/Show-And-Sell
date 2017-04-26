@@ -50,6 +50,16 @@ class SSTabBarViewController: UITabBarController {
             if let e = error { print("error with owner group: \(e)") }
         }
         
+        // load the bookmarks
+        HttpRequestManager.bookmarks(forUserWithId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+            print("DATA RETURNED")
+            
+            // set current items to requested items
+            if let b = bookmarks {
+                AppDelegate.bookmarks = b
+            }
+        }
+        
         // register for didBecomeActive notification
         //NotificationCenter.default.addObserver(self, selector: #selector(appBecameActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         

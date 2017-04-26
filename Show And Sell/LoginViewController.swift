@@ -121,7 +121,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         // clear error message
         messageLabel.text = ""
         loggingIn = true
-        loadOverlay.showOverlay(view: self.view)
+        loadOverlay.showOverlay(view: self.view, position: .center)
         
         // GET user data.
         if let email = emailField.text, let password = passwordField.text {
@@ -157,7 +157,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
             print("\(email) signed in")
             print("name: \(name)")
             if let email = email, let userId = userId, let firstName = firstName, let lastName = lastName {
-                loadOverlay.showOverlay(view: self.view)
+                loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
                 HttpRequestManager.googleUser(email: email, userId: HttpRequestManager.encrypt(userId), firstName: firstName, lastName: lastName) { user, response, error in
                     print("calling postlogin from google sign in")
                     // finish login
@@ -315,7 +315,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         // clear message label
         messageLabel.text = ""
         print("google button clicked")
-        loadOverlay.showOverlay(view: self.view)
+        loadOverlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
     }
     
     // log the user out

@@ -16,6 +16,8 @@ class BookmarksTableViewController: UITableViewController {
         }
     }
     var bookmarkItems = [Item]()
+    
+    lazy var slideUpTransitionDelegate = SlideUpPresentationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,24 +55,12 @@ class BookmarksTableViewController: UITableViewController {
             let cell = sender as! ItemTableViewCell
             
             let item = bookmarkItems[(self.tableView.indexPath(for: cell)?.row)!]
-             
+            
+            // transition
+            destination.transitioningDelegate = slideUpTransitionDelegate
+            destination.modalPresentationStyle = .custom
+            
             // assign the data from the item to the fields in the destination view controller
-            destination.name = item.name
-            destination.price = item.price
-            destination.condition = item.condition
-            destination.desc = item.itemDescription
-            destination.previousVC = self
-            destination.segue = segue
-            
-            let imageData = Data(base64Encoded: item.thumbnail)
-            if let data = imageData {
-                destination.thumbnail = UIImage(data: data)
-            }
-            else {
-                destination.thumbnail = UIImage(named: "noimage")
-            }
-            
-            //print("bookmarked: \(item.isBookmarked)")
             destination.item = item
         }
         // else, going to settings
@@ -114,7 +104,8 @@ class BookmarksTableViewController: UITableViewController {
     // when a cell is selected, go to its details
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.visibleCells[indexPath.row]
-        performSegue(withIdentifier: "bookmarkDetails", sender: cell)
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "bookmarkToDetail", sender: cell)
     }
     
     // MARK: Refresh

@@ -80,10 +80,10 @@ class EditPasswordViewController: UIViewController {
     // MARK: IBAction
     @IBAction func savePassword(_ sender: UIBarButtonItem) {
         // show overlay
-        overlay.showOverlay(view: self.view)
+        overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         
         if let user = AppDelegate.user {
-            overlay.showOverlay(view: self.view)
+            overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
             user.password = newPasswordField.text!
             HttpRequestManager.put(user: user, currentPassword: oldPasswordField.text ?? "") { user, response, error in
                 

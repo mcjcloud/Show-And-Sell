@@ -75,10 +75,10 @@ class EditEmailViewController: UIViewController {
     // MARK: IBAction
     @IBAction func saveEmail(_ sender: UIBarButtonItem) {
         // show overlay
-        overlay.showOverlay(view: self.view)
+        overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         
         if let user = AppDelegate.user {
-            overlay.showOverlay(view: self.view)
+            overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
             user.email = emailField.text!
             HttpRequestManager.put(user: user, currentPassword: user.password) { user, response, error in
                 
