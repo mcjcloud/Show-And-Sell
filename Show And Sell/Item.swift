@@ -24,7 +24,7 @@ class Item: NSObject {
     
     var isBookmarked: Bool? {
         get {
-            return AppDelegate.bookmarks?.contains(where: { (k, v) in k.itemId == self.itemId }) ?? false
+            return AppData.bookmarks?.contains(where: { (k, v) in k.itemId == self.itemId }) ?? false
         }
     }
     

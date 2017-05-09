@@ -4,68 +4,45 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Braintree-Braintree-3D-Secure-Localization.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Braintree.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 		<key>BraintreeDropIn-Braintree-UIKit-Localization.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>BraintreeDropIn.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 		<key>GTMOAuth2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
 		</dict>
 		<key>GTMSessionFetcher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>GoogleToolboxForMac.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
-		</dict>
-		<key>PHFComposeBarView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
-		</dict>
-		<key>PHFDelegateChain.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>8</integer>
 		</dict>
 		<key>Pods-Show And Sell.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>9</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -75,7 +52,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2F12B93DC16BE209241AC0FBD11DAE3E</key>
+		<key>2C5917901C86F1CCECFE41EE21049AE7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -85,17 +62,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>55B2D72BBD5EF74A88D04CB7B0943C63</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>681BE6E3D02A43F9BA63777AC435C8FD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>837D8A38BD0CFB4D5347E5BE0BEA1ACE</key>
+		<key>9586AAFCC7C1BD401175B60A98770A2D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -110,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C4862B96577F57D0819ECCBCA837BD96</key>
+		<key>F6B80727F81B412225760EF148F2F5BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>

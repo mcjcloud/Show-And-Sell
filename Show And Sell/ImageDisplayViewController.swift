@@ -15,6 +15,7 @@ class ImageDisplayViewController: UIViewController {
     
     // MARK: Properties
     var image: UIImage?
+    var overlay = OverlayView(type: .loading, text: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,9 @@ class ImageDisplayViewController: UIViewController {
         }
     }
     
+    func getFullImage() {
+        
+    }
     
     @IBAction func dismissImage(_ sender: UIButton) {
         dismiss(animated: true)

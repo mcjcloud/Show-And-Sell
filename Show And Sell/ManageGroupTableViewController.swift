@@ -47,7 +47,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         // load all items.
         refreshControl?.beginRefreshing()
-        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.380, alpha: 1.0) // Gold
         handleRefresh(self.refreshControl!)
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -148,7 +148,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 }
                 
                 // delete the Item
-                HttpRequestManager.delete(itemWithId: item?.itemId ?? "", password: AppDelegate.user?.password ?? "") { item, response, error in
+                HttpRequestManager.delete(itemWithId: item?.itemId ?? "", password: AppData.user?.password ?? "") { item, response, error in
                     print("Item delete response: \((response as? HTTPURLResponse)?.statusCode)")
                 }
                 tableView.reloadData()
@@ -163,7 +163,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 // PUT the item with approved: true
                 if let i = item {
                     i.approved = true
-                    HttpRequestManager.put(item: i, itemId: i.itemId, adminPassword: AppDelegate.user?.password ?? "") { item, response, error in
+                    HttpRequestManager.put(item: i, itemId: i.itemId, adminPassword: AppData.user?.password ?? "") { item, response, error in
                         print("Item update response: \((response as? HTTPURLResponse)?.statusCode)")
                     }
                 }
@@ -183,7 +183,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
                 // PUT the item with approved: false
                 if let i = item {
                     i.approved = false
-                    HttpRequestManager.put(item: i, itemId: i.itemId, adminPassword: AppDelegate.user?.password ?? "") { item, response, error in
+                    HttpRequestManager.put(item: i, itemId: i.itemId, adminPassword: AppData.user?.password ?? "") { item, response, error in
                         print("Item update response: \((response as? HTTPURLResponse)?.statusCode)")
                     }
                 }
@@ -229,9 +229,8 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         let imageData = UIImagePNGRepresentation(resizeImage(image: source.imageButton.currentBackgroundImage!, targetSize: CGSize(width: 250, height: 250)))
         item.thumbnail = imageData!.base64EncodedString()
         
-        // make a post request to add the item to the appropriate group TODO:
-        //let item = Item(itemId: "", groupId: AppDelegate.save.group!, ownerId: AppDelegate.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, approved: false)
-        HttpRequestManager.put(item: item, itemId: item.itemId, adminPassword: AppDelegate.user?.password ?? "") { item, response, error in
+        // make a post request to add the item to the appropriate group
+        HttpRequestManager.put(item: item, itemId: item.itemId, adminPassword: AppData.user?.password ?? "") { item, response, error in
             print("ITEM PUT COMPLETION")
             if error != nil {
                 print("ERROR: \(error)")
@@ -254,7 +253,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         print("refreshing")
         // get a list of all items (for now)
         // TODO: get items based on owned group.
-        HttpRequestManager.items(withGroupId: AppDelegate.myGroup!.groupId) { itemsArray, response, error in
+        HttpRequestManager.items(withGroupId: AppData.myGroup!.groupId) { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items

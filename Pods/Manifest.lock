@@ -1,10 +1,29 @@
 PODS:
+  - Braintree/3D-Secure (4.7.4):
+    - Braintree/Card
+    - Braintree/Core
+  - Braintree/Apple-Pay (4.7.4):
+    - Braintree/Core
   - Braintree/Card (4.7.4):
     - Braintree/Core
   - Braintree/Core (4.7.4)
+  - Braintree/PayPal (4.7.4):
+    - Braintree/Core
+    - Braintree/PayPalOneTouch
+  - Braintree/PayPalDataCollector (4.7.4):
+    - Braintree/Core
+    - Braintree/PayPalUtils
+  - Braintree/PayPalOneTouch (4.7.4):
+    - Braintree/Core
+    - Braintree/PayPalDataCollector
+    - Braintree/PayPalUtils
+  - Braintree/PayPalUtils (4.7.4)
   - Braintree/UnionPay (4.7.4):
     - Braintree/Card
     - Braintree/Core
+  - Braintree/Venmo (4.7.4):
+    - Braintree/Core
+    - Braintree/PayPalDataCollector
   - BraintreeDropIn (5.1.0):
     - BraintreeDropIn/DropIn (= 5.1.0)
   - BraintreeDropIn/DropIn (5.1.0):
@@ -56,14 +75,14 @@ PODS:
   - GTMSessionFetcher/Core (1.1.8)
   - GTMSessionFetcher/Full (1.1.8):
     - GTMSessionFetcher/Core (= 1.1.8)
-  - PHFComposeBarView (2.0.2):
-    - PHFDelegateChain (~> 1.0)
-  - PHFDelegateChain (1.0.1)
 
 DEPENDENCIES:
+  - Braintree/3D-Secure
+  - Braintree/Apple-Pay
+  - Braintree/PayPal
+  - Braintree/Venmo
   - BraintreeDropIn
   - Google/SignIn
-  - PHFComposeBarView (~> 2.0.1)
 
 SPEC CHECKSUMS:
   Braintree: 85b7f6300aa5238df972b32ea58adc405c8ebfdc
@@ -79,9 +98,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
   GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
-  PHFComposeBarView: 758c73ce54be681df97223bc61543dd8828ae0d3
-  PHFDelegateChain: 491f9cd8a3fb8761f390ff05f74a0e168d48d285
 
-PODFILE CHECKSUM: aa550c3585a33abddbe4e21071be4f0eeb55c62d
+PODFILE CHECKSUM: 535ef3ba8ce6cc8421bfdfa0cac131826282b631
 
 COCOAPODS: 1.2.0

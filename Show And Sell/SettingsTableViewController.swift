@@ -37,11 +37,8 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             switch(indexPath.row) {
-            case 0:     // Choose Group
-                self.performSegue(withIdentifier: "settingsToFinder", sender: self)
-            case 1:     // Manage Group
-                if let _ = AppDelegate.myGroup {
-                    print("my group: \(AppDelegate.myGroup?.name)")
+            case 0:     // Manage Group
+                if let _ = AppData.myGroup {
                     self.performSegue(withIdentifier: "settingsToManage", sender: self)
                 }
                 else {
@@ -58,10 +55,10 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                             self.manageCell.isUserInteractionEnabled = false
                         }
                         // get myGroup
-                        HttpRequestManager.group(withAdminId: AppDelegate.user!.userId) { group, response, error in
+                        HttpRequestManager.group(withAdminId: AppData.user!.userId) { group, response, error in
                             print("got myGroup")
-                            AppDelegate.myGroup = group
-                            AppDelegate.saveData()
+                            AppData.myGroup = group
+                            AppData.saveData()
                             
                             DispatchQueue.main.async {
                                 self.manageCell.isUserInteractionEnabled = true
@@ -75,7 +72,7 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                     
                     self.present(alertController, animated: true, completion: nil)
                 }
-            case 2:     // Account Settings
+            case 1:     // Account Settings
                 // TODO: segue to account settings
                 self.performSegue(withIdentifier: "settingsToAccount", sender: self)
             default: break

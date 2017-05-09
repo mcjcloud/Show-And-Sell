@@ -250,6 +250,89 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // GET a rating
+    static func rating(forGroupId groupId: String, andUserId userId: String, completion: @escaping (Int?, URLResponse?, Error?) -> Void) {
+        
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/rating?groupId=\(groupId)&userId=\(userId)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            var value: Int? = nil
+            if let data = data, (response as? HTTPURLResponse)?.statusCode == 200 {
+                var json: [String: Any]!
+                do {
+                    json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+                    value = json["rating"] as? Int
+                } catch { }
+            }
+            
+            completion(value, response, error)
+        }
+        task.resume()
+    }
+    
+    // POST rate a group
+    static func rateGroup(withId id: String, rating: Int, userId: String, password: String, completion: @escaping (Float?, URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/rategroup?id=\(id)&rating=\(rating)&userId=\(userId)&password=\(password)")
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "POST"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            var value: Float? = nil
+            if let data = data, (response as? HTTPURLResponse)?.statusCode == 200 {
+                var json: [String: Any]!
+                do {
+                    json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+                    value = json["rating"] as? Float
+                }
+                catch { }
+            }
+            
+            // return the new rating
+            completion(value, response, error)
+        }
+        task.resume()
+    }
+    
+    // POST donate money to group
+    static func donateToGroup(withId groupId: String, userId: String, password: String, paymentDetails: (token: String, nonce: String, amount: Double), completion: @escaping ([String: Any], URLResponse?, Error?) -> Void) {
+        
+        let requestURL = URL(string: "\(SERVER_URL)/api/groups/donatetogroup?id=\(groupId)&userId=\(userId)&password=\(password)")
+        var request = URLRequest(url: requestURL!)
+        
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.timeoutInterval = requestTimeout
+        
+        // create request body
+        let bodyJson: [String: Any] = ["token":paymentDetails.token, "paymentMethodNonce":paymentDetails.nonce, "amount":paymentDetails.amount]
+        request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
+        
+        // create task
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            var json: [String: Any]!
+            do {
+                json = try JSONSerialization.jsonObject(with: data ?? "".data(using: .utf8)!) as! [String: Any]
+            }
+            catch {
+                print("error with returned data from donate")
+                completion([String: Any](), response, error)
+            }
+            
+            if json != nil {
+                completion(json, response, error)
+            }
+            else {
+                completion([String: Any](), response, error)
+            }
+        }
+        task.resume()
+    }
+    
     // POST group
     static func post(group: Group, password: String, completion: @escaping (Group?, URLResponse?, Error?) -> Void) {
         
@@ -325,6 +408,22 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // get all approved items in a given range
+    static func allApproved(inRange start: Int, to end: Int, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
+        let requestURL = URL(string: "\(SERVER_URL)/api/items/allapprovedinrange?start=\(start)&end=\(end)")
+        
+        // request
+        var request = URLRequest(url: requestURL!)
+        request.httpMethod = "GET"
+        request.timeoutInterval = requestTimeout
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // call the completion handler
+            completion(Item.approvedArray(with: data), response, error)
+        }
+        task.resume()
+    }
+    
     // get all approved items within a group
     static func approvedItems(withGroupId id: String, completion: @escaping ([Item], URLResponse?, Error?) -> Void) {
         
@@ -369,7 +468,6 @@ class HttpRequestManager {
         // make request
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let d = data {
-                print("token: \(String(data: d, encoding: .utf8))")
                 completion(String(data: d, encoding: .utf8))
             }
             else {
@@ -481,6 +579,11 @@ class HttpRequestManager {
         task.resume()
     }
     
+    // GET the full size image for an item
+    static func fullImage(forId id: String, completion: @escaping (String?) -> Void) {
+        // TODO: implement after fixed server side
+    }
+    
     // MARK: Bookmark
     
     // get bookmarks for a user with the given ID
@@ -570,7 +673,7 @@ class HttpRequestManager {
     }
     
     // delete a bookmark with the given bookmark id
-    static func delete(bookmarkWithId id: String, completion: @escaping ((bookmarkId: String?, userId: String?, itemId: String?), URLResponse?, Error?) -> Void) {
+    static func delete(bookmarkWithId id: String, completion: (((bookmarkId: String?, userId: String?, itemId: String?), URLResponse?, Error?) -> Void)?) {
         
         let requestURL = URL(string: "\(SERVER_URL)/api/bookmarks/delete?id=\(id)")
         var request = URLRequest(url: requestURL!)
@@ -594,10 +697,10 @@ class HttpRequestManager {
                 let userId = json["userId"] as? String {
                 
                 // completion
-                completion((bookmarkId, userId, itemId), response, error)
+                completion?((bookmarkId, userId, itemId), response, error)
             }
             else {
-                completion((nil, nil, nil), response, error)
+                completion?((nil, nil, nil), response, error)
             }
         
         }

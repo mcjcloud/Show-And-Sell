@@ -10,12 +10,18 @@ import UIKit
 
 class BookmarksTableViewController: UITableViewController {
     
-    var bookmarks = [Item: String]() {                          // the AppDel bookmarks or an empty array.
-        didSet {
-            bookmarkItems = bookmarks.keys.sorted(by: { return $0.name < $1.name })
+    var bookmarks: [Item: String] {                          // the AppDel bookmarks or an empty array.
+        get {
+            return AppData.bookmarks ?? [Item: String]()
         }
+        set { }
     }
-    var bookmarkItems = [Item]()
+    var bookmarkItems: [Item] {
+        get {
+            return bookmarks.keys.sorted(by: { return $0.name < $1.name })
+        }
+        set { }
+    }
     
     lazy var slideUpTransitionDelegate = SlideUpPresentationManager()
 
@@ -38,19 +44,17 @@ class BookmarksTableViewController: UITableViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         // if the tab is reclicked or showed after being left, reload the data.
-        // update the data dictionary
-        self.bookmarks = AppDelegate.bookmarks ?? [Item: String]()
-        
         tableView.reloadData()
     }
     
 
-    // MARK: - Navigation
+    // MARK: Navigation
     
      // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // if going to item detail
         if let destination = segue.destination as? ItemDetailTableViewController {
+            
             // prepare to go to detail view
             let cell = sender as! ItemTableViewCell
             
@@ -115,14 +119,12 @@ class BookmarksTableViewController: UITableViewController {
         print()
         print("refreshing")
         // get a list of all items (for now)
-        HttpRequestManager.bookmarks(forUserWithId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+        HttpRequestManager.bookmarks(forUserWithId: AppData.user!.userId, password: AppData.user!.password) { bookmarks, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items
             if let b = bookmarks {
-                self.bookmarks = b
-                AppDelegate.bookmarks = b
-            }
+                self.bookmarks = b            }
             
             // reload data on the main thread.
             DispatchQueue.main.async {

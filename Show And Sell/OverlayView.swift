@@ -134,7 +134,7 @@ class OverlayView: UIView, UIGestureRecognizerDelegate {
     // MARK: GestureRecognizer Delegate
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let location = touch.location(in: self.superview)
-        if let superview = self.superview {
+        if let _ = self.superview {
             return self.frame.contains(location)
         }
         else {

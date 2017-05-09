@@ -11,39 +11,12 @@
 import UIKit
 import Google
 import GoogleSignIn
+import Braintree
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
-    // Global variables.
-    static var save: SaveData!
-    
-    static var bookmarks: [Item: String]?
-    static var user: User? {
-        didSet {
-            AppDelegate.save.email = user?.email
-            AppDelegate.save.password = user?.password ?? ""
-            AppDelegate.saveData()
-        }
-    }
-    static var group: Group? {
-        didSet {
-            //save.groupId = group?.groupId
-            user?.groupId = group?.groupId ?? ""
-            AppDelegate.saveData()
-            
-            if let u = self.user {
-                // Make PUT request for user
-                HttpRequestManager.put(user: u, currentPassword: AppDelegate.user?.password ?? "") { user, response, error in
-                    AppDelegate.user = user
-                }
-            }
-        }
-    }
-    static var myGroup: Group?
-    static var displayItem: Item?
     
     // references to UI controllers
     static var loginVC: LoginViewController?
@@ -55,8 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("password: \(enc)")
         print("decrypted: \(HttpRequestManager.decrypt(enc))")
         
+        BTAppSwitch.setReturnURLScheme("com.insertcoolnamehere.Show-And-Sell.payment")
+        
         // load saved data.
-        AppDelegate.save = AppDelegate.loadData() ?? SaveData(email: nil, password: nil, isGoogleSigned: false)
+        AppData.save = AppData.loadData() ?? SaveData(email: nil, password: nil, isGoogleSigned: false)
         
         return true
     }
@@ -70,13 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         // save data
-        AppDelegate.saveData()
+        AppData.saveData()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         // save data
-        AppDelegate.saveData()
+        AppData.saveData()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -86,7 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // save data
-        AppDelegate.saveData()
+        AppData.saveData()
         
         // log out of google
         GIDSignIn.sharedInstance().signOut()
@@ -103,9 +78,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let id = components[components.count - 1]
                     print("making item request")
                     HttpRequestManager.item(id: id) { item, response, error in
-                        AppDelegate.displayItem = item
+                        AppData.displayItem = item
                         DispatchQueue.main.async {
-                            if let _ = AppDelegate.user {   // logged in
+                            if let _ = AppData.user {   // logged in
                                 print("item returned")
                                 let rootVC = self.window?.rootViewController as? LoginViewController
                                 rootVC?.performSegue(withIdentifier: "loginToTabs", sender: rootVC)
@@ -122,24 +97,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             return false
         }
+        else if url.scheme?.localizedCaseInsensitiveCompare("com.insertcoolnamehere.show-and-sell.payment") == .orderedSame {
+            return BTAppSwitch.handleOpen(url, options: options)
+        }
         else {
             return false
         }
-    }
-
-    // MARK: NSCoding
-    static func saveData() {
-        
-        let success = NSKeyedArchiver.archiveRootObject(AppDelegate.save, toFile: SaveData.archiveURL.path)
-        if success {
-            print("Saved successfully")
-        }
-        else {
-            print("Save Failed")
-        }
-    }
-    static func loadData() -> SaveData? {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: SaveData.archiveURL.path) as! SaveData?
     }
 
 }

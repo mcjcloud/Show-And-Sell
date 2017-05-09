@@ -19,7 +19,7 @@ class StaggeredLayout: UICollectionViewLayout {
     
     // properties
     var numberOfColumns = 2
-    var cellPadding: CGFloat = 6.0
+    var cellPadding: CGFloat = 3.0
     
     // layout attributes
     var cache = [UICollectionViewLayoutAttributes]()

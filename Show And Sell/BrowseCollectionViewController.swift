@@ -8,22 +8,26 @@
 
 import UIKit
 import AVFoundation
-import PHFComposeBarView
 
 class BrowseCollectionViewController: UICollectionViewController, StaggeredLayoutDelegate, UISearchResultsUpdating, UISearchControllerDelegate {
     
     @IBOutlet var searchButton: UIBarButtonItem!
     
     // MARK: Properties
-    var items = [Item]()
+    var items: [Item] {
+        get {
+            return AppData.items ?? [Item]()
+        }
+        set {
+            AppData.items = newValue
+        }
+    }
     var filteredItems = [Item]()
     var loadInterval = 10
     var canLoadMore = true
     
     var searchController: UISearchController!
     var refreshControl: UIRefreshControl!
-    
-    lazy var slideUpTransitionDelegate = SlideUpPresentationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +50,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         // set delegates
         searchController.delegate = self
         collectionView?.delegate = self
+        
         if let layout = collectionView?.collectionViewLayout as? StaggeredLayout {
             layout.delegate = self
         }
@@ -67,10 +72,10 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         if items.count == 0 {
             refreshControl?.beginRefreshing()
             handleRefresh(self.refreshControl!)
-            
-            // reload the table data
-            self.reloadData(collectionView)
         }
+        
+        // reload the table data
+        self.reloadData(collectionView)
     }
 
     // MARK: Navigation
@@ -80,12 +85,9 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
             // get the item to use for details
             let indexPath = (collectionView?.indexPath(for: sender as! ItemCollectionViewCell))!
             let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
-            let appDelItem = AppDelegate.bookmarks?.first(where: { (k, v) in k.itemId == item.itemId })?.key
             
             // assign the data from the item to the fields in the destination view controller
-            destination.item = appDelItem ?? item
-            destination.previousVC = self
-            destination.segue = segue
+            destination.item = item
         }
         
         // release searchbar
@@ -108,8 +110,8 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
     
         // Configure the cell
-        cell.layer.cornerRadius = 10.0
         cell.backgroundColor = UIColor.black
+        
         // convert the image from encoded string to an image.
         let imageData = Data(base64Encoded: item.thumbnail)
         if let data = imageData {
@@ -118,7 +120,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         else {
             cell.itemImageView.image = UIImage(named: "noimage")
         }
-        cell.priceLabel.text = String(format: "$%.02f ", Double(item.price) ?? 0.0)
+        cell.priceLabel.text = String(format: "   $%.02f ", Double(item.price) ?? 0.0)
         
         return cell
     }
@@ -168,36 +170,19 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
             self.navigationItem.titleView = searchController.searchBar
             searchController.searchBar.becomeFirstResponder()
         }
-        //searchController.searchBar.setNeedsFocusUpdate()
     }
     
     // MARK: StaggeredLayout Delegate
     func collectionView(_ collectionView: UICollectionView, heightForCellAt indexPath: IndexPath, with width: CGFloat) -> CGFloat {
-        //print("height for cell: \(indexPath.row)")
-        let item = items[indexPath.row]
-        
-        let imageData = Data(base64Encoded: item.thumbnail)
-        let image: UIImage!
-        if let data = imageData {
-            image = UIImage(data: data)
-        }
-        else {
-            image = UIImage(named: "noimage")
-        }
-        
-        // adjust size and return the height
-        let boundingRect =  CGRect(x: 0, y: 0, width: width, height: CGFloat(MAXFLOAT))
-        let rect  = AVMakeRect(aspectRatio: image.size, insideRect: boundingRect)
-        return rect.size.height
+        return width
     }
     
     // MARK: Helper
     // Handles a drag to refresh
     func handleRefresh(_ refreshControl: UIRefreshControl) {
         print("refreshing")
-        // get a list of all items (for now)
-        // TODO: remove temp arguments
-        HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? "", inRange: 0, to: loadInterval) { itemsArray, response, error in
+        // get a list of all approved items in the range
+        HttpRequestManager.allApproved(inRange: 0, to: loadInterval) { itemsArray, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items
@@ -225,7 +210,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     
     func loadMoreItems() {
         print("LOADING MORE TO BROWSE")
-        HttpRequestManager.approvedItems(withGroupId: AppDelegate.group?.groupId ?? "", inRange: self.items.count, to: self.items.count + loadInterval) { items, response, error in
+        HttpRequestManager.approvedItems(withGroupId: AppData.group?.groupId ?? "", inRange: self.items.count, to: self.items.count + loadInterval) { items, response, error in
             DispatchQueue.main.async {
                 self.items += items
                 
@@ -238,7 +223,7 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     
     func reloadData(_ collectionView: UICollectionView?) {
         //collectionView?.collectionViewLayout.prepare()
-        (collectionView?.collectionViewLayout as! StaggeredLayout).cache = [UICollectionViewLayoutAttributes]()
+        (collectionView?.collectionViewLayout as? StaggeredLayout)?.cache = [UICollectionViewLayoutAttributes]()
         collectionView?.collectionViewLayout.invalidateLayout()
         collectionView?.reloadData()
     }

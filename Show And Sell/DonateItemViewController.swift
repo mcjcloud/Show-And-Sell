@@ -147,6 +147,10 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
         self.present(alertController, animated: true, completion: nil)
     }
     
+    @IBAction func cancelDonate(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
     @IBAction func donate(_ sender: UIBarButtonItem) {
         // dismiss keyobard
         dismissKeyboard()
@@ -177,7 +181,7 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
         let thumbnail = imageData!.base64EncodedString()
         
         // make a post request to add the item to the appropriate group TODO:
-        let item = Item(itemId: "", groupId: AppDelegate.group!.groupId, ownerId: AppDelegate.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, approved: false)
+        let item = Item(itemId: "", groupId: AppData.group!.groupId, ownerId: AppData.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, approved: false)
         HttpRequestManager.post(item: item) { item, response, error in
             // stop animating in main thread
             DispatchQueue.main.async {
@@ -216,11 +220,11 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
     // returns true if all of the text fields are filled out and the image is chosen.
     func shouldEnableDoneButton() -> Bool {
         // check if the fields are empty.
-        return (itemNameField.text?.characters.count)! > 0 &&
-            (itemPriceField.text?.characters.count)! > 0 &&
-            (Double(itemPriceField.text ?? "0.0")!) > 0.30 &&
-            (itemConditionField.text?.characters.count)! > 0 &&
-            (itemDescription.text?.characters.count)! > 0 &&
+        return (itemNameField.text?.characters.count) ?? 0 > 0 &&
+            (itemPriceField.text?.characters.count) ?? 0 > 0 &&
+            (Double(itemPriceField.text ?? "0.0") ?? 0.0) > 0.30 &&
+            (itemConditionField.text?.characters.count) ?? 0 > 0 &&
+            (itemDescription.text?.characters.count) ?? 0 > 0 &&
             imageButton.backgroundImage(for: .normal) != nil
     }
     

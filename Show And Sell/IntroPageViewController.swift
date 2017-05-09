@@ -66,6 +66,4 @@ class IntroPageViewController: UIPageViewController, UIPageViewControllerDataSou
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return 0
     }
-    
-    
 }

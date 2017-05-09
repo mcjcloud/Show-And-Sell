@@ -83,7 +83,7 @@ class EditNameViewController: UIViewController, UITextFieldDelegate {
         // display loading wheel
         overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         
-        if let user = AppDelegate.user {
+        if let user = AppData.user {
             overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
             user.firstName = firstNameField.text!
             user.lastName = lastNameField.text!
@@ -95,7 +95,7 @@ class EditNameViewController: UIViewController, UITextFieldDelegate {
                 }
                 
                 if let u = user {
-                    AppDelegate.user = u
+                    AppData.user = u
                     // Dismiss this
                     DispatchQueue.main.async {
                         self.dismiss(animated: true, completion: nil)

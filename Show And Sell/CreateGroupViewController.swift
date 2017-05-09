@@ -16,6 +16,7 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var doneButton: UIBarButtonItem!
     var activityView: UIActivityIndicatorView!
     @IBOutlet var nameField: UITextField!
+    @IBOutlet var routingField: UITextField!
     @IBOutlet var locationButton: UIButton!
     @IBOutlet var locationDetailField: UITextView!
     var annotation: MKPointAnnotation?
@@ -28,8 +29,8 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
         doneButton.isEnabled = shouldEnableDoneButton()
         
         // assign textfields to text changed function
-        nameField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
         setupTextField(nameField)
+        setupTextField(routingField)
         
         // make textfields dismiss when uiview tapped
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
@@ -72,9 +73,10 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
         
         // make the create group request
         let address = annotation!.subtitle
+        let routing = routingField.text
         // TODO: require routing number to create group
-        let newGroup = Group(name: nameField.text!, adminId: AppDelegate.user?.userId ?? "", address: address ?? "Address not specified", routing: "", latitude: annotation!.coordinate.latitude, longitude: annotation!.coordinate.longitude, locationDetail: locationDetailField.text!)
-        HttpRequestManager.post(group: newGroup, password: AppDelegate.user?.password ?? "") { group, response, error in
+        let newGroup = Group(name: nameField.text!, adminId: AppData.user?.userId ?? "", address: address ?? "Address not specified", routing: routing ?? "", latitude: annotation!.coordinate.latitude, longitude: annotation!.coordinate.longitude, locationDetail: locationDetailField.text!)
+        HttpRequestManager.post(group: newGroup, password: AppData.user?.password ?? "") { group, response, error in
             print("response: \(response as! HTTPURLResponse)")
             // stop animation
             self.activityView.stopAnimating()
@@ -85,7 +87,7 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
             var message: String?
             switch responseCode {
             case 200:
-                AppDelegate.myGroup = group
+                AppData.myGroup = group
                 message = nil
             case 400:
                 message = "Bad Request: Some information is already taken."
@@ -141,15 +143,14 @@ class CreateGroupViewController: UIViewController, UITextViewDelegate {
     // dismiss a keyboard
     func dismissKeyboard() {
         nameField.resignFirstResponder()
+        routingField.resignFirstResponder()
         locationDetailField.resignFirstResponder()
     }
     
     // returns true if all fields are filled.
     func shouldEnableDoneButton() -> Bool {
-        print("char count: \(nameField.text?.characters.count)")
-        print("locdetail: \(locationDetailField.text.characters.count)")
-        print("annotation: \(annotation != nil)")
         return nameField.text?.characters.count ?? 0 > 0 &&
+            routingField.text?.characters.count ?? 0 > 0 &&
             locationDetailField.text.characters.count > 0 &&
             annotation != nil
     }

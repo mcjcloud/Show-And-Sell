@@ -52,7 +52,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         super.viewDidLoad()
 
         // set current group
-        currentGroup = AppDelegate.group
+        currentGroup = AppData.group
         oldGroup = currentGroup
         
         if currentGroup == nil {
@@ -76,7 +76,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         
         // get other groups and use activity indicator.
         self.refreshControl = UIRefreshControl()
-        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.663, green: 0.886, blue: 0.678, alpha: 0.7957) // Green
+        self.refreshControl?.backgroundColor = UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.380, alpha: 1.0) // Gold
         self.refreshControl!.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         
     }
@@ -154,7 +154,7 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
         
         // make the selected cell the current group, reload the table.
         currentGroup = (searchController.isActive && searchController.searchBar.text! != "") ? filteredGroups[indexPath.row] : groups[indexPath.row]
-        AppDelegate.group = currentGroup
+        AppData.group = currentGroup
         self.tableView.reloadData()
     }
     
@@ -259,9 +259,6 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     }
     
     // MARK: Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-    }
     @IBAction func unwindToFinder(_ segue: UIStoryboardSegue) {
         print("finder unwind")
     }
@@ -293,6 +290,6 @@ class FindGroupTableViewController: UITableViewController, UISearchResultsUpdati
     
     // returns if true if there is the user doesn't have a group
     func shouldEnableAddButton() -> Bool {
-        return AppDelegate.myGroup == nil
+        return AppData.myGroup == nil
     }
 }

@@ -12,6 +12,10 @@ import UIKit
 import Google
 import GoogleSignIn
 
+protocol LoginViewControllerDelegate {
+    func login(didPressCreateButton createButton: UIButton)
+}
+
 class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate, UIGestureRecognizerDelegate {
     // GUI properties
     @IBOutlet var emailField: UITextField!
@@ -20,6 +24,9 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     @IBOutlet var loginButton: UIButton!
     @IBOutlet var googleButton: GIDSignInButton!
     @IBOutlet var createAccountButton: UIButton!
+    
+    // delegate for switching between login and create
+    var delegate: LoginViewControllerDelegate?
     
     var user: User!
     
@@ -33,8 +40,8 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         print("Login view did load")
         
         // setup text fields
-        setupTextField(emailField)
-        setupTextField(passwordField)
+        setupTextField(emailField, placeholder: "Email")
+        setupTextField(passwordField, placeholder: "Password")
         
         // make textfields dismiss when uiview tapped
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -70,7 +77,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         loginButton.isEnabled = shouldEnableLogin()
         
         // auto login
-        if let email = AppDelegate.save.email, let pword = AppDelegate.save.password {
+        if let email = AppData.save.email, let pword = AppData.save.password {
             emailField.text = email
             passwordField.text = HttpRequestManager.decrypt(pword)
             
@@ -93,7 +100,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     @IBAction func unwindToLogin(segue: UIStoryboardSegue) {
         print("unwind to login")
         // save data from session
-        AppDelegate.saveData()
+        AppData.saveData()
         
         // clear tab bar data
         AppDelegate.tabVC?.clearTabData()
@@ -138,6 +145,9 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
             messageLabel.text = "Please make sure all fields are filled."
         }
     }
+    @IBAction func createAccount(_ sender: UIButton) {
+        delegate?.login(didPressCreateButton: sender)
+    }
     
     // MARK: Google Auth
     func application(application: UIApplication, openURL url: URL, options: [String: Any]) -> Bool {
@@ -161,8 +171,8 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
                 HttpRequestManager.googleUser(email: email, userId: HttpRequestManager.encrypt(userId), firstName: firstName, lastName: lastName) { user, response, error in
                     print("calling postlogin from google sign in")
                     // finish login
-                    AppDelegate.save.isGoogleSigned = true
-                    AppDelegate.saveData()
+                    AppData.save.isGoogleSigned = true
+                    AppData.saveData()
                     self.postLogin(user: user, response: response, error: error)
                 }
             }
@@ -216,7 +226,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     }
     
     // setup the custom TextField
-    func setupTextField(_ textfield: UITextField) {
+    func setupTextField(_ textfield: UITextField, placeholder: String) {
         // edit password field
         let width = CGFloat(1.5)
         let border = CALayer()
@@ -227,6 +237,8 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         textfield.layer.addSublayer(border)
         textfield.layer.masksToBounds = true
         textfield.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
+        textfield.attributedPlaceholder = NSAttributedString(string: placeholder,
+                                                               attributes: [NSForegroundColorAttributeName: UIColor.white])
     }
     
     // check if the login button should be enabled.
@@ -259,29 +271,29 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
             self.autoLogin = true
             
             // if the signed in user is not the same as the saved user, reasign the "save user"
-            AppDelegate.user = u
+            AppData.user = u
             
-            AppDelegate.save.email = u.email
-            AppDelegate.save.password = u.password
+            AppData.save.email = u.email
+            AppData.save.password = u.password
             
-            AppDelegate.saveData()
+            AppData.saveData()
             
             // go to tabs segue from main thread
             DispatchQueue.main.async(execute: {
                 print("Logging in, groupId: \(u.groupId)")
-                if let groupId = AppDelegate.user?.groupId, groupId.characters.count > 0 {
+                if let groupId = AppData.user?.groupId, groupId.characters.count > 0 {
                     print("segue to tabs")
                     self.performSegue(withIdentifier: "loginToTabs", sender: self)
                 }
                 else {  // if there is no group, segue to choose a group
                     print("loginToFinder segue")
-                    print("saved groupId: \(AppDelegate.user?.groupId)")
+                    print("saved groupId: \(AppData.user?.groupId)")
                     self.performSegue(withIdentifier: "loginToFinder", sender: self)
                 }
             })
             
             // save data
-            AppDelegate.saveData()
+            AppData.saveData()
         }
         else {
             DispatchQueue.main.async {
@@ -321,12 +333,12 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     // log the user out
     func logout() {
         // clear non-persistant data.
-        AppDelegate.myGroup = nil
-        AppDelegate.user = nil
-        AppDelegate.group = nil
-        AppDelegate.bookmarks = nil
-        AppDelegate.save.isGoogleSigned = false
-        AppDelegate.saveData()
+        AppData.myGroup = nil
+        AppData.user = nil
+        AppData.group = nil
+        AppData.bookmarks = nil
+        AppData.save.isGoogleSigned = false
+        AppData.saveData()
         
         // logout google user
         GIDSignIn.sharedInstance().signOut()

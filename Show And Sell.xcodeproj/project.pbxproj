@@ -15,6 +15,14 @@
 		D80D79161DDA39980055A307 /* noimage.png in Resources */ = {isa = PBXBuildFile; fileRef = D80D79151DDA39980055A307 /* noimage.png */; };
 		D835EA3A1E2C48E9009C0650 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D835EA391E2C48E8009C0650 /* MessageTableViewCell.swift */; };
 		D84739991E59C98C00DB8763 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84739981E59C98C00DB8763 /* OverlayView.swift */; };
+		D84BC6161EB780C900512406 /* Group.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6151EB780C900512406 /* Group.png */; };
+		D84BC6181EB7859600512406 /* Group Filled.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6171EB7859600512406 /* Group Filled.png */; };
+		D84BC61A1EB7897F00512406 /* money.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6191EB7897F00512406 /* money.png */; };
+		D84BC6201EB78FD100512406 /* give.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC61F1EB78FD100512406 /* give.png */; };
+		D84BC6221EB7921900512406 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6211EB7921900512406 /* default.png */; };
+		D84BC6241EB7930F00512406 /* make_default.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6231EB7930F00512406 /* make_default.png */; };
+		D84BC6261EB796F300512406 /* rate.png in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6251EB796F300512406 /* rate.png */; };
+		D84BC62A1EC0E23700512406 /* sasloginbg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D84BC6291EC0E23700512406 /* sasloginbg.jpeg */; };
 		D84C070D1E043BAB0015DBEB /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */; };
 		D852416B1E53665F00DCC394 /* showandsell.png in Resources */ = {isa = PBXBuildFile; fileRef = D852416A1E53665F00DCC394 /* showandsell.png */; };
 		D852416D1E5367F200DCC394 /* BrowseCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852416C1E5367F200DCC394 /* BrowseCollectionViewController.swift */; };
@@ -25,6 +33,7 @@
 		D85BD1C01E5633FA0099FCD5 /* SimpleSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85BD1BF1E5633FA0099FCD5 /* SimpleSearchController.swift */; };
 		D85BD1C61E56D26A0099FCD5 /* shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = D85BD1C51E56D26A0099FCD5 /* shadow.png */; };
 		D86D51051DEC93710096B58C /* ManageGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */; };
+		D86F95F61EC0F5880072F119 /* EntrancePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86F95F51EC0F5880072F119 /* EntrancePageViewController.swift */; };
 		D87BF9811E36E7FB00AA7EA1 /* Home Filled.png in Resources */ = {isa = PBXBuildFile; fileRef = D87BF9791E36E7FB00AA7EA1 /* Home Filled.png */; };
 		D87BF9821E36E7FB00AA7EA1 /* Home.png in Resources */ = {isa = PBXBuildFile; fileRef = D87BF97A1E36E7FB00AA7EA1 /* Home.png */; };
 		D87BF9831E36E7FB00AA7EA1 /* Plus Filled.png in Resources */ = {isa = PBXBuildFile; fileRef = D87BF97B1E36E7FB00AA7EA1 /* Plus Filled.png */; };
@@ -47,9 +56,9 @@
 		D8A0F9B61EB0EAC7006695BC /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = D8A0F9B41EB0EAC7006695BC /* star.png */; };
 		D8A0F9B71EB0EAC7006695BC /* starfilled.png in Resources */ = {isa = PBXBuildFile; fileRef = D8A0F9B51EB0EAC7006695BC /* starfilled.png */; };
 		D8A0F9B91EB0EC73006695BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8A0F9B81EB0EC73006695BC /* Main.storyboard */; };
+		D8A0F9BB1EB3ADDD006695BC /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F9BA1EB3ADDC006695BC /* AppData.swift */; };
 		D8A2CA2E1D91928200E5ADC4 /* SSTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */; };
 		D8A2CA301D9193F100E5ADC4 /* GroupDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */; };
-		D8B232C21E1D7EB7000234E8 /* MessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B232C11E1D7EB7000234E8 /* MessagesTableViewController.swift */; };
 		D8C129861DB6696A005B86E5 /* SaveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C129851DB6696A005B86E5 /* SaveData.swift */; };
 		D8C5FD031DBFAE410062FDF5 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C5FD021DBFAE410062FDF5 /* Group.swift */; };
 		D8C5FD051DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C5FD041DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift */; };
@@ -102,6 +111,14 @@
 		D80D79151DDA39980055A307 /* noimage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noimage.png; sourceTree = "<group>"; };
 		D835EA391E2C48E8009C0650 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		D84739981E59C98C00DB8763 /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		D84BC6151EB780C900512406 /* Group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Group.png; sourceTree = "<group>"; };
+		D84BC6171EB7859600512406 /* Group Filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group Filled.png"; sourceTree = "<group>"; };
+		D84BC6191EB7897F00512406 /* money.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = money.png; sourceTree = "<group>"; };
+		D84BC61F1EB78FD100512406 /* give.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = give.png; sourceTree = "<group>"; };
+		D84BC6211EB7921900512406 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
+		D84BC6231EB7930F00512406 /* make_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = make_default.png; sourceTree = "<group>"; };
+		D84BC6251EB796F300512406 /* rate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rate.png; sourceTree = "<group>"; };
+		D84BC6291EC0E23700512406 /* sasloginbg.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sasloginbg.jpeg; sourceTree = "<group>"; };
 		D84C070C1E043BAB0015DBEB /* CreateGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
 		D852416A1E53665F00DCC394 /* showandsell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = showandsell.png; sourceTree = "<group>"; };
 		D852416C1E5367F200DCC394 /* BrowseCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseCollectionViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +129,7 @@
 		D85BD1BF1E5633FA0099FCD5 /* SimpleSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleSearchController.swift; sourceTree = "<group>"; };
 		D85BD1C51E56D26A0099FCD5 /* shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow.png; sourceTree = "<group>"; };
 		D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupTableViewController.swift; sourceTree = "<group>"; };
+		D86F95F51EC0F5880072F119 /* EntrancePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntrancePageViewController.swift; sourceTree = "<group>"; };
 		D87BF9791E36E7FB00AA7EA1 /* Home Filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Home Filled.png"; sourceTree = "<group>"; };
 		D87BF97A1E36E7FB00AA7EA1 /* Home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home.png; sourceTree = "<group>"; };
 		D87BF97B1E36E7FB00AA7EA1 /* Plus Filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Plus Filled.png"; sourceTree = "<group>"; };
@@ -139,9 +157,9 @@
 		D8A0F9B41EB0EAC7006695BC /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		D8A0F9B51EB0EAC7006695BC /* starfilled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = starfilled.png; sourceTree = "<group>"; };
 		D8A0F9B81EB0EC73006695BC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		D8A0F9BA1EB3ADDC006695BC /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		D8A2CA2D1D91928200E5ADC4 /* SSTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSTabBarViewController.swift; sourceTree = "<group>"; };
 		D8A2CA2F1D9193F100E5ADC4 /* GroupDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupDetailViewController.swift; sourceTree = "<group>"; };
-		D8B232C11E1D7EB7000234E8 /* MessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesTableViewController.swift; sourceTree = "<group>"; };
 		D8C129851DB6696A005B86E5 /* SaveData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaveData.swift; sourceTree = "<group>"; };
 		D8C5FD021DBFAE410062FDF5 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		D8C5FD041DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindGroupTableViewCell.swift; sourceTree = "<group>"; };
@@ -219,10 +237,16 @@
 		D84393BC1DBF1C33008E7721 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				D84BC6291EC0E23700512406 /* sasloginbg.jpeg */,
 				D8DA40B51E8D5E7F003A757C /* bookmark_button.png */,
 				D8DA40B61E8D5E7F003A757C /* cart_button.png */,
 				D8DA40B71E8D5E7F003A757C /* share_button.png */,
 				D8DA40B81E8D5E7F003A757C /* unbookmark_button.png */,
+				D84BC61F1EB78FD100512406 /* give.png */,
+				D84BC6191EB7897F00512406 /* money.png */,
+				D84BC6211EB7921900512406 /* default.png */,
+				D84BC6231EB7930F00512406 /* make_default.png */,
+				D84BC6251EB796F300512406 /* rate.png */,
 				D8E98A781E729FEF00A7F449 /* sasbrowse.PNG */,
 				D8E98A841E72AEEC00A7F449 /* sasdetail.PNG */,
 				D8E98A791E729FEF00A7F449 /* saschat.PNG */,
@@ -247,6 +271,8 @@
 				D8A0F98F1EA7E6CF006695BC /* comment.png */,
 				D87BF97B1E36E7FB00AA7EA1 /* Plus Filled.png */,
 				D8A0F98D1EA7E6BD006695BC /* Plus.png */,
+				D84BC6151EB780C900512406 /* Group.png */,
+				D84BC6171EB7859600512406 /* Group Filled.png */,
 				D87BF97D1E36E7FB00AA7EA1 /* Settings Filled.png */,
 				D87BF97E1E36E7FB00AA7EA1 /* Settings.png */,
 				D80D79151DDA39980055A307 /* noimage.png */,
@@ -305,6 +331,7 @@
 			children = (
 				D8CA36641D8AFA7E00A30D39 /* IntroViewController.swift */,
 				D8CA36621D8AFA2800A30D39 /* IntroPageViewController.swift */,
+				D86F95F51EC0F5880072F119 /* EntrancePageViewController.swift */,
 				D8FDE3B91D7DF5A600B98B48 /* LoginViewController.swift */,
 				D8FDE3CA1D7DFFB100B98B48 /* CreateAccountViewController.swift */,
 			);
@@ -374,6 +401,7 @@
 			children = (
 				D84393BC1DBF1C33008E7721 /* res */,
 				D8FDE3B71D7DF5A600B98B48 /* AppDelegate.swift */,
+				D8A0F9BA1EB3ADDC006695BC /* AppData.swift */,
 				D8DC45941D9579CA00E53B34 /* HttpRequestManager.swift */,
 				D8FDE3C91D7DFF4200B98B48 /* ViewControllers */,
 				D8E62B041D834121002018CD /* Views */,
@@ -401,7 +429,6 @@
 				D86D51041DEC93710096B58C /* ManageGroupTableViewController.swift */,
 				D8D316A21E6FC62500DB68F3 /* AccountSettingsTableViewController.swift */,
 				D8D316A61E6FD1E800DB68F3 /* Account Settings */,
-				D8B232C11E1D7EB7000234E8 /* MessagesTableViewController.swift */,
 				D8E3889A1E423D5700E034C9 /* ChooseLocationViewController.swift */,
 				D85BD1BF1E5633FA0099FCD5 /* SimpleSearchController.swift */,
 				D8083ACD1E8F33BA00B37DA7 /* ImageDisplayViewController.swift */,
@@ -472,19 +499,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D84BC62A1EC0E23700512406 /* sasloginbg.jpeg in Resources */,
 				D8DA40BA1E8D5E7F003A757C /* cart_button.png in Resources */,
 				D8E98A821E729FEF00A7F449 /* sasdonate.PNG in Resources */,
+				D84BC61A1EB7897F00512406 /* money.png in Resources */,
 				D8E98A801E729FEF00A7F449 /* saschoose.PNG in Resources */,
 				D8D316B21E705EE800DB68F3 /* Compass Filled.png in Resources */,
 				D8E98A7E1E729FEF00A7F449 /* sasbrowse.PNG in Resources */,
+				D84BC6201EB78FD100512406 /* give.png in Resources */,
 				D8D316AE1E6FFE5700DB68F3 /* green-check.png in Resources */,
 				D8E98A7F1E729FEF00A7F449 /* saschat.PNG in Resources */,
 				D8A0F9B71EB0EAC7006695BC /* starfilled.png in Resources */,
 				D80D79161DDA39980055A307 /* noimage.png in Resources */,
 				D8FDE3C21D7DF5A700B98B48 /* LaunchScreen.storyboard in Resources */,
+				D84BC6161EB780C900512406 /* Group.png in Resources */,
 				D8A0F9B61EB0EAC7006695BC /* star.png in Resources */,
 				D87BF9861E36E7FB00AA7EA1 /* Settings.png in Resources */,
 				D8A0F9B11EAFB2A6006695BC /* RateXIB.xib in Resources */,
+				D84BC6181EB7859600512406 /* Group Filled.png in Resources */,
 				D8FDE3BF1D7DF5A700B98B48 /* Assets.xcassets in Resources */,
 				D8A0F9AD1EAFADC9006695BC /* Bookmark.png in Resources */,
 				D8A0F9B91EB0EC73006695BC /* Main.storyboard in Resources */,
@@ -498,6 +530,7 @@
 				D8E9D3D71E654B3F00AA1B7C /* showandsell-small.png in Resources */,
 				D8D316B01E705EE000DB68F3 /* Compass.png in Resources */,
 				D87BF9811E36E7FB00AA7EA1 /* Home Filled.png in Resources */,
+				D84BC6261EB796F300512406 /* rate.png in Resources */,
 				D87BF9851E36E7FB00AA7EA1 /* Settings Filled.png in Resources */,
 				D8DA40B91E8D5E7F003A757C /* bookmark_button.png in Resources */,
 				D87BF9831E36E7FB00AA7EA1 /* Plus Filled.png in Resources */,
@@ -505,9 +538,11 @@
 				D8DA40BC1E8D5E7F003A757C /* unbookmark_button.png in Resources */,
 				D85BD1BC1E561C370099FCD5 /* Search Filled.png in Resources */,
 				D85BD1C61E56D26A0099FCD5 /* shadow.png in Resources */,
+				D84BC6241EB7930F00512406 /* make_default.png in Resources */,
 				D89394921E695F63004EF5BB /* GoogleService-Info.plist in Resources */,
 				D8A0F9901EA7E6CF006695BC /* comment.png in Resources */,
 				D8A0F98E1EA7E6BD006695BC /* Plus.png in Resources */,
+				D84BC6221EB7921900512406 /* default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,6 +602,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8083AD21E94083600B37DA7 /* SlideUpPresentationManager.swift in Sources */,
+				D8A0F9BB1EB3ADDD006695BC /* AppData.swift in Sources */,
 				D8FDE3D31D7E01BC00B98B48 /* DonateItemViewController.swift in Sources */,
 				D8A0F9B31EAFB601006695BC /* RateXIBView.swift in Sources */,
 				D8CA36631D8AFA2800A30D39 /* IntroPageViewController.swift in Sources */,
@@ -578,7 +614,6 @@
 				D8FDE3D11D7E003E00B98B48 /* BookmarksTableViewController.swift in Sources */,
 				D8A0F9A91EAF0C34006695BC /* GroupTableViewCell.swift in Sources */,
 				D8D316AA1E6FD22400DB68F3 /* EditEmailViewController.swift in Sources */,
-				D8B232C21E1D7EB7000234E8 /* MessagesTableViewController.swift in Sources */,
 				D84739991E59C98C00DB8763 /* OverlayView.swift in Sources */,
 				D8D316A81E6FD20900DB68F3 /* EditNameViewController.swift in Sources */,
 				D8083AD41E940AFA00B37DA7 /* SlideUpPresentationController.swift in Sources */,
@@ -612,6 +647,7 @@
 				D85241741E536B7700DCC394 /* StaggeredLayout.swift in Sources */,
 				D8FDE3B81D7DF5A600B98B48 /* AppDelegate.swift in Sources */,
 				D85BD1C01E5633FA0099FCD5 /* SimpleSearchController.swift in Sources */,
+				D86F95F61EC0F5880072F119 /* EntrancePageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -779,10 +815,6 @@
 					"-framework",
 					"\"MessageUI\"",
 					"-framework",
-					"\"PHFComposeBarView\"",
-					"-framework",
-					"\"PHFDelegateChain\"",
-					"-framework",
 					"\"SafariServices\"",
 					"-framework",
 					"\"Security\"",
@@ -859,10 +891,6 @@
 					"\"GoogleToolboxForMac\"",
 					"-framework",
 					"\"MessageUI\"",
-					"-framework",
-					"\"PHFComposeBarView\"",
-					"-framework",
-					"\"PHFDelegateChain\"",
 					"-framework",
 					"\"SafariServices\"",
 					"-framework",

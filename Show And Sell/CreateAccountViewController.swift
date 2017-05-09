@@ -10,6 +10,10 @@
 
 import UIKit
 
+protocol CreateAccountViewControllerDelegate {
+    func create(didPressLoginButton loginButton: UIButton)
+}
+
 class CreateAccountViewController: UIViewController {
     // GUI Outlets
     @IBOutlet var firstNameField: UITextField!
@@ -21,6 +25,9 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet var createAccountButton: UIButton!
     @IBOutlet var cancelButton: UIButton!
     
+    // delegate
+    var delegate: CreateAccountViewControllerDelegate?
+    
     var loginVC: LoginViewController!
 
     override func viewDidLoad() {
@@ -29,11 +36,11 @@ class CreateAccountViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // edit TextFields
-        setupTextField(firstNameField)
-        setupTextField(lastNameField)
-        setupTextField(emailField)
-        setupTextField(passwordField)
-        setupTextField(confirmPasswordField)
+        setupTextField(firstNameField, placeholder: "First Name")
+        setupTextField(lastNameField, placeholder: "Last Name")
+        setupTextField(emailField, placeholder: "Email")
+        setupTextField(passwordField, placeholder: "Password")
+        setupTextField(confirmPasswordField, placeholder: "Confirm Password")
         
         // make textfields dismiss when uiview tapped
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard)))
@@ -52,11 +59,6 @@ class CreateAccountViewController: UIViewController {
         
         messageLabel.text = ""
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // if navigating to Finder, tell it where it came from
@@ -66,7 +68,7 @@ class CreateAccountViewController: UIViewController {
         }
     }
 
-    // Create Account button action
+    // MARK: IBAction
     @IBAction func createAccount(_ sender: UIButton) {
         // disable button
         createAccountButton.isEnabled = false
@@ -85,10 +87,10 @@ class CreateAccountViewController: UIViewController {
                         // the user object is not nil
                         
                         // set the global user variable.
-                        AppDelegate.user = u
+                        AppData.user = u
                         
-                        AppDelegate.save.email = u.email
-                        AppDelegate.save.password = u.password
+                        AppData.save.email = u.email
+                        AppData.save.password = u.password
                         
                         // perform segue to Browse View Controller.
                         DispatchQueue.main.async {
@@ -96,7 +98,7 @@ class CreateAccountViewController: UIViewController {
                         }
                         
                         // save data
-                        AppDelegate.saveData()
+                        AppData.saveData()
                     }
                     else {
                         DispatchQueue.main.async {
@@ -122,6 +124,10 @@ class CreateAccountViewController: UIViewController {
         }
     }
 
+    @IBAction func cancelCreate(_ sender: UIButton) {
+        self.delegate?.create(didPressLoginButton: sender)
+    }
+    
     // MARK: Helper
     
     // target for text change in UITextFields
@@ -146,7 +152,7 @@ class CreateAccountViewController: UIViewController {
             confirmPasswordField.text?.characters.count ?? 0 > 0
     }
     
-    func setupTextField(_ textfield: UITextField) {
+    func setupTextField(_ textfield: UITextField, placeholder: String) {
         // edit password field
         let width = CGFloat(1.5)
         let border = CALayer()
@@ -156,5 +162,7 @@ class CreateAccountViewController: UIViewController {
         border.borderWidth = width
         textfield.layer.addSublayer(border)
         textfield.layer.masksToBounds = true
+        textfield.attributedPlaceholder = NSAttributedString(string: placeholder,
+                                                             attributes: [NSForegroundColorAttributeName: UIColor.white])
     }
 }

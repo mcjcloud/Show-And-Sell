@@ -22,13 +22,13 @@ class AccountSettingsTableViewController: UITableViewController {
         
         self.navigationItem.title = "Account Settings"
         // update UI
-        emailField.text = AppDelegate.user?.email
-        if let firstName = AppDelegate.user?.firstName, let lastName = AppDelegate.user?.lastName {
+        emailField.text = AppData.user?.email
+        if let firstName = AppData.user?.firstName, let lastName = AppData.user?.lastName {
             nameField.text = "\(firstName) \(lastName)"
         }
         
         // check if password changing should be enabled
-        if AppDelegate.save.isGoogleSigned ?? false {
+        if AppData.save.isGoogleSigned ?? false {
             
             // disable email
             emailCell.isUserInteractionEnabled = false
@@ -41,8 +41,8 @@ class AccountSettingsTableViewController: UITableViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         // update UI
-        emailField.text = AppDelegate.user?.email
-        if let firstName = AppDelegate.user?.firstName, let lastName = AppDelegate.user?.lastName {
+        emailField.text = AppData.user?.email
+        if let firstName = AppData.user?.firstName, let lastName = AppData.user?.lastName {
             nameField.text = "\(firstName) \(lastName)"
         }
         tableView.reloadData()
@@ -52,11 +52,11 @@ class AccountSettingsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // set the textField text for the destination
         if let dest = (segue.destination as? UINavigationController)?.childViewControllers[0] as? EditNameViewController {
-            dest.firstName = AppDelegate.user?.firstName ?? ""
-            dest.lastName = AppDelegate.user?.lastName ?? ""
+            dest.firstName = AppData.user?.firstName ?? ""
+            dest.lastName = AppData.user?.lastName ?? ""
         }
         else if let dest = (segue.destination as? UINavigationController)?.childViewControllers[0] as? EditEmailViewController {
-            dest.email = AppDelegate.user?.email ?? ""
+            dest.email = AppData.user?.email ?? ""
         }
     }
     

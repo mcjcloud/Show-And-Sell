@@ -77,7 +77,7 @@ class EditEmailViewController: UIViewController {
         // show overlay
         overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
         
-        if let user = AppDelegate.user {
+        if let user = AppData.user {
             overlay.showOverlay(view: UIApplication.shared.keyWindow!, position: .center)
             user.email = emailField.text!
             HttpRequestManager.put(user: user, currentPassword: user.password) { user, response, error in
@@ -88,7 +88,7 @@ class EditEmailViewController: UIViewController {
                 }
                 
                 if let u = user {
-                    AppDelegate.user = u
+                    AppData.user = u
                     // Dismiss this
                     DispatchQueue.main.async {
                         self.dismiss(animated: true, completion: nil)

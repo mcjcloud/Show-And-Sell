@@ -27,41 +27,38 @@ class SSTabBarViewController: UITabBarController {
         self.tabBar.unselectedItemTintColor = UIColor.white //UIColor(colorLiteralRed: 0.871, green: 0.788, blue: 0.380, alpha: 1.0)
  
         // load the current group.
-        if let groupId = AppDelegate.user?.groupId {
+        if let groupId = AppData.user?.groupId {
             // make an http request for the group.
             HttpRequestManager.group(withId: groupId) { group, response, error in
                 if let g = group {
-                    AppDelegate.group = g
+                    AppData.group = g
                 }
                 else {
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "tabsToFinder", sender: self)
                     }
                 }
-                AppDelegate.saveData()
+                AppData.saveData()
             }
         }
         
         // load the owned group
-        HttpRequestManager.group(withAdminId: AppDelegate.user?.userId ?? "") { group, response, error in
-            AppDelegate.myGroup = group
-            AppDelegate.saveData()
+        HttpRequestManager.group(withAdminId: AppData.user?.userId ?? "") { group, response, error in
+            AppData.myGroup = group
+            AppData.saveData()
             
             if let e = error { print("error with owner group: \(e)") }
         }
         
         // load the bookmarks
-        HttpRequestManager.bookmarks(forUserWithId: AppDelegate.user!.userId, password: AppDelegate.user!.password) { bookmarks, response, error in
+        HttpRequestManager.bookmarks(forUserWithId: AppData.user!.userId, password: AppData.user!.password) { bookmarks, response, error in
             print("DATA RETURNED")
             
             // set current items to requested items
             if let b = bookmarks {
-                AppDelegate.bookmarks = b
+                AppData.bookmarks = b
             }
         }
-        
-        // register for didBecomeActive notification
-        //NotificationCenter.default.addObserver(self, selector: #selector(appBecameActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -70,13 +67,13 @@ class SSTabBarViewController: UITabBarController {
     func presentQueuedItem() {
         print("view appeared in tabs")
         // check if there's an item in need of display.
-        if let item = AppDelegate.displayItem {
+        if let item = AppData.displayItem {
             print("item: \(item)")
             print("browseVC: \(self.childViewControllers[1].childViewControllers[0])")
             if let browseVC = self.childViewControllers[1].childViewControllers[0] as? BrowseCollectionViewController {
                 print("showing item!")
                 browseVC.performSegue(withIdentifier: "browseToDetail", sender: item)
-                AppDelegate.displayItem = nil
+                AppData.displayItem = nil
             }
         }
     }
