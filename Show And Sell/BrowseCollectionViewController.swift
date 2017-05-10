@@ -83,11 +83,16 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
         print("PREPARE IN BROWSE")
         if let destination = segue.destination as? ItemDetailTableViewController {
             // get the item to use for details
-            let indexPath = (collectionView?.indexPath(for: sender as! ItemCollectionViewCell))!
-            let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
-            
-            // assign the data from the item to the fields in the destination view controller
-            destination.item = item
+            if let item = sender as? Item {
+                destination.item = item
+            }
+            else if let cell = sender as? ItemCollectionViewCell {
+                let indexPath = (collectionView?.indexPath(for: cell))!
+                let item = (searchController.isActive && searchController.searchBar.text != "") ? filteredItems[indexPath.row] : items[indexPath.row]
+                
+                // assign the data from the item to the fields in the destination view controller
+                destination.item = item
+            }
         }
         
         // release searchbar
@@ -210,9 +215,13 @@ class BrowseCollectionViewController: UICollectionViewController, StaggeredLayou
     
     func loadMoreItems() {
         print("LOADING MORE TO BROWSE")
-        HttpRequestManager.approvedItems(withGroupId: AppData.group?.groupId ?? "", inRange: self.items.count, to: self.items.count + loadInterval) { items, response, error in
+        HttpRequestManager.allApproved(inRange: self.items.count, to: self.items.count + loadInterval) { items, response, error in
             DispatchQueue.main.async {
                 self.items += items
+                // if more items were loaded, immedietely make canLoadMore true again.
+                if items.count > 0 {
+                    self.canLoadMore = true
+                }
                 
                 // reload browse
                 self.reloadData(self.collectionView)

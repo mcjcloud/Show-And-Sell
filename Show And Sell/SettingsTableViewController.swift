@@ -73,7 +73,7 @@ class SettingsTableViewController: UITableViewController, UIPopoverPresentationC
                     self.present(alertController, animated: true, completion: nil)
                 }
             case 1:     // Account Settings
-                // TODO: segue to account settings
+                // segue to account settings
                 self.performSegue(withIdentifier: "settingsToAccount", sender: self)
             default: break
             }

@@ -41,12 +41,12 @@
 		D87BF9861E36E7FB00AA7EA1 /* Settings.png in Resources */ = {isa = PBXBuildFile; fileRef = D87BF97E1E36E7FB00AA7EA1 /* Settings.png */; };
 		D88C05FD1E30696500A30FFB /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C05FC1E30696500A30FFB /* Message.swift */; };
 		D89394921E695F63004EF5BB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D89394911E695F63004EF5BB /* GoogleService-Info.plist */; };
+		D89E963D1EC2DF6F00E53B56 /* ParallaxHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D89E96361EC2DF6F00E53B56 /* ParallaxHeaderView.m */; };
+		D89E963E1EC2DF6F00E53B56 /* StoryCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D89E96381EC2DF6F00E53B56 /* StoryCommentCell.m */; };
+		D89E963F1EC2DF6F00E53B56 /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D89E963A1EC2DF6F00E53B56 /* StoryViewController.m */; };
+		D89E96401EC2DF6F00E53B56 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D89E963C1EC2DF6F00E53B56 /* UIImage+ImageEffects.m */; };
 		D8A0F98E1EA7E6BD006695BC /* Plus.png in Resources */ = {isa = PBXBuildFile; fileRef = D8A0F98D1EA7E6BD006695BC /* Plus.png */; };
 		D8A0F9901EA7E6CF006695BC /* comment.png in Resources */ = {isa = PBXBuildFile; fileRef = D8A0F98F1EA7E6CF006695BC /* comment.png */; };
-		D8A0F9A41EAE5695006695BC /* ParallaxHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F99D1EAE5695006695BC /* ParallaxHeaderView.m */; };
-		D8A0F9A51EAE5695006695BC /* StoryCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F99F1EAE5695006695BC /* StoryCommentCell.m */; };
-		D8A0F9A61EAE5695006695BC /* StoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F9A11EAE5695006695BC /* StoryViewController.m */; };
-		D8A0F9A71EAE5695006695BC /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F9A31EAE5695006695BC /* UIImage+ImageEffects.m */; };
 		D8A0F9A91EAF0C34006695BC /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F9A81EAF0C34006695BC /* GroupTableViewCell.swift */; };
 		D8A0F9AB1EAF0CAB006695BC /* GroupsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A0F9AA1EAF0CAB006695BC /* GroupsTableViewController.swift */; };
 		D8A0F9AD1EAFADC9006695BC /* Bookmark.png in Resources */ = {isa = PBXBuildFile; fileRef = D8A0F9AC1EAFADC9006695BC /* Bookmark.png */; };
@@ -137,17 +137,17 @@
 		D87BF97E1E36E7FB00AA7EA1 /* Settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings.png; sourceTree = "<group>"; };
 		D88C05FC1E30696500A30FFB /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		D89394911E695F63004EF5BB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D89E96341EC2DF6E00E53B56 /* Show And Sell-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Show And Sell-Bridging-Header.h"; sourceTree = "<group>"; };
+		D89E96351EC2DF6F00E53B56 /* ParallaxHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallaxHeaderView.h; sourceTree = "<group>"; };
+		D89E96361EC2DF6F00E53B56 /* ParallaxHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallaxHeaderView.m; sourceTree = "<group>"; };
+		D89E96371EC2DF6F00E53B56 /* StoryCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCommentCell.h; sourceTree = "<group>"; };
+		D89E96381EC2DF6F00E53B56 /* StoryCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCommentCell.m; sourceTree = "<group>"; };
+		D89E96391EC2DF6F00E53B56 /* StoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryViewController.h; sourceTree = "<group>"; };
+		D89E963A1EC2DF6F00E53B56 /* StoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryViewController.m; sourceTree = "<group>"; };
+		D89E963B1EC2DF6F00E53B56 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		D89E963C1EC2DF6F00E53B56 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		D8A0F98D1EA7E6BD006695BC /* Plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Plus.png; sourceTree = "<group>"; };
 		D8A0F98F1EA7E6CF006695BC /* comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comment.png; sourceTree = "<group>"; };
-		D8A0F99B1EAE5695006695BC /* Show And Sell-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Show And Sell-Bridging-Header.h"; sourceTree = "<group>"; };
-		D8A0F99C1EAE5695006695BC /* ParallaxHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallaxHeaderView.h; sourceTree = "<group>"; };
-		D8A0F99D1EAE5695006695BC /* ParallaxHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParallaxHeaderView.m; sourceTree = "<group>"; };
-		D8A0F99E1EAE5695006695BC /* StoryCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryCommentCell.h; sourceTree = "<group>"; };
-		D8A0F99F1EAE5695006695BC /* StoryCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryCommentCell.m; sourceTree = "<group>"; };
-		D8A0F9A01EAE5695006695BC /* StoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryViewController.h; sourceTree = "<group>"; };
-		D8A0F9A11EAE5695006695BC /* StoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoryViewController.m; sourceTree = "<group>"; };
-		D8A0F9A21EAE5695006695BC /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
-		D8A0F9A31EAE5695006695BC /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		D8A0F9A81EAF0C34006695BC /* GroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		D8A0F9AA1EAF0CAB006695BC /* GroupsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupsTableViewController.swift; sourceTree = "<group>"; };
 		D8A0F9AC1EAFADC9006695BC /* Bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Bookmark.png; sourceTree = "<group>"; };
@@ -299,20 +299,20 @@
 			name = UX;
 			sourceTree = "<group>";
 		};
-		D8A0F99A1EAE5664006695BC /* ObjC */ = {
+		D89E96331EC2DF3300E53B56 /* Objc */ = {
 			isa = PBXGroup;
 			children = (
-				D8A0F99C1EAE5695006695BC /* ParallaxHeaderView.h */,
-				D8A0F99D1EAE5695006695BC /* ParallaxHeaderView.m */,
-				D8A0F99E1EAE5695006695BC /* StoryCommentCell.h */,
-				D8A0F99F1EAE5695006695BC /* StoryCommentCell.m */,
-				D8A0F9A01EAE5695006695BC /* StoryViewController.h */,
-				D8A0F9A11EAE5695006695BC /* StoryViewController.m */,
-				D8A0F9A21EAE5695006695BC /* UIImage+ImageEffects.h */,
-				D8A0F9A31EAE5695006695BC /* UIImage+ImageEffects.m */,
-				D8A0F99B1EAE5695006695BC /* Show And Sell-Bridging-Header.h */,
+				D89E96351EC2DF6F00E53B56 /* ParallaxHeaderView.h */,
+				D89E96361EC2DF6F00E53B56 /* ParallaxHeaderView.m */,
+				D89E96371EC2DF6F00E53B56 /* StoryCommentCell.h */,
+				D89E96381EC2DF6F00E53B56 /* StoryCommentCell.m */,
+				D89E96391EC2DF6F00E53B56 /* StoryViewController.h */,
+				D89E963A1EC2DF6F00E53B56 /* StoryViewController.m */,
+				D89E963B1EC2DF6F00E53B56 /* UIImage+ImageEffects.h */,
+				D89E963C1EC2DF6F00E53B56 /* UIImage+ImageEffects.m */,
+				D89E96341EC2DF6E00E53B56 /* Show And Sell-Bridging-Header.h */,
 			);
-			name = ObjC;
+			name = Objc;
 			sourceTree = "<group>";
 		};
 		D8B232C31E1D7F0F000234E8 /* Detail */ = {
@@ -407,7 +407,7 @@
 				D8E62B041D834121002018CD /* Views */,
 				D8DC45931D95797800E53B34 /* Models */,
 				D85241701E536A2D00DCC394 /* UX */,
-				D8A0F99A1EAE5664006695BC /* ObjC */,
+				D89E96331EC2DF3300E53B56 /* Objc */,
 				D8A0F9B01EAFB2A6006695BC /* RateXIB.xib */,
 				D8A0F9B81EB0EC73006695BC /* Main.storyboard */,
 				D8FDE3BE1D7DF5A700B98B48 /* Assets.xcassets */,
@@ -601,33 +601,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D89E963F1EC2DF6F00E53B56 /* StoryViewController.m in Sources */,
 				D8083AD21E94083600B37DA7 /* SlideUpPresentationManager.swift in Sources */,
 				D8A0F9BB1EB3ADDD006695BC /* AppData.swift in Sources */,
 				D8FDE3D31D7E01BC00B98B48 /* DonateItemViewController.swift in Sources */,
 				D8A0F9B31EAFB601006695BC /* RateXIBView.swift in Sources */,
 				D8CA36631D8AFA2800A30D39 /* IntroPageViewController.swift in Sources */,
 				D8CA36651D8AFA7E00A30D39 /* IntroViewController.swift in Sources */,
-				D8A0F9A71EAE5695006695BC /* UIImage+ImageEffects.m in Sources */,
 				D8083ACC1E8D64DF00B37DA7 /* ItemDetailTableViewController.swift in Sources */,
 				D8C5FD051DBFEC4E0062FDF5 /* FindGroupTableViewCell.swift in Sources */,
 				D8FE95DF1DADA08D002276AF /* SettingsTableViewController.swift in Sources */,
 				D8FDE3D11D7E003E00B98B48 /* BookmarksTableViewController.swift in Sources */,
 				D8A0F9A91EAF0C34006695BC /* GroupTableViewCell.swift in Sources */,
+				D89E963E1EC2DF6F00E53B56 /* StoryCommentCell.m in Sources */,
 				D8D316AA1E6FD22400DB68F3 /* EditEmailViewController.swift in Sources */,
+				D89E963D1EC2DF6F00E53B56 /* ParallaxHeaderView.m in Sources */,
 				D84739991E59C98C00DB8763 /* OverlayView.swift in Sources */,
 				D8D316A81E6FD20900DB68F3 /* EditNameViewController.swift in Sources */,
 				D8083AD41E940AFA00B37DA7 /* SlideUpPresentationController.swift in Sources */,
-				D8A0F9A41EAE5695006695BC /* ParallaxHeaderView.m in Sources */,
 				D8FDFB1C1DBAA1EB008E09B1 /* FindGroupTableViewController.swift in Sources */,
 				D8DC45951D9579CA00E53B34 /* HttpRequestManager.swift in Sources */,
 				D8DA40A61E8C3656003A757C /* ItemDetailTableViewCell.swift in Sources */,
 				D8D316A31E6FC62500DB68F3 /* AccountSettingsTableViewController.swift in Sources */,
 				D8CA36611D8AF2CA00A30D39 /* ItemTableViewCell.swift in Sources */,
 				D8083ACE1E8F33BA00B37DA7 /* ImageDisplayViewController.swift in Sources */,
-				D8A0F9A61EAE5695006695BC /* StoryViewController.m in Sources */,
 				D835EA3A1E2C48E9009C0650 /* MessageTableViewCell.swift in Sources */,
 				D852416F1E5369A600DCC394 /* ItemCollectionViewCell.swift in Sources */,
 				D84C070D1E043BAB0015DBEB /* CreateGroupViewController.swift in Sources */,
+				D89E96401EC2DF6F00E53B56 /* UIImage+ImageEffects.m in Sources */,
 				D852416D1E5367F200DCC394 /* BrowseCollectionViewController.swift in Sources */,
 				D88C05FD1E30696500A30FFB /* Message.swift in Sources */,
 				D85BD1BE1E5632BB0099FCD5 /* SimpleSearchBar.swift in Sources */,
@@ -640,7 +641,6 @@
 				D8FDE3BA1D7DF5A600B98B48 /* LoginViewController.swift in Sources */,
 				D8C129861DB6696A005B86E5 /* SaveData.swift in Sources */,
 				D8FE95DD1DA6A89B002276AF /* Item.swift in Sources */,
-				D8A0F9A51EAE5695006695BC /* StoryCommentCell.m in Sources */,
 				D8D316AC1E6FD23800DB68F3 /* EditPasswordViewController.swift in Sources */,
 				D8DC45971D957ACE00E53B34 /* User.swift in Sources */,
 				D8A0F9AB1EAF0CAB006695BC /* GroupsTableViewController.swift in Sources */,
@@ -825,7 +825,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.insertcoolnamehere.Show-And-Sell";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Show And Sell/Show And Sell-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -902,7 +904,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.insertcoolnamehere.Show-And-Sell";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Show And Sell/Show And Sell-Bridging-Header.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "";
 				SWIFT_VERSION = 3.0;
 				USER_HEADER_SEARCH_PATHS = "";
 			};

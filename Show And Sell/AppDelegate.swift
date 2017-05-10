@@ -78,9 +78,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let id = components[components.count - 1]
                     print("making item request")
                     HttpRequestManager.item(id: id) { item, response, error in
-                        AppData.displayItem = item
                         DispatchQueue.main.async {
                             if let _ = AppData.user {   // logged in
+                                AppData.displayItem = item
                                 print("item returned")
                                 let rootVC = self.window?.rootViewController as? LoginViewController
                                 rootVC?.performSegue(withIdentifier: "loginToTabs", sender: rootVC)

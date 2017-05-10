@@ -44,24 +44,33 @@ class GroupsTableViewController: UITableViewController, UISearchResultsUpdating,
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("AppData.myGroup: \(AppData.myGroup)")
         self.createGroupButton.isEnabled = createGroupShouldEnable()
-        self.tableView.reloadData()
+        self.handleRefresh(self.refreshControl)
     }
 
     // MARK: Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return AppData.group != nil ? 2 : 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 :
+        if self.numberOfSections(in: tableView) == 2 {
+            return section == 0 ? 1 :
             (self.searchController.isActive && self.searchController.searchBar.text! != "") ? filteredGroups.count : groups.count
+        }
+        else {
+            return (self.searchController.isActive && self.searchController.searchBar.text! != "") ? filteredGroups.count : groups.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "Current Group" : "Groups"
+        if self.numberOfSections(in: tableView) == 2 {
+            return section == 0 ? "Favorite Group" : "Groups"
+        }
+        else {
+            return "Groups"
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,7 +78,7 @@ class GroupsTableViewController: UITableViewController, UISearchResultsUpdating,
 
         // Configure the cell
         var group: Group!
-        if indexPath.section == 0 {
+        if self.numberOfSections(in: tableView) == 2 && indexPath.section == 0 {
             group = currentGroup
         }
         else {
@@ -96,7 +105,7 @@ class GroupsTableViewController: UITableViewController, UISearchResultsUpdating,
         if let dest = segue.destination as? GroupDetailViewController {
             let indexPath = self.tableView.indexPath(for: sender as! GroupTableViewCell)!
             var group: Group!
-            if indexPath.section == 0 {
+            if self.numberOfSections(in: tableView) == 2 && indexPath.section == 0 {
                 group = currentGroup!
             }
             else {
@@ -138,7 +147,6 @@ class GroupsTableViewController: UITableViewController, UISearchResultsUpdating,
         }
     }
     func updateSearchResults(for searchController: UISearchController) {
-        print("UPDATE SEARCH RESULTS")
         filterGroups(for: searchController.searchBar.text!)
         self.tableView.reloadData()
     }

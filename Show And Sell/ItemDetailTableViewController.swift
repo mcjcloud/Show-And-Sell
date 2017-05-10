@@ -16,6 +16,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
     // struct for states
     struct ItemDetailVCStates {
         var shouldRestoreNavBar = true
+        var shouldShowActivityIndicator = true
     }
 
     // MARK: UI Properties
@@ -110,6 +111,9 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
         }
         else if let dest = segue.destination as? GroupDetailViewController {
             if let group = group {
+                // assign destination data
+                dest.group = group
+                dest.groupId = group.groupId
                 dest.name = group.name
                 dest.location = group.address
                 dest.locationDetail = group.locationDetail
@@ -124,7 +128,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
     
     // MARK: TableView Delegate
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return messages.count > 0 ? messages.count + 2 : 2
+        return messages.count > 0 ? messages.count + 1 : 2
     }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
@@ -161,23 +165,23 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
             return cell
         }
         else if indexPath.row == 1 && messages.count == 0 {
-            // setup table view cell with activity indicator
-            let cell = UITableViewCell()
-            commentActivityIndicator.center = cell.center
-            cell.addSubview(commentActivityIndicator)
-            cell.isUserInteractionEnabled = false
-            
-            return cell
+            if self.states.shouldShowActivityIndicator {
+                // setup table view cell with activity indicator
+                let cell = UITableViewCell()
+                cell.frame.size = CGSize(width: self.view.frame.width, height: self.tableView(tableView, heightForRowAt: indexPath))
+                commentActivityIndicator.center = cell.center
+                cell.addSubview(commentActivityIndicator)
+                cell.isUserInteractionEnabled = false
+                
+                return cell
+            }
+            else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "noComments")
+                return cell!
+            }
         }
         else if indexPath.row == (messages.count > 0 ? messages.count + 2 : 2) - 1 {    // the last cell
-            let cell = UITableViewCell()
-            if self.messages.count <= 0 {
-                let label = UILabel()
-                label.text = "No comments"
-                cell.addSubview(label)
-            }
-            cell.isUserInteractionEnabled = false
-            return cell
+            return UITableViewCell()
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageTableViewCell
@@ -252,7 +256,7 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
             })[indexPath.row - 1]
             
             // calculate cell height based on text
-            height = 36.0 + heightForView(text: message.body, font: UIFont.systemFont(ofSize: 20.0), width: self.view.frame.width - 16.0)
+            height = 34.0 + heightForView(text: message.body, font: UIFont.systemFont(ofSize: 17.0), width: self.view.frame.width - 16.0)
         }
         
         return height
@@ -453,12 +457,15 @@ class ItemDetailTableViewController: UITableViewController, UITextViewDelegate {
     }
     
     func handleRefresh() {
+        self.states.shouldShowActivityIndicator = true
+        self.tableView.reloadData()
         self.commentActivityIndicator.startAnimating()
         HttpRequestManager.messages(forItemId: item.itemId) { messages, response, error in
             self.messages = messages
             
             DispatchQueue.main.async {
                 self.commentActivityIndicator.stopAnimating()
+                self.states.shouldShowActivityIndicator = false
                 self.tableView.reloadData()
             }
         }

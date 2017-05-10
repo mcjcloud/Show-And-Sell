@@ -79,6 +79,10 @@ class GroupDetailViewController: UIViewController, UICollectionViewDataSource, U
         if let dest = segue.destination as? ItemDetailTableViewController {
             dest.item = items[self.itemsCollectionView.indexPath(for: sender as! ItemCollectionViewCell)!.row]
         }
+        else if let dest = segue.destination.childViewControllers[0] as? DonateItemViewController {
+            print("giving the item donate the group id")
+            dest.groupId = self.groupId
+        }
     }
     
     // MARK: UICollectionView

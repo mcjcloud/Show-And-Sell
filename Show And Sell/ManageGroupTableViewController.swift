@@ -54,11 +54,6 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         tableView.reloadData()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -211,6 +206,7 @@ class ManageGroupTableViewController: UITableViewController, UISearchResultsUpda
         
         // assign data from cell.
         destination.item = item
+        destination.groupId = item?.groupId
     }
     
     @IBAction func updateItem(segue: UIStoryboardSegue) {

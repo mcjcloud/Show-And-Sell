@@ -347,7 +347,7 @@ class HttpRequestManager {
         request.timeoutInterval = requestTimeout
         
         // build body
-        let bodyJson: [String: Any] = ["group":["name":"\(group.name)", "adminId":"\(group.adminId)", "address":"\(group.address)", "latitude":group.latitude, "longitude":group.longitude, "locationDetail":"\(group.locationDetail)"], "password":"\(password)"]
+        let bodyJson: [String: Any] = ["group":["name":"\(group.name)", "adminId":"\(group.adminId)", "address":"\(group.address)", "routing":"\(group.routing)", "latitude":group.latitude, "longitude":group.longitude, "locationDetail":"\(group.locationDetail)"], "password":"\(password)"]
         request.httpBody = try! JSONSerialization.data(withJSONObject: bodyJson, options: .prettyPrinted)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in

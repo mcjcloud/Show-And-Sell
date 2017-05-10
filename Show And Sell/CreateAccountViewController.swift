@@ -63,9 +63,6 @@ class CreateAccountViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // if navigating to Finder, tell it where it came from
         print("source from create: \(self)")
-        if let dest = (segue.destination as? UINavigationController)?.childViewControllers[0] as? FindGroupTableViewController {
-            dest.previousVC = self
-        }
     }
 
     // MARK: IBAction

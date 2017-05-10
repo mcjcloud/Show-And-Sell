@@ -33,11 +33,6 @@ class SSTabBarViewController: UITabBarController {
                 if let g = group {
                     AppData.group = g
                 }
-                else {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "tabsToFinder", sender: self)
-                    }
-                }
                 AppData.saveData()
             }
         }
@@ -64,14 +59,13 @@ class SSTabBarViewController: UITabBarController {
     override func viewDidAppear(_ animated: Bool) {
         presentQueuedItem()
     }
+    
     func presentQueuedItem() {
         print("view appeared in tabs")
         // check if there's an item in need of display.
         if let item = AppData.displayItem {
-            print("item: \(item)")
-            print("browseVC: \(self.childViewControllers[1].childViewControllers[0])")
             if let browseVC = self.childViewControllers[1].childViewControllers[0] as? BrowseCollectionViewController {
-                print("showing item!")
+                self.selectedIndex = 1
                 browseVC.performSegue(withIdentifier: "browseToDetail", sender: item)
                 AppData.displayItem = nil
             }
@@ -82,7 +76,6 @@ class SSTabBarViewController: UITabBarController {
     
     // clear data of table view controllers
     func clearTabData() {
-        print("clear data")
         clearBrowseData()
         clearBookmarksData()
     }

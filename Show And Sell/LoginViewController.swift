@@ -116,11 +116,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         createAccountButton.isEnabled = true
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("dest from login: \(segue.destination)")
-        // if the next view controller is the finder, give it a reference of self to know where to navigate next.
-        if let dest = (segue.destination as? UINavigationController)?.childViewControllers[0] as? FindGroupTableViewController {
-            dest.previousVC = self
-        }
+        // do nothing
     }
     
     // IBOutlet functions
@@ -281,15 +277,8 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
             // go to tabs segue from main thread
             DispatchQueue.main.async(execute: {
                 print("Logging in, groupId: \(u.groupId)")
-                if let groupId = AppData.user?.groupId, groupId.characters.count > 0 {
-                    print("segue to tabs")
-                    self.performSegue(withIdentifier: "loginToTabs", sender: self)
-                }
-                else {  // if there is no group, segue to choose a group
-                    print("loginToFinder segue")
-                    print("saved groupId: \(AppData.user?.groupId)")
-                    self.performSegue(withIdentifier: "loginToFinder", sender: self)
-                }
+                print("segue to tabs")
+                self.performSegue(withIdentifier: "loginToTabs", sender: self)
             })
             
             // save data

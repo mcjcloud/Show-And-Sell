@@ -12,6 +12,7 @@ class AccountSettingsTableViewController: UITableViewController {
 
     // MARK: UI Properties
     @IBOutlet var emailCell: UITableViewCell!
+    @IBOutlet var emailLabel: UILabel!
     @IBOutlet var emailField: UILabel!
     @IBOutlet var nameField: UILabel!
     @IBOutlet var passwordCell: UITableViewCell!
@@ -32,6 +33,7 @@ class AccountSettingsTableViewController: UITableViewController {
             
             // disable email
             emailCell.isUserInteractionEnabled = false
+            emailLabel.textColor = UIColor.lightGray
             emailField.textColor = UIColor.lightGray
             
             // disable password

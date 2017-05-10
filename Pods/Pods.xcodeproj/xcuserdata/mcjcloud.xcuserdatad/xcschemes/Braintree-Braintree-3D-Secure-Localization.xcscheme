@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'C4862B96577F57D0819ECCBCA837BD96'
-               BlueprintName = 'PHFComposeBarView'
+               BlueprintIdentifier = '9586AAFCC7C1BD401175B60A98770A2D'
+               BlueprintName = 'Braintree-Braintree-3D-Secure-Localization'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'PHFComposeBarView.framework'>
+               BuildableName = 'Braintree-3D-Secure-Localization.bundle'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

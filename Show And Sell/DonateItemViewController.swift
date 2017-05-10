@@ -26,6 +26,7 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
     
     // data
     var item: Item?
+    var groupId: String?
     let priceMinimum = 0.31
     
     override func viewDidLoad() {
@@ -180,8 +181,9 @@ class DonateItemViewController: UIViewController, UITextViewDelegate, UITextFiel
         let imageData = UIImagePNGRepresentation(resizeImage(image: imageButton.currentBackgroundImage!, targetSize: CGSize(width: imageButton.currentBackgroundImage!.size.width * 0.1, height: imageButton.currentBackgroundImage!.size.height * 0.1)))
         let thumbnail = imageData!.base64EncodedString()
         
+        print("groupId: \(groupId)")
         // make a post request to add the item to the appropriate group TODO:
-        let item = Item(itemId: "", groupId: AppData.group!.groupId, ownerId: AppData.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, approved: false)
+        let item = Item(itemId: "", groupId: self.groupId ?? "", ownerId: AppData.user!.userId, name: name, price: price, condition: condition, itemDescription: desc, thumbnail: thumbnail, approved: false)
         HttpRequestManager.post(item: item) { item, response, error in
             // stop animating in main thread
             DispatchQueue.main.async {
