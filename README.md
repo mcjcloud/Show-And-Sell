@@ -82,13 +82,13 @@ Once installed, the app will run for three days before the codesigning expires, 
 If problems persist, try deleting the project, and following the instructions again.
 
 
-###Software Used
+### Software Used
 * Xcode 8 IDE
 * Visiual Studios IDE (for backend API)
 * GIMP Image Editor
 
 
-###Templates Used
+### Templates Used
 * No templates other than those provided by Xcode were used
 
 
@@ -100,7 +100,7 @@ If problems persist, try deleting the project, and following the instructions ag
 * [Braintree Developer Documentation](https://developers.braintreepayments.com/home) - for implementing digital transactions
 
 
-###Copyright Notations
+### Copyright Notations
 | Source         | Usage                     |
 | -------------- | ------------------------- |
 | [icons8](https://icons8.com) | Resource for TabBar icons, distributed under the Creative Commons Attribution-NoDerivs 3.0 License |
