@@ -92,7 +92,7 @@ If problems persist, try deleting the project, and following the instructions ag
 * No templates other than those provided by Xcode were used
 
 
-###Source of Information
+### Source of Information
 * [Apple API Reference](https://developer.apple.com/ios/resources/) - for reference of iOS APIs and general knowledge
 * [Google Sign-In for iOS](https://developers.google.com/identity/sign-in/ios/start-integrating) - for implementing Google OAuth sign in support
 * [Twitter Developer Documentation](https://dev.twitter.com/cards/overview) - for implementing item tweeting and Deep-Links
