@@ -3,13 +3,13 @@ Central High School
 Keller, TX
 
 ### Quick Reference
-* [Overview] (#overview)
-* [Instructions for Installation] (#instructions-for-installation)
-* [Troubleshooting] (#troubleshooting)
-* [Software Used] (#software-used)
-* [Templates Used] (#templates-used)
-* [Source of Information] (#source-of-information)
-* [Copyright Notations] (#copyright-notations)
+* [Overview](#overview)
+* [Instructions for Installation](#instructions-for-installation)
+* [Troubleshooting](#troubleshooting)
+* [Software Used](#software-used)
+* [Templates Used](#templates-used)
+* [Source of Information](#source-of-information)
+* [Copyright Notations](#copyright-notations)
 
 ### Overview
 When we began this project, we began with the following specifications in mind:
